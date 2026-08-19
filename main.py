@@ -1,3 +1,7 @@
+from calificaciones import altas_calificaciones
+from calificaciones import bajas_calificaciones
+from calificaciones import modificar_calificaciones
+
 usuario = "Admin"
 contrasenia = "123"
 
@@ -27,7 +31,23 @@ def mostrar_submenu(titulo):
     5. VOLVER AL MENÚ PRINCIPAL
     """)
 
-
+#------------------ Menu Calificaciones ---------------------
+def menu_calificaciones(notas, estudiantes, materias):
+    mostrar_submenu("CALIFICACIONES")
+    opcion = validar_rango(1, 5)
+    match opcion:
+        case 1:
+            altas_calificaciones(notas, estudiantes, materias)
+            menu_calificaciones(notas, estudiantes, materias)
+        case 2:
+            bajas_calificaciones(notas, estudiantes, materias)
+            menu_calificaciones(notas, estudiantes, materias)
+        case 3:
+            modificar_calificaciones(notas, estudiantes, materias)
+            menu_calificaciones(notas, estudiantes, materias)
+        case 4:
+            print(notas)
+            menu_calificaciones(notas, estudiantes, materias)
 
 
 def mostrar_menu_principal():
@@ -49,8 +69,7 @@ def ejecutar_menu_principal(eleccion, estudiantes, materias, notas):
         case 2:
             ...
         case 3:
-            #menu_calificaciones(id_notas, legajo_estudiantes, id_materias, notas, condicion_nota)
-            ...
+            menu_calificaciones(notas, estudiantes, materias)
         case 4:
             ...
         case 5:
