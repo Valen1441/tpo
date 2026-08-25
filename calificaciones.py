@@ -16,27 +16,27 @@ def altas_calificaciones(notas, estudiantes, materias):
     #Pedir legajo del estudiante 
     estudiante = int(input("Ingrese el legajo del estudiante a calificar: "))
     
-    registrado = busqueda_secuencial(estudiantes, 1, estudiante)
+    registrado = busqueda_secuencial(estudiantes, 0, estudiante)
             
     while registrado == -1:
         print("ERROR: Ese legajo no está registrado.")
         
         estudiante = int(input("Ingrese de nuevo el legajo del estudiante a calificar: "))
     
-        registrado = busqueda_secuencial(estudiantes, 1, estudiante)
+        registrado = busqueda_secuencial(estudiantes, 0, estudiante)
     
     
     #Pedir id de la materia
     materia = int(input("Ingrese el codigo de la materia: "))
     
-    registrado = busqueda_secuencial(materias, 1, materia)
+    registrado = busqueda_secuencial(materias, 0, materia)
             
     while registrado == -1:
         print("ERROR: Ese codigo de materia no está registrado.")
         
         materia = int(input("Ingrese de nuevo el codigo de la materia: "))
     
-        registrado = busqueda_secuencial(materias, 1, materia)
+        registrado = busqueda_secuencial(materias, 0, materia)
         
     
     #Pedir la nota
@@ -105,26 +105,26 @@ def modificar_calificaciones(notas, estudiantes, materias):
     #Pedir el nuevo legajo
     legajo = int(input("Ingrese el nuevo legajo del estudiante de la nota (Formato: 100): "))
 
-    registrado = busqueda_secuencial(estudiantes, 1, legajo)
+    registrado = busqueda_secuencial(estudiantes, 0, legajo)
 
     while registrado == -1:
         print("ERROR: Ese código no está registrado")
         
         legajo = int(input("Ingrese el nuevo legajo del estudiante de la nota (Formato: 100): "))
 
-        registrado = busqueda_secuencial(estudiantes, 1, legajo)
+        registrado = busqueda_secuencial(estudiantes, 0, legajo)
         
     #Pedir el nuevo codigo de materia
-    materia = input("Ingrese el nuevo id de la materia de la nota (Formato: 100): ")
+    materia = int(input("Ingrese el nuevo id de la materia de la nota (Formato: 100): "))
 
-    registrado = busqueda_secuencial(materias, 1, materia)
+    registrado = busqueda_secuencial(materias, 0, materia)
 
     while registrado == -1:
         print("ERROR: Ese código no está registrado")
         
         materia = int(input("Ingrese otra vez el nuevo id de la materia de la nota (Formato: 100): "))
 
-        registrado = busqueda_secuencial(materias, 1, materia)
+        registrado = busqueda_secuencial(materias, 0, materia)
     
     #Pedir la nueva nota
     nota = int(input("Ingrese la nueva nota: "))    
@@ -152,3 +152,65 @@ def modificar_calificaciones(notas, estudiantes, materias):
     print("Nota",codigo,"modificada.")
         
         
+
+
+
+
+def clasificar_nota(nota):
+    if nota >= 8:
+        cadena = f"{AZUL}Promocionada{RESET}"
+    elif nota >= 4:
+        cadena = f"{VERDE}Aprobada{RESET}"
+    else:
+        cadena = f"{ROJO}Desaprobada{RESET}"
+    return cadena
+    
+def imprimir_calificacion(notas, estudiantes, materias):
+    # Encabezado
+    print("="*72)
+    print(f'{BOLD}{MAGENTA}{"CALIFICACIONES":^72}{RESET}')
+    print("="*72)
+    print(f"{BOLD}{'ID Nota':<13}{'Nota':<10}{'Estudiante':<17}{'Materia':<21}{'Condición':<17}{RESET}")
+    print("-" * 72)
+
+    # Datos
+    for i in range(len(notas)):
+        id_nota = notas[i][0]
+        nota = notas[i][1]
+
+        estudiante = notas[i][2]
+        pos = busqueda_secuencial(estudiantes, 0, estudiante)
+        estudiante = estudiantes[pos][1]
+
+        materia = notas[i][3]
+        pos = busqueda_secuencial(materias, 0, materia)
+        materia = materias[pos][1]
+        
+        condicion = clasificar_nota(nota)
+        print(f"{id_nota:^7}{nota:^16}{estudiante:<17}{materia:<19}{condicion:^25}")
+
+
+def ordenar_matriz(matriz, columna, reversa):
+    if reversa == 0: 
+        matriz.sort(key=lambda fila: fila[columna])
+    else:
+        matriz.sort(key=lambda fila: fila[columna], reverse=True)
+
+    
+
+
+# Códigos ANSI
+RESET = "\033[0m"
+BOLD  = "\033[1m"
+ROJO  = "\033[31;1m"
+VERDE = "\033[32;1m"
+AZUL  = "\033[34;1m"
+MAGENTA  = "\033[35;1m"
+
+
+
+def mostrar_calificaciones(notas, estudiantes, materias):
+    columna = int(input("Ingrese una columna: "))
+    reversa = int(input("1: para ordenar de mayor a menor, 0: viceversa: "))
+    ordenar_matriz(notas, columna, reversa)
+    imprimir_calificacion(notas, estudiantes, materias)

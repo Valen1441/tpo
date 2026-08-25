@@ -1,6 +1,5 @@
-from calificaciones import altas_calificaciones
-from calificaciones import bajas_calificaciones
-from calificaciones import modificar_calificaciones
+import calificaciones
+import estudiantes_materias
 
 usuario = "Admin"
 contrasenia = "123"
@@ -31,22 +30,58 @@ def mostrar_submenu(titulo):
     5. VOLVER AL MENÚ PRINCIPAL
     """)
 
+#------------------ Menu Estudiantes ---------------------
+def menu_estudiantes(notas, estudiantes, materias):
+    mostrar_submenu("ESTUDIANTES")
+    opcion = validar_rango(1, 5)
+    match opcion:
+        case 1:
+            estudiantes_materias.altas_estudiantes_materias(estudiantes, "ESTUDIANTES")
+            menu_calificaciones(notas, estudiantes, materias)
+        case 2:
+            estudiantes_materias.bajas_estudiantes_materias(estudiantes, "ESTUDIANTES")
+            menu_calificaciones(notas, estudiantes, materias)
+        case 3:
+            estudiantes_materias.modificar_estudiantes_materias(estudiantes, "ESTUDIANTES")
+            menu_calificaciones(notas, estudiantes, materias)
+        case 4:
+            estudiantes_materias.mostrar_estudiantes_materias(estudiantes, "ESTUDIANTES")
+            menu_calificaciones(notas, estudiantes, materias)
+
+#------------------ Menu Materias ---------------------
+def menu_materias(notas, estudiantes, materias):
+    mostrar_submenu("MATERIAS")
+    opcion = validar_rango(1, 5)
+    match opcion:
+        case 1:
+            estudiantes_materias.altas_estudiantes_materias(materias, "MATERIAS")
+            menu_calificaciones(notas, estudiantes, materias)
+        case 2:
+            estudiantes_materias.bajas_estudiantes_materias(materias, "MATERIAS")
+            menu_calificaciones(notas, estudiantes, materias)
+        case 3:
+            estudiantes_materias.modificar_estudiantes_materias(materias, "MATERIAS")
+            menu_calificaciones(notas, estudiantes, materias)
+        case 4:
+            estudiantes_materias.mostrar_estudiantes_materias(materias, "MATERIAS")
+            menu_calificaciones(notas, estudiantes, materias)
+
 #------------------ Menu Calificaciones ---------------------
 def menu_calificaciones(notas, estudiantes, materias):
     mostrar_submenu("CALIFICACIONES")
     opcion = validar_rango(1, 5)
     match opcion:
         case 1:
-            altas_calificaciones(notas, estudiantes, materias)
+            calificaciones.altas_calificaciones(notas, estudiantes, materias)
             menu_calificaciones(notas, estudiantes, materias)
         case 2:
-            bajas_calificaciones(notas, estudiantes, materias)
+            calificaciones.bajas_calificaciones(notas)
             menu_calificaciones(notas, estudiantes, materias)
         case 3:
-            modificar_calificaciones(notas, estudiantes, materias)
+            calificaciones.modificar_calificaciones(notas, estudiantes, materias)
             menu_calificaciones(notas, estudiantes, materias)
         case 4:
-            print(notas)
+            calificaciones.mostrar_calificaciones(notas, estudiantes, materias)
             menu_calificaciones(notas, estudiantes, materias)
 
 
@@ -65,9 +100,9 @@ def mostrar_menu_principal():
 def ejecutar_menu_principal(eleccion, estudiantes, materias, notas):
     match eleccion:
         case 1:
-            ...
+            menu_estudiantes(notas, estudiantes, materias)
         case 2:
-            ...
+            menu_materias(notas, estudiantes, materias)
         case 3:
             menu_calificaciones(notas, estudiantes, materias)
         case 4:
@@ -86,29 +121,29 @@ def principal():
 
     # Matriz estudiantes: nombre, legajo, edad, año de cursada
     estudiantes = [
-    ["Ares", 100, 18, 2],
-    ["Lucas", 101, 19, 3],
-    ["Marcos", 102, 18, 1],
-    ["Diomid", 103, 22, 2],
-    ["Valentino", 104, 18, 1]
+    [100, "Ares", 18, 2],
+    [101, "Lucas", 19, 3],
+    [102, "Marcos", 18, 1],
+    [103, "Diomid", 22, 2],
+    [104, "Valentino", 18, 1]
     ]
 
     # Matriz materias: nombre, id, cuatrimestre, carga horaria
     materias = [
-        ["Prog.", 100, 2, 6],
-        ["Alg.", 101, 2, 4],
-        ["Sist. Inf.", 102, 1, 6],
-        ["Quim.", 103, 2, 4],
-        ["Ingl.", 104, 1, 3]
+    [100, "Prog.", 2, 6],
+    [101, "Alg.", 2, 4],
+    [102, "Sist. Inf.", 1, 6],
+    [103, "Quim.", 2, 4],
+    [104, "Ingl.", 1, 3]
     ]
 
     # Matriz notas: id nota, nota, legajo estudiante, id materia, condicion: 1(aprobado), 2(promocionada), 3(desaprobado)
     notas = [
-        [100, 8, 103, 101, 2],
-        [101, 6, 101, 101, 1],
-        [102, 7, 100, 104, 1],
-        [103, 3, 103, 103, 3],
-        [104, 9, 104, 102, 2]
+    [100, 8, 103, 101, 2],
+    [101, 6, 101, 101, 1],
+    [102, 7, 100, 104, 1],
+    [103, 3, 103, 103, 3],
+    [104, 9, 104, 102, 2]
     ]
 
 
