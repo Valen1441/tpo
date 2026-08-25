@@ -210,7 +210,15 @@ MAGENTA  = "\033[35;1m"
 
 
 def mostrar_calificaciones(notas, estudiantes, materias):
-    columna = int(input("Ingrese una columna: "))
-    reversa = int(input("1: para ordenar de mayor a menor, 0: viceversa: "))
+    columna = int(input("Ingrese el número de la columna para ordenar (1-5): ")) - 1
+    while columna < 0 or columna > 3:
+        print(f"{ROJO}Número fuera de rango, la matriz posee 5 columnas{RESET}")
+        columna = int(input("Ingrese de nuevo el número de la columna para ordenar (1-5): ")) - 1
+    
+    reversa = int(input("Ingrese 0 = ascendente, 1 = descendente: "))
+    while reversa < 0 or reversa > 1:
+            print(f"{ROJO}Número inválido, rango valido de 0 a 1{RESET}")
+            reversa = int(input("Ingrese 0 = ascendente, 1 = descendente: ")) - 1
+
     ordenar_matriz(notas, columna, reversa)
     imprimir_calificacion(notas, estudiantes, materias)

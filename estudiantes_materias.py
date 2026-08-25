@@ -24,26 +24,26 @@ def altas_estudiantes_materias(matriz, titulo):
     if titulo == "ESTUDIANTES":
         edad_cuat = int(input("Ingrese la edad del nuevo estudiante: "))
         while edad_cuat < 17 or edad_cuat > 100:
-            print("Edad invalida: rango perimitido de 17 a 100 años")
+            print(f"{ROJO}Edad invalida: rango perimitido de 17 a 100 años{RESET}")
             edad_cuat = int(input("Ingrese de nuevo la edad del estudiante: "))
     else:
-        edad_cuat = int(input("Ingrese el cuatrimestre de la nueva materia"))
+        edad_cuat = int(input("Ingrese el cuatrimestre de la nueva materia (1-2): "))
         while edad_cuat < 1 or edad_cuat > 2:
-            print("Cuatimestre invalido: rango perimitido de 1 a 2")
-            edad_cuat = int(input("Ingrese de nuevo el cuatrimestre de la materia: "))
+            print(f"{ROJO}Cuatimestre invalido: rango perimitido de 1 a 2{RESET}")
+            edad_cuat = int(input("Ingrese de nuevo el cuatrimestre de la materia (1-2): "))
 
 
     #Pedir año de cursada / carga horaria
     if titulo == "ESTUDIANTES":
-        año_horaria = int(input("Ingrese el año de cursada del nuevo estudiante: "))
+        año_horaria = int(input("Ingrese el año de cursada del nuevo estudiante (1-9): "))
         while año_horaria < 1 or año_horaria > 9:
-            print("Año de cursada invalido: rango perimitido de 1 a 9")
-            año_horaria = int(input("Ingrese de nuevo el año de cursada del estudiante: "))
+            print(f"{ROJO}Año de cursada invalido: rango perimitido de 1 a 9{RESET}")
+            año_horaria = int(input("Ingrese de nuevo el año de cursada del estudiante (1-9): "))
     else:
-        año_horaria = int(input("Ingrese la carga horaria de la nueva materia"))
+        año_horaria = int(input("Ingrese la carga horaria de la nueva materia (1-12): "))
         while año_horaria < 1 or año_horaria > 12:
-            print("Carga horaria invalida: rango perimitido de 1 a 12 horas")
-            año_horaria = int(input("Ingrese de nuevo la carga horaria de la materia: "))
+            print(f"{ROJO}Carga horaria invalida: rango perimitido de 1 a 12 horas{RESET}")
+            año_horaria = int(input("Ingrese de nuevo la carga horaria de la materia (1-12): "))
 
         
     codigo = matriz[len(matriz) - 1][0] + 1
@@ -52,30 +52,38 @@ def altas_estudiantes_materias(matriz, titulo):
     matriz.append([codigo, nombre, edad_cuat, año_horaria])
 
     if titulo == "ESTUDIANTES":
-        print(f"Estudiante {codigo} agreagado.")
+        print(f"{VERDE}Estudiante {codigo} agreagado.{RESET}")
     else: 
-        print(f"Materia {codigo} agreagada.")
+        print(f"{VERDE}Materia {codigo} agreagada.{RESET}")
     
 
 #------------------ BAJAS ESTUDIANTES / MATERIAS ---------------------
-def bajas_estudiantes_materias(matriz, titulo):
+def bajas_estudiantes_materias(matriz, notas, titulo):
     print()
     print(f" == BAJAS {titulo} ==")
 
     if titulo == "ESTUDIANTES":
         codigo = int(input("Ingrese el código del estudiante a eliminar (Formato: 100): "))
+        esta_en_calificaciones = busqueda_secuencial(notas, 2, codigo)
     else:
         codigo = int(input("Ingrese el código de la materia a eliminar (Formato: 100): "))
+        esta_en_calificaciones = busqueda_secuencial(notas, 3, codigo)
     
     registrado = busqueda_secuencial(matriz, 0, codigo)
+
             
-    while registrado == -1:
-        print("ERROR: Ese código no está registrado")
+    while registrado == -1 or esta_en_calificaciones != -1:
+        if registrado == -1:
+            print(f"{ROJO}ERROR: Ese código no está registrado{RESET}")
+        else:
+            print(f"{ROJO}ERROR: Ese estudiante tiene una calificaión registrada, no se puede eliminar{RESET}")
         
         if titulo == "ESTUDIANTES":
             codigo = int(input("Ingrese el código del estudiante a eliminar (Formato: 100): "))
+            esta_en_calificaciones = busqueda_secuencial(notas, 2, codigo)
         else:
             codigo = int(input("Ingrese el código de la materia a eliminar (Formato: 100): "))
+            esta_en_calificaciones = busqueda_secuencial(notas, 3, codigo)
     
         registrado = busqueda_secuencial(matriz, 0, codigo)
                     
@@ -83,9 +91,9 @@ def bajas_estudiantes_materias(matriz, titulo):
     matriz.pop(registrado)
     
     if titulo == "ESTUDIANTES":
-        print(f"Estudiante {codigo} eliminado.")
+        print(f"{NARANJA}Estudiante {codigo} eliminado.{RESET}")
     else: 
-        print(f"Materia {codigo} agreagada.")
+        print(f"{NARANJA}Materia {codigo} agreagada.{RESET}")
     
 
 #------------------ MODIFICACION ESTUDIANTES / MATERIAS ---------------------
@@ -102,7 +110,7 @@ def modificar_estudiantes_materias(matriz, titulo):
     modificar = busqueda_secuencial(matriz, 0, codigo)
 
     while modificar == -1:
-        print("ERROR: Ese código no está registrado")
+        print(f"{ROJO}ERROR: Ese código no está registrado{RESET}")
         
         if titulo == "ESTUDIANTES":
             codigo = int(input("Ingrese el código del estudiante a modificar (Formato: 100): "))
@@ -123,26 +131,26 @@ def modificar_estudiantes_materias(matriz, titulo):
     if titulo == "ESTUDIANTES":
         edad_cuat = int(input("Ingrese la edad del estudiante: "))
         while edad_cuat < 17 or edad_cuat > 100:
-            print("Edad invalida: rango perimitido de 17 a 100 años")
+            print(f"{ROJO}Edad invalida: rango perimitido de 17 a 100 años{RESET}")
             edad_cuat = int(input("Ingrese de nuevo la edad del estudiante: "))
     else:
-        edad_cuat = int(input("Ingrese el cuatrimestre de la materia"))
+        edad_cuat = int(input("Ingrese el cuatrimestre de la materia (1-2):"))
         while edad_cuat < 1 or edad_cuat > 2:
-            print("Cuatimestre invalido: rango perimitido de 1 a 2")
-            edad_cuat = int(input("Ingrese de nuevo el cuatrimestre de la materia: "))
+            print(f"{ROJO}Cuatimestre invalido: rango perimitido de 1 a 2{RESET}")
+            edad_cuat = int(input("Ingrese de nuevo el cuatrimestre de la materia (1-2): "))
 
 
     #Pedir año de cursada / carga horaria
     if titulo == "ESTUDIANTES":
-        año_horaria = int(input("Ingrese el año de cursada del estudiante: "))
+        año_horaria = int(input("Ingrese el año de cursada del estudiante (1-9): "))
         while año_horaria < 1 or año_horaria > 9:
-            print("Año de cursada invalido: rango perimitido de 1 a 9")
-            año_horaria = int(input("Ingrese de nuevo el año de cursada del estudiante: "))
+            print(f"{ROJO}Año de cursada invalido: rango perimitido de 1 a 9{RESET}")
+            año_horaria = int(input("Ingrese de nuevo el año de cursada del estudiante (1-9): "))
     else:
-        año_horaria = int(input("Ingrese la carga horaria de la materia"))
+        año_horaria = int(input("Ingrese la carga horaria de la materia (1-12): "))
         while año_horaria < 1 or año_horaria > 12:
-            print("Carga horaria invalida: rango perimitido de 1 a 12 horas")
-            año_horaria = int(input("Ingrese de nuevo la carga horaria de la materia: "))
+            print(f"{ROJO}Carga horaria invalida: rango perimitido de 1 a 12 horas{RESET}")
+            año_horaria = int(input("Ingrese de nuevo la carga horaria de la materia (1-12): "))
         
 
     #Modificar
@@ -152,21 +160,12 @@ def modificar_estudiantes_materias(matriz, titulo):
     matriz[modificar][3] = año_horaria
 
     if titulo == "ESTUDIANTES":
-        print(f"Estudiante {codigo} modificado.")
+        print(f"{AZUL}Estudiante {codigo} modificado.{RESET}")
     else: 
-        print(f"Materia {codigo} modificada.")
+        print(f"{AZUL}Materia {codigo} modificada.{RESET}")
         
         
 
-
-def clasificar_nota(nota):
-    if nota >= 8:
-        cadena = f"{AZUL}Promocionada{RESET}"
-    elif nota >= 4:
-        cadena = f"{VERDE}Aprobada{RESET}"
-    else:
-        cadena = f"{ROJO}Desaprobada{RESET}"
-    return cadena
     
 def imprimir_matriz(matriz, titulo):
 
@@ -206,8 +205,16 @@ def ordenar_matriz(matriz, columna, reversa):
 
 
 def mostrar_estudiantes_materias(matriz, titulo):
-    columna = int(input("Ingrese una columna: "))
-    reversa = int(input("1: para ordenar de mayor a menor, 0: viceversa: "))
+    columna = int(input("Ingrese el número de la columna para ordenar (1-4): ")) - 1
+    while columna < 0 or columna > 3:
+        print(f"{ROJO}Número fuera de rango, la matriz posee 4 columnas{RESET}")
+        columna = int(input("Ingrese de nuevo el número de la columna para ordenar (1-4): ")) - 1
+    
+    reversa = int(input("Ingrese 0 = ascendente, 1 = descendente: "))
+    while reversa < 0 or reversa > 1:
+            print(f"{ROJO}Número inválido, rango valido de 0 a 1{RESET}")
+            reversa = int(input("Ingrese 0 = ascendente, 1 = descendente: ")) - 1
+
     ordenar_matriz(matriz, columna, reversa)
     imprimir_matriz(matriz, titulo)
 
@@ -220,5 +227,6 @@ ROJO  = "\033[31;1m"
 VERDE = "\033[32;1m"
 AZUL  = "\033[34;1m"
 MAGENTA  = "\033[35;1m"
+NARANJA = "\033[33;1m"
 
 
