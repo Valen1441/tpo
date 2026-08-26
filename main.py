@@ -125,8 +125,7 @@ def menu_principal(estudiantes, materias, notas):
 
 
 def principal():
-
-    # Matriz estudiantes: nombre, legajo, edad, año de cursada
+        # Matriz estudiantes: nombre, legajo, edad, año de cursada
     estudiantes = [
     [100, "Ares", 18, 2],
     [101, "Lucas", 19, 3],
@@ -148,10 +147,11 @@ def principal():
     notas = [
     [100, 8, 103, 101, 2],
     [101, 6, 101, 101, 1],
-    [102, 7, 100, 104, 1],
+    [102, 7, 102, 104, 1],
     [103, 3, 103, 103, 3],
     [104, 9, 104, 102, 2]
     ]
+
 
 
     if login(usuario, contrasenia) == True:
