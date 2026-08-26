@@ -14,27 +14,27 @@ def altas_calificaciones(notas, estudiantes, materias):
     print(" == ALTAS CALIFICACIONES ==")
 
     #Pedir legajo del estudiante 
-    estudiante = int(input("Ingrese el legajo del estudiante a calificar: "))
+    estudiante = int(input("Ingrese el legajo del estudiante a calificar (Formato: 100): "))
     
     registrado = busqueda_secuencial(estudiantes, 0, estudiante)
             
     while registrado == -1:
         print("ERROR: Ese legajo no está registrado.")
         
-        estudiante = int(input("Ingrese de nuevo el legajo del estudiante a calificar: "))
+        estudiante = int(input("Ingrese de nuevo el legajo del estudiante a calificar (Formato: 100): "))
     
         registrado = busqueda_secuencial(estudiantes, 0, estudiante)
     
     
     #Pedir id de la materia
-    materia = int(input("Ingrese el codigo de la materia: "))
+    materia = int(input("Ingrese el codigo de la materia (Formato: 100): "))
     
     registrado = busqueda_secuencial(materias, 0, materia)
             
     while registrado == -1:
         print("ERROR: Ese codigo de materia no está registrado.")
         
-        materia = int(input("Ingrese de nuevo el codigo de la materia: "))
+        materia = int(input("Ingrese de nuevo el codigo de la materia (Formato: 100): "))
     
         registrado = busqueda_secuencial(materias, 0, materia)
         
@@ -60,6 +60,44 @@ def altas_calificaciones(notas, estudiantes, materias):
     notas.append([codigo, nota, estudiante, materia, condicion])
 
     print("Nota",codigo,"agreagada.")
+
+    # ==============================
+    # REPORTE / BOLETÍN DEL ALUMNO
+    # ==============================
+
+    # Buscar nombre del alumno
+    posicion_estudiante = busqueda_secuencial(estudiantes, 0, estudiante)
+    nombre_alumno = estudiantes[posicion_estudiante][1]
+
+    print()
+    print("========================================")
+    print("              BOLETÍN")
+    print("========================================")
+    print("Alumno:", nombre_alumno)
+    print("Legajo:", estudiante)
+    print("----------------------------------------")
+
+    for registro in notas:
+        if registro[2] == estudiante:
+
+            nota_alumno = registro[1]
+            codigo_materia = registro[3]
+
+            # Buscar la materia
+            posicion_materia = busqueda_secuencial(materias, 0, codigo_materia)
+            nombre_materia = materias[posicion_materia][1]
+
+            if nota_alumno >= 8:
+                resultado = "PROMOCIONA"
+            elif nota_alumno >= 4:
+                resultado = "APRUEBA"
+            else:
+                resultado = "DESAPRUEBA"
+
+            print("Materia:", nombre_materia)
+            print("Nota:", nota_alumno)
+            print("Resultado:", resultado)
+            print("----------------------------------------")
     
 
 #------------------ BAJAS CALIFICACIONES ---------------------
@@ -105,26 +143,26 @@ def modificar_calificaciones(notas, estudiantes, materias):
     #Pedir el nuevo legajo
     legajo = int(input("Ingrese el nuevo legajo del estudiante de la nota (Formato: 100): "))
 
-    registrado = busqueda_secuencial(estudiantes, 0, legajo)
+    registrado = busqueda_secuencial(estudiantes, 1, legajo)
 
     while registrado == -1:
         print("ERROR: Ese código no está registrado")
         
         legajo = int(input("Ingrese el nuevo legajo del estudiante de la nota (Formato: 100): "))
 
-        registrado = busqueda_secuencial(estudiantes, 0, legajo)
+        registrado = busqueda_secuencial(estudiantes, 1, legajo)
         
     #Pedir el nuevo codigo de materia
-    materia = int(input("Ingrese el nuevo id de la materia de la nota (Formato: 100): "))
+    materia = input("Ingrese el nuevo id de la materia de la nota (Formato: 100): ")
 
-    registrado = busqueda_secuencial(materias, 0, materia)
+    registrado = busqueda_secuencial(materias, 1, materia)
 
     while registrado == -1:
         print("ERROR: Ese código no está registrado")
         
         materia = int(input("Ingrese otra vez el nuevo id de la materia de la nota (Formato: 100): "))
 
-        registrado = busqueda_secuencial(materias, 0, materia)
+        registrado = busqueda_secuencial(materias, 1, materia)
     
     #Pedir la nueva nota
     nota = int(input("Ingrese la nueva nota: "))    
@@ -152,73 +190,3 @@ def modificar_calificaciones(notas, estudiantes, materias):
     print("Nota",codigo,"modificada.")
         
         
-
-
-
-
-def clasificar_nota(nota):
-    if nota >= 8:
-        cadena = f"{AZUL}Promocionada{RESET}"
-    elif nota >= 4:
-        cadena = f"{VERDE}Aprobada{RESET}"
-    else:
-        cadena = f"{ROJO}Desaprobada{RESET}"
-    return cadena
-    
-def imprimir_calificacion(notas, estudiantes, materias):
-    # Encabezado
-    print("="*72)
-    print(f'{BOLD}{MAGENTA}{"CALIFICACIONES":^72}{RESET}')
-    print("="*72)
-    print(f"{BOLD}{'ID Nota':<13}{'Nota':<10}{'Estudiante':<17}{'Materia':<21}{'Condición':<17}{RESET}")
-    print("-" * 72)
-
-    # Datos
-    for i in range(len(notas)):
-        id_nota = notas[i][0]
-        nota = notas[i][1]
-
-        estudiante = notas[i][2]
-        pos = busqueda_secuencial(estudiantes, 0, estudiante)
-        estudiante = estudiantes[pos][1]
-
-        materia = notas[i][3]
-        pos = busqueda_secuencial(materias, 0, materia)
-        materia = materias[pos][1]
-        
-        condicion = clasificar_nota(nota)
-        print(f"{id_nota:^7}{nota:^16}{estudiante:<17}{materia:<19}{condicion:^25}")
-
-
-def ordenar_matriz(matriz, columna, reversa):
-    if reversa == 0: 
-        matriz.sort(key=lambda fila: fila[columna])
-    else:
-        matriz.sort(key=lambda fila: fila[columna], reverse=True)
-
-    
-
-
-# Códigos ANSI
-RESET = "\033[0m"
-BOLD  = "\033[1m"
-ROJO  = "\033[31;1m"
-VERDE = "\033[32;1m"
-AZUL  = "\033[34;1m"
-MAGENTA  = "\033[35;1m"
-
-
-
-def mostrar_calificaciones(notas, estudiantes, materias):
-    columna = int(input("Ingrese el número de la columna para ordenar (1-5): ")) - 1
-    while columna < 0 or columna > 3:
-        print(f"{ROJO}Número fuera de rango, la matriz posee 5 columnas{RESET}")
-        columna = int(input("Ingrese de nuevo el número de la columna para ordenar (1-5): ")) - 1
-    
-    reversa = int(input("Ingrese 0 = ascendente, 1 = descendente: "))
-    while reversa < 0 or reversa > 1:
-            print(f"{ROJO}Número inválido, rango valido de 0 a 1{RESET}")
-            reversa = int(input("Ingrese 0 = ascendente, 1 = descendente: ")) - 1
-
-    ordenar_matriz(notas, columna, reversa)
-    imprimir_calificacion(notas, estudiantes, materias)
