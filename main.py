@@ -10,17 +10,26 @@ ROJO  = "\033[31;1m"
 
 
 def validar_rango(desde, hasta):
-    numero = int(input("Ingrese una opción: " ))
+    numero = input("Ingrese una opción: " )
+    while numero.isnumeric() == False:
+        print(f"{ROJO}Opcion iválida. Ingrese un número dentro del ragno{RESET}")
+        numero = input("Ingrese de nuevo una opción: " )
+
+    numero = int(numero)
     while numero < desde or numero > hasta:
         print(f"{ROJO}Opción inválida. Ingrese una opcion que se encuentre en el rango{RESET}")
-        numero = int(input("Ingrese de nuevo una opción: "))
+        numero = input("Ingrese de nuevo una opción: ")
+        while numero.isnumeric() == False:
+                print(f"{ROJO}Opcion iválida. Ingrese un número dentro del ragno{RESET}")
+                numero = input("Ingrese de nuevo una opción: " )
+        numero = int(numero)
     return numero
 
 
-def login(usuario_almacenado, contraseña_almacenada):
+def login(usuario_almacenado, contrasenia_almacenada):
     usuario_login = input("Ingrese un usuario: ")
     contrasena_login = input("Ingrese una contraseña: ")
-    return usuario_login == usuario_almacenado and contrasena_login == contraseña_almacenada
+    return usuario_login == usuario_almacenado and contrasena_login == contrasenia_almacenada
 
 
 #------------------------ Submenu ---------------------
@@ -125,7 +134,8 @@ def menu_principal(estudiantes, materias, notas):
 
 
 def principal():
-        # Matriz estudiantes: nombre, legajo, edad, año de cursada
+
+    # Matriz estudiantes: legajo, nombre, edad, año de cursada
     estudiantes = [
     [100, "Ares", 18, 2],
     [101, "Lucas", 19, 3],
@@ -134,7 +144,7 @@ def principal():
     [104, "Valentino", 18, 1]
     ]
 
-    # Matriz materias: nombre, id, cuatrimestre, carga horaria
+    # Matriz materias: id, nombre, cuatrimestre, carga horaria
     materias = [
     [100, "Prog.", 2, 6],
     [101, "Alg.", 2, 4],
@@ -152,12 +162,17 @@ def principal():
     [104, 9, 104, 102, 2]
     ]
 
+    cont = 1
+    lgin = login(usuario, contrasenia)
+    while cont < 5 and lgin == False:
+        print(f"{ROJO}Usuario o contraseña inválidos. Intento: {cont}/5{RESET}")
+        lgin = login(usuario, contrasenia)
+        cont += 1
 
-
-    if login(usuario, contrasenia) == True:
+    if cont <= 5:
         menu_principal(estudiantes, materias, notas)
     else:
-        print(f"{ROJO}Usuario o contraseña inválidos.{RESET}")
+        print("Intentos superados, vuelva a intentar más tarde")
 
 
 principal()

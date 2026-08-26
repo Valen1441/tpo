@@ -25,12 +25,12 @@ def altas_estudiantes_materias(matriz, titulo):
         edad_cuat = int(input("Ingrese la edad del nuevo estudiante: "))
         while edad_cuat < 17 or edad_cuat > 100:
             print(f"{ROJO}Edad invalida: rango perimitido de 17 a 100 años{RESET}")
-            edad_cuat = int(input("Ingrese de nuevo la edad del estudiante: "))
+            edad_cuat = int(input("Ingrese otra vez la edad del nuevo estudiante: "))
     else:
         edad_cuat = int(input("Ingrese el cuatrimestre de la nueva materia (1-2): "))
         while edad_cuat < 1 or edad_cuat > 2:
             print(f"{ROJO}Cuatimestre invalido: rango perimitido de 1 a 2{RESET}")
-            edad_cuat = int(input("Ingrese de nuevo el cuatrimestre de la materia (1-2): "))
+            edad_cuat = int(input("Ingrese otra vez el cuatrimestre de la nueva materia (1-2): "))
 
 
     #Pedir año de cursada / carga horaria
@@ -38,12 +38,12 @@ def altas_estudiantes_materias(matriz, titulo):
         año_horaria = int(input("Ingrese el año de cursada del nuevo estudiante (1-9): "))
         while año_horaria < 1 or año_horaria > 9:
             print(f"{ROJO}Año de cursada invalido: rango perimitido de 1 a 9{RESET}")
-            año_horaria = int(input("Ingrese de nuevo el año de cursada del estudiante (1-9): "))
+            año_horaria = int(input("Ingrese otra vez el año de cursada del nuevo estudiante (1-9): "))
     else:
         año_horaria = int(input("Ingrese la carga horaria de la nueva materia (1-12): "))
         while año_horaria < 1 or año_horaria > 12:
             print(f"{ROJO}Carga horaria invalida: rango perimitido de 1 a 12 horas{RESET}")
-            año_horaria = int(input("Ingrese de nuevo la carga horaria de la materia (1-12): "))
+            año_horaria = int(input("Ingrese otra vez la carga horaria de la nueva materia (1-12): "))
 
         
     codigo = matriz[len(matriz) - 1][0] + 1
@@ -76,7 +76,11 @@ def bajas_estudiantes_materias(matriz, notas, titulo):
         if registrado == -1:
             print(f"{ROJO}ERROR: Ese código no está registrado{RESET}")
         else:
-            print(f"{ROJO}ERROR: Ese estudiante tiene una calificaión registrada, no se puede eliminar{RESET}")
+            if titulo == "ESTUDIANTES":
+                print(f"{ROJO}ERROR: Ese estudiante tiene una calificaión registrada, no se puede eliminar{RESET}")
+            else:
+                print(f"{ROJO}ERROR: Esa materia tiene una calificaión registrada, no se puede eliminar{RESET}")
+
         
         if titulo == "ESTUDIANTES":
             codigo = int(input("Ingrese el código del estudiante a eliminar (Formato: 100): "))
@@ -113,9 +117,9 @@ def modificar_estudiantes_materias(matriz, titulo):
         print(f"{ROJO}ERROR: Ese código no está registrado{RESET}")
         
         if titulo == "ESTUDIANTES":
-            codigo = int(input("Ingrese el código del estudiante a modificar (Formato: 100): "))
+            codigo = int(input("Ingrese de nuevo el código del estudiante a modificar (Formato: 100): "))
         else:
-            codigo = int(input("Ingrese el código de la materia a modificar (Formato: 100): "))
+            codigo = int(input("Ingrese de nuevo el código de la materia a modificar (Formato: 100): "))
     
         modificar = busqueda_secuencial(matriz, 0, codigo)
                 
@@ -134,7 +138,7 @@ def modificar_estudiantes_materias(matriz, titulo):
             print(f"{ROJO}Edad invalida: rango perimitido de 17 a 100 años{RESET}")
             edad_cuat = int(input("Ingrese de nuevo la edad del estudiante: "))
     else:
-        edad_cuat = int(input("Ingrese el cuatrimestre de la materia (1-2):"))
+        edad_cuat = int(input("Ingrese el cuatrimestre de la materia (1-2): "))
         while edad_cuat < 1 or edad_cuat > 2:
             print(f"{ROJO}Cuatimestre invalido: rango perimitido de 1 a 2{RESET}")
             edad_cuat = int(input("Ingrese de nuevo el cuatrimestre de la materia (1-2): "))
@@ -166,7 +170,7 @@ def modificar_estudiantes_materias(matriz, titulo):
         
         
 
-    
+#------------------ MOSTRAR ESTUDIANTES / MATERIAS ---------------------   
 def imprimir_matriz(matriz, titulo):
 
     if titulo == "ESTUDIANTES":
@@ -205,15 +209,38 @@ def ordenar_matriz(matriz, columna, reversa):
 
 
 def mostrar_estudiantes_materias(matriz, titulo):
-    columna = int(input("Ingrese el número de la columna para ordenar (1-4): ")) - 1
+    columna = input("Ingrese el número de la columna para ordenar (1-4): ")
+
+    while columna.isnumeric() == False:
+        print(f"{ROJO}Opción inválida, ingrese un número entre 1 y 4{RESET}")
+        columna = input("Ingrese el número de la columna para ordenar (1-4): ")
+    columna = int(columna) - 1
+
     while columna < 0 or columna > 3:
-        print(f"{ROJO}Número fuera de rango, la matriz posee 4 columnas{RESET}")
-        columna = int(input("Ingrese de nuevo el número de la columna para ordenar (1-4): ")) - 1
+        print(f"{ROJO}Número inválido, la matriz posee 4 columnas{RESET}")
+        columna = input("Ingrese de nuevo el número de la columna para ordenar (1-4): ")
+
+        while columna.isnumeric() == False:
+            print(f"{ROJO}Opción inválida, ingrese un número entre 1 y 4{RESET}")
+            columna = input("Ingrese el número de la columna para ordenar (1-4): ")
+        columna = int(columna) - 1
+
     
-    reversa = int(input("Ingrese 0 = ascendente, 1 = descendente: "))
+    reversa = input("Ingrese 0 = ascendente, 1 = descendente: ")
+
+    while reversa.isnumeric() == False:
+        print(f"{ROJO}Opción inválida, ingrese un número entre 1 y 2{RESET}")
+        reversa = input("Ingrese 0 = ascendente, 1 = descendente: ")
+    reversa = int(reversa)
+    
     while reversa < 0 or reversa > 1:
-            print(f"{ROJO}Número inválido, rango valido de 0 a 1{RESET}")
-            reversa = int(input("Ingrese 0 = ascendente, 1 = descendente: ")) - 1
+        print(f"{ROJO}Número inválido, rango valido de 0 a 1{RESET}")
+        reversa = input("Ingrese 0 = ascendente, 1 = descendente: ")
+
+        while reversa.isnumeric() == False:
+            print(f"{ROJO}Opción inválida, ingrese un número entre 1 y 2{RESET}")
+            reversa = input("Ingrese 0 = ascendente, 1 = descendente: ")
+        revera = int(reversa)
 
     ordenar_matriz(matriz, columna, reversa)
     imprimir_matriz(matriz, titulo)
@@ -228,5 +255,3 @@ VERDE = "\033[32;1m"
 AZUL  = "\033[34;1m"
 MAGENTA  = "\033[35;1m"
 NARANJA = "\033[33;1m"
-
-
