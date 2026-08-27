@@ -1,4 +1,4 @@
-#------------------------ CALIFICAIONES ---------------------
+#------------------------ CALIFICACIONES ---------------------
 def busqueda_secuencial(matriz, columna, dato):
     i = 0
     while i < len(matriz) and matriz[i][columna] != dato:

@@ -12,16 +12,16 @@ ROJO  = "\033[31;1m"
 def validar_rango(desde, hasta):
     numero = input("Ingrese una opción: " )
     while numero.isnumeric() == False:
-        print(f"{ROJO}Opcion iválida. Ingrese un número dentro del ragno{RESET}")
-        numero = input("Ingrese de nuevo una opción: " )
+        print(f"{ROJO}Opcion inválida. Ingrese un número dentro del rango{RESET}")
+        numero = input("Ingrese nuevamente una opción: " )
 
     numero = int(numero)
     while numero < desde or numero > hasta:
-        print(f"{ROJO}Opción inválida. Ingrese una opcion que se encuentre en el rango{RESET}")
-        numero = input("Ingrese de nuevo una opción: ")
+        print(f"{ROJO}Opción inválida. Ingrese una opción que se encuentre en el rango{RESET}")
+        numero = input("Ingrese nuevamente una opción: ")
         while numero.isnumeric() == False:
-                print(f"{ROJO}Opcion iválida. Ingrese un número dentro del ragno{RESET}")
-                numero = input("Ingrese de nuevo una opción: " )
+                print(f"{ROJO}Opcion iválida. Ingrese un número dentro del rango{RESET}")
+                numero = input("Ingrese nuevamente una opción: " )
         numero = int(numero)
     return numero
 
@@ -162,14 +162,15 @@ def principal():
     [104, 9, 104, 102, 2]
     ]
 
-    cont = 1
+    cont = 4 #Cantidad de intentos de login
     lgin = login(usuario, contrasenia)
-    while cont < 5 and lgin == False:
-        print(f"{ROJO}Usuario o contraseña inválidos. Intento: {cont}/5{RESET}")
-        lgin = login(usuario, contrasenia)
-        cont += 1
 
-    if cont <= 5:
+    while cont > 0 and lgin == False:
+        print(f"{ROJO}Usuario o contraseña inválidos. Intentos restantes: {cont}{RESET}")
+        lgin = login(usuario, contrasenia)
+        cont -= 1
+
+    if lgin == True:
         menu_principal(estudiantes, materias, notas)
     else:
         print("Intentos superados, vuelva a intentar más tarde")
