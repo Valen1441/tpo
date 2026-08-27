@@ -1,4 +1,4 @@
-#------------------------ CALIFICAIONES ---------------------
+#------------------------ CALIFICACIONES ---------------------
 def busqueda_secuencial(matriz, columna, dato):
     i = 0
     while i < len(matriz) and matriz[i][columna] != dato:
@@ -23,11 +23,13 @@ def altas_estudiantes_materias(matriz, titulo):
     #Pedir edad/cuatrimestre
     if titulo == "ESTUDIANTES":
         edad_cuat = int(input("Ingrese la edad del nuevo estudiante: "))
+
         while edad_cuat < 17 or edad_cuat > 100:
             print(f"{ROJO}Edad invalida: rango perimitido de 17 a 100 años{RESET}")
             edad_cuat = int(input("Ingrese otra vez la edad del nuevo estudiante: "))
     else:
         edad_cuat = int(input("Ingrese el cuatrimestre de la nueva materia (1-2): "))
+
         while edad_cuat < 1 or edad_cuat > 2:
             print(f"{ROJO}Cuatimestre invalido: rango perimitido de 1 a 2{RESET}")
             edad_cuat = int(input("Ingrese otra vez el cuatrimestre de la nueva materia (1-2): "))
@@ -36,11 +38,13 @@ def altas_estudiantes_materias(matriz, titulo):
     #Pedir año de cursada / carga horaria
     if titulo == "ESTUDIANTES":
         año_horaria = int(input("Ingrese el año de cursada del nuevo estudiante (1-9): "))
+
         while año_horaria < 1 or año_horaria > 9:
             print(f"{ROJO}Año de cursada invalido: rango perimitido de 1 a 9{RESET}")
             año_horaria = int(input("Ingrese otra vez el año de cursada del nuevo estudiante (1-9): "))
     else:
         año_horaria = int(input("Ingrese la carga horaria de la nueva materia (1-12): "))
+
         while año_horaria < 1 or año_horaria > 12:
             print(f"{ROJO}Carga horaria invalida: rango perimitido de 1 a 12 horas{RESET}")
             año_horaria = int(input("Ingrese otra vez la carga horaria de la nueva materia (1-12): "))
@@ -53,6 +57,7 @@ def altas_estudiantes_materias(matriz, titulo):
 
     if titulo == "ESTUDIANTES":
         print(f"{VERDE}Estudiante {codigo} agreagado.{RESET}")
+        
     else: 
         print(f"{VERDE}Materia {codigo} agreagada.{RESET}")
     
@@ -63,15 +68,27 @@ def bajas_estudiantes_materias(matriz, notas, titulo):
     print(f" == BAJAS {titulo} ==")
 
     if titulo == "ESTUDIANTES":
-        codigo = int(input("Ingrese el código del estudiante a eliminar (Formato: 100): "))
+        codigo = input("Ingrese el código del estudiante a eliminar (Formato: 100): ")
+
+        while codigo.isnumeric() == False:
+            print(f"{ROJO}ERROR: No se admiten letras en el código.{RESET}")
+            codigo = input("Ingrese de nuevo el código del estudiante a eliminar (Formato: 100): ")
+
+        codigo = int(codigo)
         esta_en_calificaciones = busqueda_secuencial(notas, 2, codigo)
+
     else:
-        codigo = int(input("Ingrese el código de la materia a eliminar (Formato: 100): "))
+        codigo = input("Ingrese el código de la materia a eliminar (Formato: 100): ")
+
+        while codigo.isnumeric() == False:
+            print(f"{ROJO}ERROR: No se admiten letras en el código.{RESET}")
+            codigo = input("Ingrese de nuevo el código de la materia a eliminar (Formato: 100): ")
+
+        codigo = int(codigo)
         esta_en_calificaciones = busqueda_secuencial(notas, 3, codigo)
-    
+
     registrado = busqueda_secuencial(matriz, 0, codigo)
 
-            
     while registrado == -1 or esta_en_calificaciones != -1:
         if registrado == -1:
             print(f"{ROJO}ERROR: Ese código no está registrado{RESET}")
@@ -81,15 +98,28 @@ def bajas_estudiantes_materias(matriz, notas, titulo):
             else:
                 print(f"{ROJO}ERROR: Esa materia tiene una calificaión registrada, no se puede eliminar{RESET}")
 
-        
         if titulo == "ESTUDIANTES":
-            codigo = int(input("Ingrese el código del estudiante a eliminar (Formato: 100): "))
+            codigo = input("Ingrese el código del estudiante a eliminar (Formato: 100): ")
+
+            while codigo.isnumeric() == False:
+                print(f"{ROJO}ERROR: No se admiten letras en el código.{RESET}")
+                codigo = input("Ingrese de nuevo el código del estudiante a eliminar (Formato: 100): ")
+
+            codigo = int(codigo)
             esta_en_calificaciones = busqueda_secuencial(notas, 2, codigo)
+
         else:
-            codigo = int(input("Ingrese el código de la materia a eliminar (Formato: 100): "))
+            codigo = input("Ingrese el código de la materia a eliminar (Formato: 100): ")
+
+            while codigo.isnumeric() == False:
+                print(f"{ROJO}ERROR: No se admiten letras en el código.{RESET}")
+                codigo = input("Ingrese de nuevo el código de la materia a eliminar (Formato: 100): ")
+
+            codigo = int(codigo)
             esta_en_calificaciones = busqueda_secuencial(notas, 3, codigo)
-    
+
         registrado = busqueda_secuencial(matriz, 0, codigo)
+
                     
 
     matriz.pop(registrado)
@@ -107,20 +137,46 @@ def modificar_estudiantes_materias(matriz, titulo):
     
     #Pedir el codigo a modificar
     if titulo == "ESTUDIANTES":
-        codigo = int(input("Ingrese el código del estudiante a modificar (Formato: 100): "))
+        codigo = input("Ingrese el código del estudiante a modificar (Formato: 100): ")
+
+        while codigo.isnumeric() == False:
+            print(f"{ROJO}ERROR: No se admiten letras en el código.{RESET}")
+            codigo = input("Ingrese de nuevo el código del estudiante a modificar (Formato: 100): ")
+
+        codigo = int(codigo)
+
     else:
-        codigo = int(input("Ingrese el código de la materia a modificar (Formato: 100): "))
-    
+        codigo = input("Ingrese el código de la materia a modificar (Formato: 100): ")
+
+        while codigo.isnumeric() == False:
+            print(f"{ROJO}ERROR: No se admiten letras en el código.{RESET}")
+            codigo = input("Ingrese de nuevo el código de la materia a modificar (Formato: 100): ")
+
+        codigo = int(codigo)
+
     modificar = busqueda_secuencial(matriz, 0, codigo)
 
     while modificar == -1:
         print(f"{ROJO}ERROR: Ese código no está registrado{RESET}")
-        
+
         if titulo == "ESTUDIANTES":
-            codigo = int(input("Ingrese de nuevo el código del estudiante a modificar (Formato: 100): "))
+            codigo = input("Ingrese de nuevo el código del estudiante a modificar (Formato: 100): ")
+
+            while codigo.isnumeric() == False:
+                print(f"{ROJO}ERROR: No se admiten letras en el código.{RESET}")
+                codigo = input("Ingrese de nuevo el código del estudiante a modificar (Formato: 100): ")
+
+            codigo = int(codigo)
+
         else:
-            codigo = int(input("Ingrese de nuevo el código de la materia a modificar (Formato: 100): "))
-    
+            codigo = input("Ingrese de nuevo el código de la materia a modificar (Formato: 100): ")
+
+            while codigo.isnumeric() == False:
+                print(f"{ROJO}ERROR: No se admiten letras en el código.{RESET}")
+                codigo = input("Ingrese de nuevo el código de la materia a modificar (Formato: 100): ")
+
+            codigo = int(codigo)
+
         modificar = busqueda_secuencial(matriz, 0, codigo)
                 
                 
@@ -240,7 +296,7 @@ def mostrar_estudiantes_materias(matriz, titulo):
         while reversa.isnumeric() == False:
             print(f"{ROJO}Opción inválida, ingrese un número entre 1 y 2{RESET}")
             reversa = input("Ingrese 0 = ascendente, 1 = descendente: ")
-        revera = int(reversa)
+        reversa = int(reversa)
 
     ordenar_matriz(matriz, columna, reversa)
     imprimir_matriz(matriz, titulo)
