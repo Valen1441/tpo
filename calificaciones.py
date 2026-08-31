@@ -308,7 +308,10 @@ def imprimir_calificacion(notas, estudiantes, materias):
         materia = notas[i][3]
         pos = busqueda_secuencial(materias, 0, materia)
         materia = materias[pos][1]
-        
+
+        if len(materia) > 19:
+            materia = materia[:16] + "..."
+
         condicion = clasificar_nota(nota)
         print(f"{id_nota:^7}{nota:^16}{estudiante:<17}{materia:<19}{condicion:^25}")
 
