@@ -334,6 +334,9 @@ def imprimir_matriz(matriz, titulo):
         edad_cuat = matriz[i][2]
         año_horaria = matriz[i][3]
 
+        if len(nombre) > 16:
+            nombre = nombre[:13] + "..."
+
         if titulo == "ESTUDIANTES":
             print(f"{codigo:<13}{nombre:<16}{edad_cuat:^4}{año_horaria:>15}")
         else:
