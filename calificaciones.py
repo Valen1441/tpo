@@ -290,11 +290,11 @@ def clasificar_nota(nota):
     
 def imprimir_calificacion(notas, estudiantes, materias):
     # Encabezado
-    print("="*72)
-    print(f'{BOLD}{MAGENTA}{"CALIFICACIONES":^72}{RESET}')
-    print("="*72)
-    print(f"{BOLD}{'ID Nota':<13}{'Nota':<10}{'Estudiante':<17}{'Materia':<21}{'Condición':<17}{RESET}")
-    print("-" * 72)
+    print("="*80)
+    print(f'{BOLD}{MAGENTA}{"CALIFICACIONES":^80}{RESET}')
+    print("="*80)
+    print(f"{BOLD}{'ID Nota':<13}{'Nota':<10}{'Estudiante':<21}{'Materia':<23}{'Condición':<17}{RESET}")
+    print("-" * 80)
 
     # Datos
     for i in range(len(notas)):
@@ -304,16 +304,17 @@ def imprimir_calificacion(notas, estudiantes, materias):
         estudiante = notas[i][2]
         pos = busqueda_secuencial(estudiantes, 0, estudiante)
         estudiante = estudiantes[pos][1]
+        if len(estudiante) > 15:
+            estudiante = estudiante[:12] + "..."
 
         materia = notas[i][3]
         pos = busqueda_secuencial(materias, 0, materia)
         materia = materias[pos][1]
-
-        if len(materia) > 19:
-            materia = materia[:16] + "..."
-
+        if len(materia) > 15:
+            materia = materia[:12] + "..."
+        
         condicion = clasificar_nota(nota)
-        print(f"{id_nota:^7}{nota:^16}{estudiante:<17}{materia:<19}{condicion:^25}")
+        print(f"{id_nota:^7}{nota:^16}{estudiante:<21}{materia:<21}{condicion:^25}")
 
 def ordenar_matriz(matriz, columna, reversa):
     if reversa == 0: 

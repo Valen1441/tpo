@@ -147,8 +147,8 @@ def principal():
     # Matriz materias: id, nombre, cuatrimestre, carga horaria
     materias = [
     [100, "Programación", 2, 6],
-    [101, "Algebra", 2, 4],
-    [102, "Sistemas de representación", 1, 6],
+    [101, "Álgebra", 2, 4],
+    [102, "Sistemas Información", 1, 6],
     [103, "Química", 2, 4],
     [104, "Inglés", 1, 3]
     ]

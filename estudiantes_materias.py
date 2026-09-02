@@ -1,4 +1,4 @@
-#------------------------ CALIFICACIONES ---------------------
+#------------------------ ESTUDIANTES Y MATERIAS ---------------------
 def busqueda_secuencial(matriz, columna, dato):
     i = 0
     while i < len(matriz) and matriz[i][columna] != dato:
@@ -22,32 +22,72 @@ def altas_estudiantes_materias(matriz, titulo):
     
     #Pedir edad/cuatrimestre
     if titulo == "ESTUDIANTES":
-        edad_cuat = int(input("Ingrese la edad del nuevo estudiante: "))
+        edad_cuat = input("Ingrese la edad del nuevo estudiante: ")
+
+        while edad_cuat.isnumeric() == False:
+            print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
+            edad_cuat = input("Ingrese otra vez la edad del nuevo estudiante: ")
+        edad_cuat = int(edad_cuat)
 
         while edad_cuat < 17 or edad_cuat > 100:
             print(f"{ROJO}Edad invalida: rango perimitido de 17 a 100 años{RESET}")
-            edad_cuat = int(input("Ingrese otra vez la edad del nuevo estudiante: "))
+            edad_cuat = input("Ingrese otra vez la edad del nuevo estudiante: ")
+
+            while edad_cuat.isnumeric() == False:
+                print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
+                edad_cuat = input("Ingrese otra vez la edad del nuevo estudiante: ")
+            edad_cuat = int(edad_cuat)
     else:
-        edad_cuat = int(input("Ingrese el cuatrimestre de la nueva materia (1-2): "))
+        edad_cuat = input("Ingrese el cuatrimestre de la nueva materia (1-2): ")
+
+        while edad_cuat.isnumeric() == False:
+            print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
+            edad_cuat = input("Ingrese otra vez el cuatrimestre de la nueva materia (1-2): ")
+        edad_cuat = int(edad_cuat)
 
         while edad_cuat < 1 or edad_cuat > 2:
             print(f"{ROJO}Cuatimestre invalido: rango perimitido de 1 a 2{RESET}")
-            edad_cuat = int(input("Ingrese otra vez el cuatrimestre de la nueva materia (1-2): "))
+            edad_cuat = input("Ingrese otra vez el cuatrimestre de la nueva materia (1-2): ")
+
+            while edad_cuat.isnumeric() == False:
+                print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
+                edad_cuat = input("Ingrese otra vez el cuatrimestre de la nueva materia (1-2): ")
+            edad_cuat = int(edad_cuat)
 
 
     #Pedir año de cursada / carga horaria
     if titulo == "ESTUDIANTES":
-        año_horaria = int(input("Ingrese el año de cursada del nuevo estudiante (1-9): "))
+        año_horaria = input("Ingrese el año de cursada del nuevo estudiante (1-9): ")
+
+        while año_horaria.isnumeric() == False:
+            print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
+            año_horaria = input("Ingrese otra vez el año de cursada del nuevo estudiante (1-9): ")
+        año_horaria = int(año_horaria)
 
         while año_horaria < 1 or año_horaria > 9:
             print(f"{ROJO}Año de cursada invalido: rango perimitido de 1 a 9{RESET}")
-            año_horaria = int(input("Ingrese otra vez el año de cursada del nuevo estudiante (1-9): "))
+            año_horaria = input("Ingrese otra vez el año de cursada del nuevo estudiante (1-9): ")
+
+            while año_horaria.isnumeric() == False:
+                print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
+                año_horaria = input("Ingrese otra vez el año de cursada del nuevo estudiante (1-9): ")
+            año_horaria = int(año_horaria)
     else:
-        año_horaria = int(input("Ingrese la carga horaria de la nueva materia (1-12): "))
+        año_horaria = input("Ingrese la carga horaria de la nueva materia (1-12): ")
+
+        while año_horaria.isnumeric() == False:
+            print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
+            año_horaria = input("Ingrese otra vez la carga horaria de la nueva materia (1-12): ")
+        año_horaria = int(año_horaria)
 
         while año_horaria < 1 or año_horaria > 12:
             print(f"{ROJO}Carga horaria invalida: rango perimitido de 1 a 12 horas{RESET}")
-            año_horaria = int(input("Ingrese otra vez la carga horaria de la nueva materia (1-12): "))
+            año_horaria = input("Ingrese otra vez la carga horaria de la nueva materia (1-12): ")
+
+            while año_horaria.isnumeric() == False:
+                print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
+                año_horaria = input("Ingrese otra vez la carga horaria de la nueva materia (1-12): ")
+            año_horaria = int(año_horaria)
 
         
     codigo = matriz[len(matriz) - 1][0] + 1
@@ -189,28 +229,73 @@ def modificar_estudiantes_materias(matriz, titulo):
     
 #Pedir edad/cuatrimestre
     if titulo == "ESTUDIANTES":
-        edad_cuat = int(input("Ingrese la edad del estudiante: "))
+        edad_cuat = input("Ingrese la edad del estudiante: ")
+
+        while edad_cuat.isnumeric() == False:
+            print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
+            edad_cuat = input("Ingrese de nuevo la edad del estudiante: ")
+        edad_cuat = int(edad_cuat)
+        
         while edad_cuat < 17 or edad_cuat > 100:
             print(f"{ROJO}Edad invalida: rango perimitido de 17 a 100 años{RESET}")
-            edad_cuat = int(input("Ingrese de nuevo la edad del estudiante: "))
+            edad_cuat = input("Ingrese de nuevo la edad del estudiante: ")
+
+            while edad_cuat.isnumeric() == False:
+                print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
+                edad_cuat = input("Ingrese de nuevo la edad del estudiante: ")
+            edad_cuat = int(edad_cuat)
     else:
-        edad_cuat = int(input("Ingrese el cuatrimestre de la materia (1-2): "))
+        edad_cuat = input("Ingrese el cuatrimestre de la materia (1-2): ")
+
+        while edad_cuat.isnumeric() == False:
+            print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
+            edad_cuat = input("Ingrese de nuevo el cuatrimestre de la materia (1-2): ")
+        edad_cuat = int(edad_cuat)
+
         while edad_cuat < 1 or edad_cuat > 2:
             print(f"{ROJO}Cuatimestre invalido: rango perimitido de 1 a 2{RESET}")
-            edad_cuat = int(input("Ingrese de nuevo el cuatrimestre de la materia (1-2): "))
+            edad_cuat = input("Ingrese de nuevo el cuatrimestre de la materia (1-2): ")
+
+            while edad_cuat.isnumeric() == False:
+                print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
+                edad_cuat = input("Ingrese de nuevo el cuatrimestre de la materia (1-2): ")
+            edad_cuat = int(edad_cuat)
 
 
     #Pedir año de cursada / carga horaria
     if titulo == "ESTUDIANTES":
-        año_horaria = int(input("Ingrese el año de cursada del estudiante (1-9): "))
+        año_horaria = input("Ingrese el año de cursada del estudiante (1-9): ")
+
+        while año_horaria.isnumeric() == False:
+            print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
+            año_horaria = input("Ingrese de nuevo el año de cursada del estudiante (1-9): ")
+        año_horaria = int(año_horaria)
+
         while año_horaria < 1 or año_horaria > 9:
             print(f"{ROJO}Año de cursada invalido: rango perimitido de 1 a 9{RESET}")
-            año_horaria = int(input("Ingrese de nuevo el año de cursada del estudiante (1-9): "))
+            año_horaria = input("Ingrese de nuevo el año de cursada del estudiante (1-9): ")
+
+            while año_horaria.isnumeric() == False:
+                print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
+                año_horaria = input("Ingrese de nuevo el año de cursada del estudiante (1-9): ")
+            año_horaria = int(año_horaria)
     else:
-        año_horaria = int(input("Ingrese la carga horaria de la materia (1-12): "))
+        año_horaria = input("Ingrese la carga horaria de la materia (1-12): ")
+
+        while año_horaria.isnumeric() == False:
+            print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
+            año_horaria = input("Ingrese de nuevo la carga horaria de la materia (1-12): ")
+        año_horaria = int(año_horaria)
+
         while año_horaria < 1 or año_horaria > 12:
             print(f"{ROJO}Carga horaria invalida: rango perimitido de 1 a 12 horas{RESET}")
-            año_horaria = int(input("Ingrese de nuevo la carga horaria de la materia (1-12): "))
+            año_horaria = input("Ingrese de nuevo la carga horaria de la materia (1-12): ")
+
+            while año_horaria.isnumeric() == False:
+                print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
+                año_horaria = input("Ingrese de nuevo la carga horaria de la materia (1-12): ")
+            año_horaria = int(año_horaria)
+
         
 
     #Modificar
