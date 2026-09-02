@@ -146,11 +146,11 @@ def principal():
 
     # Matriz materias: id, nombre, cuatrimestre, carga horaria
     materias = [
-    [100, "Prog.", 2, 6],
-    [101, "Alg.", 2, 4],
-    [102, "Sist. Inf.", 1, 6],
-    [103, "Quim.", 2, 4],
-    [104, "Ingl.", 1, 3]
+    [100, "Programación", 2, 6],
+    [101, "Álgebra", 2, 4],
+    [102, "Sistemas Información", 1, 6],
+    [103, "Química", 2, 4],
+    [104, "Inglés", 1, 3]
     ]
 
     # Matriz notas: id nota, nota, legajo estudiante, id materia, condicion: 1(aprobado), 2(promocionada), 3(desaprobado)
