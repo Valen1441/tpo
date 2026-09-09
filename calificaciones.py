@@ -293,7 +293,7 @@ def imprimir_calificacion(notas, estudiantes, materias):
     print("="*80)
     print(f'{BOLD}{MAGENTA}{"CALIFICACIONES":^80}{RESET}')
     print("="*80)
-    print(f"{BOLD}{'ID Nota':<13}{'Nota':<10}{'Estudiante':<21}{'Materia':<23}{'Condición':<17}{RESET}")
+    print(f"{BOLD}{'ID Nota':<7}{'Nota':^16}{'Estudiante':<21}{'Materia':<15}{'Condición':^24}{RESET}")
     print("-" * 80)
 
     # Datos
@@ -314,7 +314,7 @@ def imprimir_calificacion(notas, estudiantes, materias):
             materia = materia[:12] + "..."
         
         condicion = clasificar_nota(nota)
-        print(f"{id_nota:^7}{nota:^16}{estudiante:<21}{materia:<21}{condicion:^25}")
+        print(f"{id_nota:^7}{nota:^16}{estudiante:<21}{materia:<15}{condicion:^36}")
 
 def ordenar_matriz(matriz, columna, reversa):
     if reversa == 0: 

@@ -1,5 +1,6 @@
 import calificaciones
 import estudiantes_materias
+import estadisticas
 
 usuario = "Admin"
 contrasenia = "123"
@@ -41,6 +42,14 @@ def mostrar_submenu(titulo):
     3. MODIFICACIÓN
     4. LISTADO
     5. VOLVER AL MENÚ PRINCIPAL
+    """)
+
+def mostrar_submenu_estadistica():
+    print("""
+    === MENÚ ESTADÍSTICAS ===
+    1. MATERIAS
+    2. ESTUDIANTES
+    3. VOLVER AL MENÚ PRINCIPAL
     """)
 
 #------------------ Menu Estudiantes ---------------------
@@ -97,6 +106,17 @@ def menu_calificaciones(notas, estudiantes, materias):
             calificaciones.mostrar_calificaciones(notas, estudiantes, materias)
             menu_calificaciones(notas, estudiantes, materias)
 
+#------------------ Menu Estadisticas ---------------------
+def menu_estadisticas(notas, estudiantes, materias):
+    mostrar_submenu_estadistica()
+    opcion = validar_rango(1, 3)
+    match opcion:
+        case 1:
+            estadisticas.estadisticas_materias(notas, materias)
+            menu_estadisticas(notas, estudiantes, materias)
+        case 2:
+            ...
+
 
 def mostrar_menu_principal():
     print("""
@@ -122,7 +142,8 @@ def ejecutar_menu_principal(eleccion, estudiantes, materias, notas):
             menu_calificaciones(notas, estudiantes, materias)
             menu_principal(estudiantes, materias, notas)
         case 4:
-            ...
+            menu_estadisticas(notas, estudiantes, materias)
+            menu_principal(estudiantes, materias, notas)
         case 5:
             print("Saliste del programa.")
  
@@ -135,23 +156,23 @@ def menu_principal(estudiantes, materias, notas):
 
 def principal():
 
-    # Matriz estudiantes: legajo, nombre, edad, año de cursada
+    # Matriz estudiantes: legajo, nombre, edad, año de cursada, nombre de usuario
     estudiantes = [
-    [100, "Ares", 18, 2],
-    [101, "Lucas", 19, 3],
-    [102, "Marcos", 18, 1],
-    [103, "Diomid", 22, 2],
-    [104, "Valentino", 18, 1]
+    [100, "Ares Alfini", 18, 2, "aalfini"],
+    [101, "Lucas Jaldin", 19, 3, "ljaldin"],
+    [102, "Marcos Ratt", 18, 1, "mratt"],
+    [103, "Diomid Petrenko", 22, 2, "dpetrenko"],
+    [104, "Valentino Lazzari", 18, 1, "vlazzari"]
     ]
 
-    # Matriz materias: id, nombre, cuatrimestre, carga horaria
+    # Matriz materias: id, nombre, cuatrimestre, año, carga horaria
     materias = [
-    [100, "Programación", 2, 6],
-    [101, "Álgebra", 2, 4],
-    [102, "Sistemas Información", 1, 6],
-    [103, "Química", 2, 4],
-    [104, "Inglés", 1, 3]
-    ]
+    [100, "Programación", 2, 2, 6],
+    [101, "Álgebra", 2, 2, 4],
+    [102, "Sistemas de Información", 1, 1, 6],
+    [103, "Química", 2, 2, 4],
+    [104, "Inglés", 1, 3, 3]
+    ]     
 
     # Matriz notas: id nota, nota, legajo estudiante, id materia, condicion: 1(aprobado), 2(promocionada), 3(desaprobado)
     notas = [

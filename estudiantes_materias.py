@@ -1,3 +1,4 @@
+import re
 #------------------------ ESTUDIANTES Y MATERIAS ---------------------
 def busqueda_secuencial(matriz, columna, dato):
     i = 0
@@ -15,7 +16,14 @@ def altas_estudiantes_materias(matriz, titulo):
 
     #Pedir nombre del estudiante/materia
     if titulo == "ESTUDIANTES":
-        nombre = input("Ingrese el nombre del nuevo estudiante: ").title()
+        nombre = input("Ingrese el nombre y apellido del nuevo estudiante: ").title()
+
+        if len(nombre.split()) != 2:
+            print(f"{ROJO}ERROR: debe ingresar solo un nombre y apellido.{RESET}")
+            nombre = input("Ingrese otra vez el nombre y apellido del nuevo estudiante: ").title()
+
+        nombre = nombre.split()
+        nombre = nombre[0] + " " + nombre[1]
     else:
         nombre = input("Ingrese el nombre de la nueva materia: ").title()
     
@@ -57,43 +65,79 @@ def altas_estudiantes_materias(matriz, titulo):
 
     #Pedir año de cursada / carga horaria
     if titulo == "ESTUDIANTES":
-        año_horaria = input("Ingrese el año de cursada del nuevo estudiante (1-9): ")
+        anio = input("Ingrese el año de cursada del nuevo estudiante (1-9): ")
 
-        while año_horaria.isnumeric() == False:
+        while anio.isnumeric() == False:
             print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-            año_horaria = input("Ingrese otra vez el año de cursada del nuevo estudiante (1-9): ")
-        año_horaria = int(año_horaria)
+            anio = input("Ingrese otra vez el año de cursada del nuevo estudiante (1-9): ")
+        anio = int(anio)
 
-        while año_horaria < 1 or año_horaria > 9:
+        while anio < 1 or anio > 9:
             print(f"{ROJO}Año de cursada invalido: rango perimitido de 1 a 9{RESET}")
-            año_horaria = input("Ingrese otra vez el año de cursada del nuevo estudiante (1-9): ")
+            anio = input("Ingrese otra vez el año de cursada del nuevo estudiante (1-9): ")
 
-            while año_horaria.isnumeric() == False:
+            while anio.isnumeric() == False:
                 print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-                año_horaria = input("Ingrese otra vez el año de cursada del nuevo estudiante (1-9): ")
-            año_horaria = int(año_horaria)
+                anio = input("Ingrese otra vez el año de cursada del nuevo estudiante (1-9): ")
+            anio = int(anio)
     else:
-        año_horaria = input("Ingrese la carga horaria de la nueva materia (1-12): ")
+        anio = input("Ingrese el año de la nueva materia (1-5): ")
 
-        while año_horaria.isnumeric() == False:
+        while anio.isnumeric() == False:
             print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-            año_horaria = input("Ingrese otra vez la carga horaria de la nueva materia (1-12): ")
-        año_horaria = int(año_horaria)
+            anio = input("Ingrese otra vez el año de la nueva materia (1-5): ")
+        anio = int(anio)
 
-        while año_horaria < 1 or año_horaria > 12:
-            print(f"{ROJO}Carga horaria invalida: rango perimitido de 1 a 12 horas{RESET}")
-            año_horaria = input("Ingrese otra vez la carga horaria de la nueva materia (1-12): ")
+        while anio < 1 or anio > 5:
+            print(f"{ROJO}Año inválido: rango perimitido de 1 a 5 años{RESET}")
+            anio = input("Ingrese otra vez el año de la nueva materia (1-5): ")
 
-            while año_horaria.isnumeric() == False:
+            while anio.isnumeric() == False:
                 print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-                año_horaria = input("Ingrese otra vez la carga horaria de la nueva materia (1-12): ")
-            año_horaria = int(año_horaria)
+                anio = input("Ingrese otra vez el año de la nueva materia (1-5): ")
+            anio = int(anio)
+
+
+    #Nombre de usuario / año 
+    if titulo == "ESTUDIANTES":
+        usuario_horaria = nombre.split()
+        cont = 1
+        numero = 0
+        for i in range(len(matriz)):
+            if re.search(nombre, matriz[i][1], re.IGNORECASE):
+                if cont < len(usuario_horaria[0]):
+                    cont += 1
+                else: 
+                    numero += 1
+        if numero == 0:
+            usuario_horaria = (usuario_horaria[0][:cont] + usuario_horaria[1]).lower()
+        else:
+            usuario_horaria = (usuario_horaria[0][:cont] + usuario_horaria[1] + str(numero)).lower()
+        print(usuario_horaria)
+
+    else:
+        usuario_horaria = input("Ingrese la carga horaria de la nueva materia (1-12): ")
+
+        while usuario_horaria.isnumeric() == False:
+            print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
+            usuario_horaria = input("Ingrese otra vez la carga horaria de la nueva materia (1-12): ")
+        usuario_horaria = int(usuario_horaria)
+
+        while usuario_horaria < 1 or usuario_horaria > 12:
+            print(f"{ROJO}Carga horaria invalida: rango perimitido de 1 a 12 horas{RESET}")
+            usuario_horaria = input("Ingrese otra vez la carga horaria de la nueva materia (1-12): ")
+
+            while usuario_horaria.isnumeric() == False:
+                print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
+                usuario_horaria = input("Ingrese otra vez la carga horaria de la nueva materia (1-12): ")
+            usuario_horaria = int(usuario_horaria)
+
 
         
     codigo = matriz[len(matriz) - 1][0] + 1
 
     #Agregar
-    matriz.append([codigo, nombre, edad_cuat, año_horaria])
+    matriz.append([codigo, nombre, edad_cuat, anio, usuario_horaria])
 
     if titulo == "ESTUDIANTES":
         print(f"{VERDE}Estudiante {codigo} agreagado.{RESET}")
@@ -222,7 +266,14 @@ def modificar_estudiantes_materias(matriz, titulo):
                 
 #Pedir nombre del estudiante/materia
     if titulo == "ESTUDIANTES":
-        nombre = input("Ingrese el nombre del estudiante: ").title()
+        nombre = input("Ingrese el nombre y apellido del estudiante: ").title()
+
+        if len(nombre.split()) != 2:
+            print(f"{ROJO}ERROR: debe ingresar solo un nombre y apellido.{RESET}")
+            nombre = input("Ingrese otra vez el nombre y apellido del estudiante: ").title()
+
+        nombre = nombre.split()
+        nombre = nombre[0] + " " + nombre[1]
     else:
         nombre = input("Ingrese el nombre de la materia: ").title()
     
@@ -264,37 +315,72 @@ def modificar_estudiantes_materias(matriz, titulo):
 
     #Pedir año de cursada / carga horaria
     if titulo == "ESTUDIANTES":
-        año_horaria = input("Ingrese el año de cursada del estudiante (1-9): ")
+        anio = input("Ingrese el año de cursada del estudiante (1-9): ")
 
-        while año_horaria.isnumeric() == False:
+        while anio.isnumeric() == False:
             print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-            año_horaria = input("Ingrese de nuevo el año de cursada del estudiante (1-9): ")
-        año_horaria = int(año_horaria)
+            anio = input("Ingrese de nuevo el año de cursada del estudiante (1-9): ")
+        anio = int(anio)
 
-        while año_horaria < 1 or año_horaria > 9:
+        while anio < 1 or anio > 9:
             print(f"{ROJO}Año de cursada invalido: rango perimitido de 1 a 9{RESET}")
-            año_horaria = input("Ingrese de nuevo el año de cursada del estudiante (1-9): ")
+            anio = input("Ingrese de nuevo el año de cursada del estudiante (1-9): ")
 
-            while año_horaria.isnumeric() == False:
+            while anio.isnumeric() == False:
                 print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-                año_horaria = input("Ingrese de nuevo el año de cursada del estudiante (1-9): ")
-            año_horaria = int(año_horaria)
+                anio = input("Ingrese de nuevo el año de cursada del estudiante (1-9): ")
+            anio = int(anio)
     else:
-        año_horaria = input("Ingrese la carga horaria de la materia (1-12): ")
+        anio = input("Ingrese el año de la materia (1-5): ")
 
-        while año_horaria.isnumeric() == False:
+        while anio.isnumeric() == False:
             print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-            año_horaria = input("Ingrese de nuevo la carga horaria de la materia (1-12): ")
-        año_horaria = int(año_horaria)
+            anio = input("Ingrese de nuevo el año de la materia (1-5): ")
+        anio = int(anio)
 
-        while año_horaria < 1 or año_horaria > 12:
-            print(f"{ROJO}Carga horaria invalida: rango perimitido de 1 a 12 horas{RESET}")
-            año_horaria = input("Ingrese de nuevo la carga horaria de la materia (1-12): ")
+        while anio < 1 or anio > 5:
+            print(f"{ROJO}Año invalido: rango perimitido de 1 a 5 años{RESET}")
+            anio = input("Ingrese de nuevo el año de la materia (1-5): ")
 
-            while año_horaria.isnumeric() == False:
+            while anio.isnumeric() == False:
                 print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-                año_horaria = input("Ingrese de nuevo la carga horaria de la materia (1-12): ")
-            año_horaria = int(año_horaria)
+                anio = input("Ingrese de nuevo el año de la materia (1-5): ")
+            anio = int(anio)
+
+
+     #Nombre de usuario / año 
+    if titulo == "ESTUDIANTES":
+        usuario_horaria = nombre.split()
+        cont = 1
+        numero = 0
+        for i in range(len(matriz)):
+            if re.search(nombre, matriz[i][1], re.IGNORECASE):
+                if cont < len(usuario_horaria[0]):
+                    cont += 1
+                else: 
+                    numero += 1
+        if numero == 0:
+            usuario_horaria = (usuario_horaria[0][:cont] + usuario_horaria[1]).lower()
+        else:
+            usuario_horaria = (usuario_horaria[0][:cont] + usuario_horaria[1] + str(numero)).lower()
+        print(usuario_horaria)
+
+    else:
+        usuario_horaria = input("Ingrese la carga horaria de la materia (1-12): ")
+
+        while usuario_horaria.isnumeric() == False:
+            print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
+            usuario_horaria = input("Ingrese otra vez la carga horaria de la materia (1-12): ")
+        usuario_horaria = int(usuario_horaria)
+
+        while usuario_horaria < 1 or usuario_horaria > 12:
+            print(f"{ROJO}Carga horaria invalida: rango perimitido de 1 a 12 horas{RESET}")
+            usuario_horaria = input("Ingrese otra vez la carga horaria de la materia (1-12): ")
+
+            while usuario_horaria.isnumeric() == False:
+                print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
+                usuario_horaria = input("Ingrese otra vez la carga horaria de la materia (1-12): ")
+            usuario_horaria = int(usuario_horaria)
 
         
 
@@ -302,7 +388,8 @@ def modificar_estudiantes_materias(matriz, titulo):
     matriz[modificar][0] = codigo
     matriz[modificar][1] = nombre
     matriz[modificar][2] = edad_cuat
-    matriz[modificar][3] = año_horaria
+    matriz[modificar][3] = anio
+    matriz[modificar][4] = usuario_horaria
 
     if titulo == "ESTUDIANTES":
         print(f"{AZUL}Estudiante {codigo} modificado.{RESET}")
@@ -315,32 +402,41 @@ def modificar_estudiantes_materias(matriz, titulo):
 def imprimir_matriz(matriz, titulo):
 
     if titulo == "ESTUDIANTES":
-        print("="*55)
-        print(f'{BOLD}{MAGENTA}{"ESTUDIANTES":^55}{RESET}')
-        print("="*55)
-        print(f"{BOLD}{'Legajo':<13}{'Nombre':<16}{'Edad':<13}{'Año Cursada':<21}{RESET}")
-        print("-" * 55)
+        print("="*82)
+        print(f'{BOLD}{MAGENTA}{"ESTUDIANTES":^82}{RESET}')
+        print("="*82)
+        print(f"{BOLD}{'Legajo':<13}{'Nombre':<17}{'Edad':^18}{'Año Cursada':^13}{"Usuario":>19}{RESET}")
+        print("-" * 82)
     else:
-        print("="*65)
-        print(f'{BOLD}{MAGENTA}{"MATERIAS":^65}{RESET}')
-        print("="*65)
-        print(f"{BOLD}{'Id Materia':<16}{'Nombre':<16}{'Cuatrimestre':<17}{'Carga Horaria':<21}{RESET}")
-        print("-" * 65)
+        print("="*82)
+        print(f'{BOLD}{MAGENTA}{"MATERIAS":^82}{RESET}')
+        print("="*82)
+        print(f"{BOLD}{'Id Materia':<16}{'Nombre':<21}{'Cuatrimestre':^12}{"Año":^17}{'Carga Horaria':^13}{RESET}")
+        print("-" * 82)
+
+        lista_codigo = list(map(lambda fila: str(fila[3]) + "Pri" + str(fila[0]) if fila[2] == 1 else str(fila[3]) + "Seg" + str(fila[0]), matriz))
+        for fila in range(len(matriz)):
+            matriz[fila][0] = lista_codigo[fila]
 
     # Datos
     for i in range(len(matriz)):
         codigo = matriz[i][0]
-        nombre = matriz[i][1]
-        edad_cuat = matriz[i][2]
-        año_horaria = matriz[i][3]
 
-        if len(nombre) > 16:
-            nombre = nombre[:13] + "..."
+        nombre = matriz[i][1]
+        if len(nombre) > 15:
+            nombre = nombre[:12] + "..."
+
+        edad_cuat = matriz[i][2]
+        anio = matriz[i][3]
+
+        usuario_horaria = matriz[i][4]
 
         if titulo == "ESTUDIANTES":
-            print(f"{codigo:<13}{nombre:<16}{edad_cuat:^4}{año_horaria:>15}")
+            if len(usuario_horaria) > 15:
+                usuario_horaria = usuario_horaria[:12] + "..."
+            print(f"{codigo:<13}{nombre:<17}{edad_cuat:^18}{anio:^13}{usuario_horaria:>19}")
         else:
-            print(f"{codigo:<16}{nombre:<16}{edad_cuat:^12}{año_horaria:>12}")
+            print(f"{codigo:<16}{nombre:<21}{edad_cuat:^12}{anio:^17}{usuario_horaria:^13}")
 
 
 
