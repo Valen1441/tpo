@@ -322,7 +322,7 @@ def modificar_estudiantes_materias(matriz, titulo):
             anio = input("Ingrese de nuevo el año de cursada del estudiante (1-9): ")
         anio = int(anio)
 
-        while v < 1 or anio > 9:
+        while anio < 1 or anio > 9:
             print(f"{ROJO}Año de cursada invalido: rango perimitido de 1 a 9{RESET}")
             anio = input("Ingrese de nuevo el año de cursada del estudiante (1-9): ")
 
