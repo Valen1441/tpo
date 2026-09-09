@@ -431,9 +431,6 @@ def imprimir_matriz(matriz, titulo):
 
         usuario_horaria = matriz[i][4]
 
-        if len(nombre) > 16:
-            nombre = nombre[:13] + "..."
-
         if titulo == "ESTUDIANTES":
             if len(usuario_horaria) > 15:
                 usuario_horaria = usuario_horaria[:12] + "..."
