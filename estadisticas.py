@@ -6,19 +6,20 @@ def estadisticas_materias(notas, materias):
     promociona = f"{AZUL}Promocionados{RESET}"
     desaprueba = f"{ROJO}Desaprobados{RESET}"
 
-    print(len(aprueba))
-    print(len(promociona))
-    print(len(desaprueba))
-
     print("="*102)
     print(f'{BOLD}{MAGENTA}{"ESTADÍSTICAS POR MATERIA":^102}{RESET}')
     print("="*102)
-    print(f"{BOLD}{'ID Materia':^15}{'Nombre':<15}{'Notas':^13}{'Promedio':^13}{aprueba:^24}{promociona:^28}{desaprueba:^27}{RESET}")
+    print(f"{BOLD}{'ID Materia':<15}{'Nombre':<15}{'Notas':^13}{'Promedio':^13}{aprueba:^24}{promociona:^28}{desaprueba:^27}{RESET}")
     print("-" * 102)
 
-    for materia in materias:
-        id_materia = materia[0]
-        nombre = materia[1]
+    codigos = [fila[0] for fila in materias]
+    lista_codigo = list(map(lambda fila: str(fila[3]) + "Pri" + str(fila[0]) if fila[2] == 1 else str(fila[3]) + "Seg" + str(fila[0]), materias))
+    for fila in range(len(materias)):
+        materias[fila][0] = lista_codigo[fila]
+  
+    for materia in range(len(materias)):
+        id_materia = codigos[materia]
+        nombre = materias[materia][1]
         if len(nombre) > 15:
             nombre = nombre[:12] + "..."
 
@@ -38,7 +39,12 @@ def estadisticas_materias(notas, materias):
             desaprobados = len(list(filter(lambda nota: nota[3] == id_materia and nota[4] == 3, notas)))
             promedio = (lambda a,b: a / b)(suma, cantidad)
 
-        print(f"{id_materia:^15}{nombre:<15}{cantidad:^13}{promedio:^13}{aprobados:^13}{promocionados:^17}{desaprobados:^17}")
+        id_materia = materias[materia][0]
+        print(f"{id_materia:<15}{nombre:<15}{cantidad:^13}{promedio:^13}{aprobados:^13}{promocionados:^17}{desaprobados:^17}")
+
+
+    for fila in range(len(materias)):
+        materias[fila][0] = codigos[fila]
     
 
 

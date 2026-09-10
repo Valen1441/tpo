@@ -8,14 +8,21 @@ def busqueda_secuencial(matriz, columna, dato):
     else:
         return -1
 
+def obtener_lista_legajos(estudiantes):
+    lista_legajos = []
+    for i in estudiantes:
+        lista_legajos.append(i["legajo"])
+    return lista_legajos
+
 def boletin(estudiantes, estudiante, notas, materias):
     # ==============================
     # REPORTE / BOLETÍN DEL ALUMNO
     # ==============================
 
     # Buscar nombre del alumno
-    posicion_estudiante = busqueda_secuencial(estudiantes, 0, estudiante)
-    nombre_alumno = estudiantes[posicion_estudiante][1]
+    lista_legajos = obtener_lista_legajos(estudiantes)
+    posicion_estudiante = lista_legajos.index(estudiante)
+    nombre_alumno = estudiantes[posicion_estudiante]["nombre"]
 
     print()
     print("=" * 40)
@@ -52,6 +59,8 @@ def altas_calificaciones(notas, estudiantes, materias):
     print()
     print(" == ALTAS CALIFICACIONES ==")
 
+    lista_legajos = obtener_lista_legajos(estudiantes)
+
     #Pedir legajo del estudiante 
     estudiante = input("Ingrese el legajo del estudiante a calificar (Formato: 100): ")
 
@@ -60,9 +69,8 @@ def altas_calificaciones(notas, estudiantes, materias):
         estudiante = input("Ingrese de nuevo el legajo del estudiante a calificar (Formato: 100): ")
     estudiante = int(estudiante)
 
-    registrado = busqueda_secuencial(estudiantes, 0, estudiante)
             
-    while registrado == -1:
+    while estudiante not in lista_legajos:
         print(f"{ROJO}ERROR: Ese legajo no está registrado.{RESET}")
         
         estudiante = input("Ingrese de nuevo el legajo del estudiante a calificar (Formato: 100): ")
@@ -71,8 +79,6 @@ def altas_calificaciones(notas, estudiantes, materias):
             print(f"{ROJO}ERROR: No se admiten letras en el legajo.{RESET}")
             estudiante = input("Ingrese de nuevo el legajo del estudiante a calificar (Formato: 100): ")
         estudiante = int(estudiante)
-    
-        registrado = busqueda_secuencial(estudiantes, 0, estudiante)
     
     
     #Pedir id de la materia
@@ -171,6 +177,8 @@ def bajas_calificaciones(notas):
 def modificar_calificaciones(notas, estudiantes, materias):
     print()
     print(" == MODIFICACIÓN CALIFICACIONES ==")
+
+    lista_legajos = obtener_lista_legajos(estudiantes)
     
     #Pedir el codigo a modificar
     codigo = input("Ingrese el código de la nota a modificar (Formato: 100): ")
@@ -203,9 +211,8 @@ def modificar_calificaciones(notas, estudiantes, materias):
         legajo = input("Ingrese otra vez el nuevo legajo del estudiante de la nota (Formato: 100): ")
     legajo = int(legajo)
 
-    registrado = busqueda_secuencial(estudiantes, 0, legajo)
 
-    while registrado == -1:
+    while legajo not in lista_legajos:
         print(f"{ROJO}ERROR: Ese código no está registrado{RESET}")
         
         legajo = input("Ingrese otra vez el nuevo legajo del estudiante de la nota (Formato: 100): ")
@@ -214,8 +221,6 @@ def modificar_calificaciones(notas, estudiantes, materias):
             print(f"{ROJO}ERROR: No se admiten letras en el legajo.{RESET}")
             legajo = input("Ingrese otra vez el nuevo legajo del estudiante de la nota (Formato: 100): ")
         legajo = int(legajo)
-
-        registrado = busqueda_secuencial(estudiantes, 0, legajo)
 
         
     #Pedir el nuevo codigo de materia
@@ -296,14 +301,16 @@ def imprimir_calificacion(notas, estudiantes, materias):
     print(f"{BOLD}{'ID Nota':<7}{'Nota':^16}{'Estudiante':<21}{'Materia':<15}{'Condición':^24}{RESET}")
     print("-" * 80)
 
+    lista_legajos = obtener_lista_legajos(estudiantes)
+
     # Datos
     for i in range(len(notas)):
         id_nota = notas[i][0]
         nota = notas[i][1]
 
         estudiante = notas[i][2]
-        pos = busqueda_secuencial(estudiantes, 0, estudiante)
-        estudiante = estudiantes[pos][1]
+        pos = lista_legajos.index(estudiante)
+        estudiante = estudiantes[pos]["nombre"]
         if len(estudiante) > 15:
             estudiante = estudiante[:12] + "..."
 
