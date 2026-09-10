@@ -1,6 +1,7 @@
 import calificaciones
-import estudiantes_materias
+import Estudiantes
 import estadisticas
+import Materias
 
 usuario = "Admin"
 contrasenia = "123"
@@ -58,34 +59,34 @@ def menu_estudiantes(estudiantes, notas):
     opcion = validar_rango(1, 5)
     match opcion:
         case 1:
-            estudiantes_materias.altas_estudiantes_materias(estudiantes, "ESTUDIANTES")
+            Estudiantes.altas_estudiantes(estudiantes)
             menu_estudiantes(estudiantes, notas)
         case 2:
-            estudiantes_materias.bajas_estudiantes_materias(estudiantes, notas, "ESTUDIANTES")
+            Estudiantes.bajas_estudiantes(estudiantes, notas)
             menu_estudiantes(estudiantes, notas)
         case 3:
-            estudiantes_materias.modificar_estudiantes_materias(estudiantes, "ESTUDIANTES")
+            Estudiantes.modificar_estudiantes(estudiantes)
             menu_estudiantes(estudiantes, notas)
         case 4:
-            estudiantes_materias.mostrar_estudiantes_materias(estudiantes, "ESTUDIANTES")
+            Estudiantes.mostrar_estudiantes(estudiantes)
             menu_estudiantes(estudiantes, notas)
 
-#------------------ Menu Materias ---------------------
+#------------------ Menu Masterias ---------------------
 def menu_materias(materias, notas):
     mostrar_submenu("MATERIAS")
     opcion = validar_rango(1, 5)
     match opcion:
         case 1:
-            estudiantes_materias.altas_estudiantes_materias(materias, "MATERIAS")
+            Materias.altas_materias(materias)
             menu_materias(materias, notas)
         case 2:
-            estudiantes_materias.bajas_estudiantes_materias(materias, notas, "MATERIAS")
+            Materias.bajas_materias(materias, notas)
             menu_materias(materias, notas)
         case 3:
-            estudiantes_materias.modificar_estudiantes_materias(materias, "MATERIAS")
+            Materias.modificar_materias(materias)
             menu_materias(materias, notas)
         case 4:
-            estudiantes_materias.mostrar_estudiantes_materias(materias, "MATERIAS")
+            Materias.mostrar_materias(materias)
             menu_materias(materias, notas)
 
 #------------------ Menu Calificaciones ---------------------
@@ -157,13 +158,17 @@ def menu_principal(estudiantes, materias, notas):
 def principal():
 
     # Matriz estudiantes: legajo, nombre, edad, año de cursada, nombre de usuario
-    estudiantes = [
+    matriz_estudiantes = [
     [100, "Ares Alfini", 18, 2, "aalfini"],
     [101, "Lucas Jaldin", 19, 3, "ljaldin"],
     [102, "Marcos Ratt", 18, 1, "mratt"],
     [103, "Diomid Petrenko", 22, 2, "dpetrenko"],
     [104, "Valentino Lazzari", 18, 1, "vlazzari"]
     ]
+
+    encabezados = ("legajo", "nombre", "edad", "año cursada", "usuario")
+
+    estudiantes = [dict(zip(encabezados, fila)) for fila in matriz_estudiantes]
 
     # Matriz materias: id, nombre, cuatrimestre, año, carga horaria
     materias = [
