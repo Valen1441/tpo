@@ -1,6 +1,11 @@
 import re
 #------------------------ ESTUDIANTES ---------------------
 def busqueda_secuencial(matriz, columna, dato):
+
+    '''
+    pre: Recibe una matriz, el índice de una columna y un dato a buscar.
+    pos: Retorna el índice de la fila donde se encuentra el dato en la columna especificada, o -1 si no se encuentra.
+    '''
     i = 0
     while i < len(matriz) and matriz[i][columna] != dato:
         i += 1
@@ -10,6 +15,11 @@ def busqueda_secuencial(matriz, columna, dato):
         return -1
 
 def obtener_lista_legajos(estudiantes):
+
+    '''
+    pre: Recibe una lista de estudiantes.
+    pos: Retorna una lista con los legajos de todos los estudiantes.
+    '''
     lista_legajos = []
     for i in estudiantes:
         lista_legajos.append(i["legajo"])
@@ -17,6 +27,12 @@ def obtener_lista_legajos(estudiantes):
 
 #------------------ ALTAS ESTUDIANTES ---------------------
 def altas_estudiantes(estudiantes):
+
+    '''
+    pre: Recibe una lista de estudiantes.
+    pos: Solicita los datos de un nuevo estudiante al usuario, valida los datos ingresados y agrega el nuevo estudiante a la lista de estudiantes.
+    '''
+
     print()
     print(f" == ALTAS ESTUDIANTES ==")
 
@@ -101,6 +117,12 @@ def altas_estudiantes(estudiantes):
 
 #------------------ BAJAS ESTUDIANTES ---------------------
 def bajas_estudiantes(estudiantes, notas):
+
+    '''
+    pre: Recibe una lista de estudiantes y una lista de notas.
+    pos: Solicita al usuario el legajo del estudiante a eliminar, valida que el legajo esté registrado y que no tenga calificaciones asociadas, y elimina el estudiante de la lista de estudiantes.
+    '''
+
     print()
     print(f" == BAJAS ESTUDIANTES ==")
 
@@ -142,6 +164,12 @@ def bajas_estudiantes(estudiantes, notas):
 
 #------------------ MODIFICACION ESTUDIANTES ---------------------
 def modificar_estudiantes(estudiantes):
+
+    '''
+    pre: Recibe una lista de estudiantes.
+    pos: Solicita al usuario el legajo del estudiante a modificar, valida que el legajo esté registrado, solicita los nuevos datos del estudiante y actualiza la información en la lista de estudiantes.
+    '''
+
     print()
     print(f" == MODIFICACIÓN ESTUDIANTES ==")
 
@@ -248,6 +276,11 @@ def modificar_estudiantes(estudiantes):
 #------------------ MOSTRAR ESTUDIANTES ---------------------   
 def imprimir_estudiantes(estudiantes):
 
+    '''
+    pre: Recibe una lista de estudiantes.
+    pos: Imprime los datos de todos los estudiantes en una tabla modificada con el codigo ANSI.
+    '''
+
     print("="*82)
     print(f'{BOLD}{MAGENTA}{"ESTUDIANTES":^82}{RESET}')
     print("="*82)
@@ -273,6 +306,12 @@ def imprimir_estudiantes(estudiantes):
 
 
 def ordenar_estudiantes(estudiantes, columna, reversa):
+
+    '''
+    pre: Recibe una lista de estudiantes, el índice de una columna y un valor que indica si se debe ordenar en orden ascendente o descendente.
+    pos: Ordena la lista de estudiantes según la columna especificada y el orden indicado.
+    '''
+
     dict_keys = list(estudiantes[0].keys())
     clave = dict_keys[columna]
 
@@ -284,6 +323,12 @@ def ordenar_estudiantes(estudiantes, columna, reversa):
 
 
 def mostrar_estudiantes(estudiantes):
+
+    '''
+    pre: Recibe una lista de estudiantes.
+    pos: Solicita al usuario el número de la columna por la cual desea ordenar la lista de estudiantes y el orden (ascendente o descendente), luego llama a la función para ordenar la lista y finalmente imprime la lista de estudiantes ordenada.
+    '''
+
     columna = input("Ingrese el número de la columna para ordenar (1-4): ")
 
     while columna.isnumeric() == False:

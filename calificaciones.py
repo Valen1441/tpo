@@ -1,5 +1,11 @@
 #------------------------ CALIFICACIONES ---------------------
 def busqueda_secuencial(matriz, columna, dato):
+
+    '''
+    pre: Recibe una matriz, un índice de columna y un dato a buscar.
+    pos: Devuelve el índice de la fila donde se encuentra el dato en la columna especificada, o -1 si no se encuentra.
+    '''
+
     i = 0
     while i < len(matriz) and matriz[i][columna] != dato:
         i += 1
@@ -9,12 +15,23 @@ def busqueda_secuencial(matriz, columna, dato):
         return -1
 
 def obtener_lista_legajos(estudiantes):
+
+    '''
+    pre: Recibe una lista de estudiantes.
+    pos: Devuelve una lista con los legajos de todos los estudiantes.
+    '''
+
     lista_legajos = []
     for i in estudiantes:
         lista_legajos.append(i["legajo"])
     return lista_legajos
 
 def boletin(estudiantes, estudiante, notas, materias):
+
+    '''
+    pre: Recibe una lista de estudiantes, un legajo de estudiante, una lista de notas y una lista de materias.
+    pos: Imprime en pantalla el boletín del estudiante especificado, mostrando las materias cursadas, las notas obtenidas y la condición de cada materia (aprobada, promocionada o desaprobada).
+    '''
     # ==============================
     # REPORTE / BOLETÍN DEL ALUMNO
     # ==============================
@@ -56,6 +73,12 @@ def boletin(estudiantes, estudiante, notas, materias):
 
 #------------------ ALTAS CALIFICACIONES ---------------------
 def altas_calificaciones(notas, estudiantes, materias):
+
+    '''
+    pre: Recibe una lista de notas, una lista de estudiantes y una lista de materias.
+    pos: Solicita al usuario el legajo del estudiante, el código de la materia y la nota obtenida, valida los datos ingresados y agrega la calificación a la lista de notas.
+    '''
+
     print()
     print(" == ALTAS CALIFICACIONES ==")
 
@@ -142,6 +165,12 @@ def altas_calificaciones(notas, estudiantes, materias):
 
 #------------------ BAJAS CALIFICACIONES ---------------------
 def bajas_calificaciones(notas):
+
+    '''
+    pre: Recibe una lista de notas.
+    pos: Solicita al usuario el código de la nota a eliminar, valida que el código esté registrado y elimina la calificación de la lista de notas.
+    '''
+
     print()
     print(" == BAJAS CALIFICACIONES ==")
     
@@ -175,6 +204,12 @@ def bajas_calificaciones(notas):
 
 #------------------ MODIFICACION CALIFICACIONES ---------------------
 def modificar_calificaciones(notas, estudiantes, materias):
+
+    '''
+    pre: Recibe una lista de notas, una lista de estudiantes y una lista de materias.
+    pos: Solicita al usuario el código de la nota a modificar, valida que el código esté registrado, solicita los nuevos datos de la nota y actualiza la información en la lista de notas.
+    '''
+
     print()
     print(" == MODIFICACIÓN CALIFICACIONES ==")
 
@@ -285,6 +320,12 @@ def modificar_calificaciones(notas, estudiantes, materias):
 
 #------------------ MOSTRAR CALIFICACIONES ---------------------
 def clasificar_nota(nota):
+
+    '''
+    pre: Recibe una nota.
+    pos: Devuelve una cadena de texto que indica si la nota es promocionada, aprobada o desaprobada, utilizando códigos de color ANSI.
+    '''
+
     if nota >= 8:
         cadena = f"{AZUL}Promocionada{RESET}"
     elif nota >= 4:
@@ -294,6 +335,11 @@ def clasificar_nota(nota):
     return cadena
     
 def imprimir_calificacion(notas, estudiantes, materias):
+
+    '''
+    pre: Recibe una lista de notas, una lista de estudiantes y una lista de materias.
+    pos: Imprime en pantalla la lista de calificaciones con sus respectivos datos, incluyendo el nombre del estudiante y de la materia, y la condición de la nota (aprobada, promocionada o desaprobada) utilizando códigos de color ANSI.
+    '''
     # Encabezado
     print("="*80)
     print(f'{BOLD}{MAGENTA}{"CALIFICACIONES":^80}{RESET}')
@@ -324,12 +370,23 @@ def imprimir_calificacion(notas, estudiantes, materias):
         print(f"{id_nota:^7}{nota:^16}{estudiante:<21}{materia:<15}{condicion:^36}")
 
 def ordenar_matriz(matriz, columna, reversa):
+
+    '''
+    pre: Recibe una matriz, un índice de columna y un valor que indica si se debe ordenar en orden ascendente o descendente.
+    pos: Ordena la matriz según la columna especificada y el orden indicado.
+    '''
+
     if reversa == 0: 
         matriz.sort(key=lambda fila: fila[columna])
     else:
         matriz.sort(key=lambda fila: fila[columna], reverse=True)
 
 def mostrar_calificaciones(notas, estudiantes, materias):
+
+    '''
+    pre: Recibe una lista de notas, una lista de estudiantes y una lista de materias.
+    pos: Solicita al usuario el número de la columna por la cual desea ordenar la lista de calificaciones y el orden (ascendente o descendente), luego llama a la función para ordenar la lista y finalmente imprime la lista de calificaciones ordenada.
+    '''
     columna = input("Ingrese el número de la columna para ordenar (1-5): ")
 
     while columna.isnumeric() == False:

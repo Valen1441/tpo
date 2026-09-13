@@ -1,6 +1,11 @@
 
 #------------------------ MATERIAS ---------------------
 def busqueda_secuencial(matriz, columna, dato):
+
+    '''
+    pre: Recibe una matriz, el índice de una columna y un dato a buscar.
+    pos: Retorna el índice de la fila donde se encuentra el dato en la columna especificada, o -1 si no se encuentra.
+    '''
     i = 0
     while i < len(matriz) and matriz[i][columna] != dato:
         i += 1
@@ -11,6 +16,11 @@ def busqueda_secuencial(matriz, columna, dato):
 
 #------------------ ALTAS MATERIAS ---------------------
 def altas_materias(materias):
+
+    '''
+    pre: Recibe una lista de materias.
+    pos: Solicita los datos de una nueva materia al usuario, valida los datos ingresados y agrega la nueva materia a la lista de materias.
+    '''
     print()
     print(f" == ALTAS MATERIAS ==")
 
@@ -82,6 +92,11 @@ def altas_materias(materias):
 
 #------------------ BAJAS MATERIAS ---------------------
 def bajas_materias(materias, notas):
+
+    '''
+    pre: Recibe una lista de materias y una lista de notas.
+    pos: Solicita al usuario el código de la materia a eliminar, valida que el código esté registrado y que no tenga calificaciones asociadas, y elimina la materia de la lista de materias.
+    '''
     print()
     print(f" == BAJAS MATERIAS ==")
 
@@ -123,6 +138,11 @@ def bajas_materias(materias, notas):
 
 #------------------ MODIFICACION MATERIAS ---------------------
 def modificar_materias(materias):
+
+    '''
+    pre: Recibe una lista de materias.
+    pos: Solicita al usuario el código de la materia a modificar, valida que el código esté registrado, solicita los nuevos datos de la materia y actualiza la información en la lista de materias.
+    '''
     print()
     print(f" == MODIFICACIÓN MATERIAS ==")
     
@@ -224,6 +244,11 @@ def modificar_materias(materias):
 #------------------ MOSTRAR MATERIAS ---------------------   
 def imprimir_materias(materias):
 
+    '''
+    pre: Recibe una lista de materias.
+    pos: Imprime en pantalla la lista de materias con sus respectivos datos, incluyendo un código único generado a partir del año y cuatrimestre de la materia.
+    '''
+
     print("="*82)
     print(f'{BOLD}{MAGENTA}{"MATERIAS":^82}{RESET}')
     print("="*82)
@@ -254,6 +279,11 @@ def imprimir_materias(materias):
         materias[fila][0] = codigos[fila]
 
 def ordenar_materias(materias, columna, reversa):
+
+    '''
+    pre: Recibe una lista de materias, el índice de una columna y un valor que indica si se debe ordenar en orden ascendente o descendente.
+    pos: Ordena la lista de materias según la columna especificada y el orden indicado.
+    '''
     if reversa == 0: 
         materias.sort(key=lambda fila: fila[columna])
     else:
@@ -262,6 +292,11 @@ def ordenar_materias(materias, columna, reversa):
 
 
 def mostrar_materias(materias):
+
+    '''
+    pre: Recibe una lista de materias.
+    pos: Solicita al usuario el número de la columna por la cual desea ordenar la lista de materias y el orden (ascendente o descendente), luego llama a la función para ordenar la lista y finalmente imprime la lista de materias ordenada.
+    '''
     columna = input("Ingrese el número de la columna para ordenar (1-4): ")
 
     while columna.isnumeric() == False:
