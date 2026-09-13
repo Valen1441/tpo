@@ -116,7 +116,8 @@ def menu_estadisticas(notas, estudiantes, materias):
             estadisticas.estadisticas_materias(notas, materias)
             menu_estadisticas(notas, estudiantes, materias)
         case 2:
-            ...
+            estadisticas.estadisticas_estudiantes(notas, estudiantes, materias)
+            menu_estadisticas(notas, estudiantes, materias)
 
 
 def mostrar_menu_principal():
@@ -181,7 +182,7 @@ def principal():
 
     # Matriz notas: id nota, nota, legajo estudiante, id materia, condicion: 1(aprobado), 2(promocionada), 3(desaprobado)
     notas = [
-    [100, 8, 103, 101, 2],
+    [100, 8, 100, 101, 2],
     [101, 6, 101, 101, 1],
     [102, 7, 102, 104, 1],
     [103, 3, 103, 103, 3],
