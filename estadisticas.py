@@ -11,6 +11,11 @@ NARANJA = "\033[33;1m"
 
 def estadisticas_materias(notas, materias):
 
+    '''
+    pre: Recibe una lista de notas y una lista de materias.
+    pos: Imprime en pantalla las estadísticas de cada materia, incluyendo la cantidad de notas, el promedio de las notas, la cantidad de aprobados, promocionados y desaprobados.
+    '''
+
     aprueba = f"{VERDE}Aprobados{RESET}"
     promociona = f"{AZUL}Promocionados{RESET}"
     desaprueba = f"{ROJO}Desaprobados{RESET}"
@@ -56,6 +61,11 @@ def estadisticas_materias(notas, materias):
         materias[fila][0] = codigos[fila]
     
 def estadisticas_estudiantes(notas, estudiantes, materias):
+
+    '''
+    pre: Recibe una lista de notas, una lista de estudiantes y una lista de materias.
+    pos: Imprime en pantalla las estadísticas de cada estudiante, incluyendo la cantidad de notas, el promedio de las notas, la cantidad de aprobados, promocionados y desaprobados.
+    '''
     aprueba = f"{VERDE}Aprobados{RESET}"
     promociona = f"{AZUL}Promocionados{RESET}"
     desaprueba = f"{ROJO}Desaprobados{RESET}"

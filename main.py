@@ -12,6 +12,12 @@ ROJO  = "\033[31;1m"
 
 
 def validar_rango(desde, hasta):
+
+    '''
+    pre: Recibe dos números enteros, desde y hasta. Solicita al usuario que ingrese un número dentro de ese rango. Valida que el número ingresado sea un número y que se encuentre dentro del rango.
+    pos: Devuelve un número ingresado por el usuario que se encuentra dentro del rango desde y hasta.
+    '''
+
     numero = input("Ingrese una opción: " )
     while numero.isnumeric() == False:
         print(f"{ROJO}Opcion inválida. Ingrese un número dentro del rango{RESET}")
@@ -29,6 +35,12 @@ def validar_rango(desde, hasta):
 
 
 def login(usuario_almacenado, contrasenia_almacenada):
+
+    '''
+    pre: Recibe un usuario y una contraseña almacenados. Solicita al usuario que ingrese un usuario y una contraseña para iniciar sesión.
+    pos: Devuelve True si el usuario y la contraseña ingresados coinciden con los almacenados, False en caso contrario.
+    '''
+
     usuario_login = input("Ingrese un usuario: ")
     contrasena_login = input("Ingrese una contraseña: ")
     return usuario_login == usuario_almacenado and contrasena_login == contrasenia_almacenada
@@ -36,6 +48,11 @@ def login(usuario_almacenado, contrasenia_almacenada):
 
 #------------------------ Submenu ---------------------
 def mostrar_submenu(titulo):
+
+    '''
+    pre: Recibe un título para el menú.
+    pos: Muestra un menú con el título proporcionado que contiene el CRUD y una opcion para volver al menú principal.
+    '''
     print(f"""
     === MENÚ {titulo} ===
     1. ALTA
@@ -46,6 +63,11 @@ def mostrar_submenu(titulo):
     """)
 
 def mostrar_submenu_estadistica():
+
+    '''
+    pre: No recibe parámetros.
+    pos: Muestra un menú de estadísticas que contiene opciones para ver estadísticas de materias, estudiantes y una opción para volver al menú principal.
+    '''
     print("""
     === MENÚ ESTADÍSTICAS ===
     1. MATERIAS
@@ -55,6 +77,11 @@ def mostrar_submenu_estadistica():
 
 #------------------ Menu Estudiantes ---------------------
 def menu_estudiantes(estudiantes, notas):
+
+    '''
+    pre: Recibe una lista de estudiantes y una lista de notas.
+    pos: Muestra un menú de estudiantes que contiene el CRUD de estudiantes y una opción para volver al menú principal. Dependiendo de la opción seleccionada, llama a la función correspondiente del módulo Estudiantes y luego vuelve a mostrar el menú de estudiantes.
+    '''
     mostrar_submenu("ESTUDIANTES")
     opcion = validar_rango(1, 5)
     match opcion:
@@ -73,6 +100,11 @@ def menu_estudiantes(estudiantes, notas):
 
 #------------------ Menu Masterias ---------------------
 def menu_materias(materias, notas):
+
+    '''
+    pre: Recibe una lista de materias y una lista de notas.
+    pos: Muestra un menú de materias que contiene el CRUD de materias y una opción para volver al menú principal. Dependiendo de la opción seleccionada, llama a la función correspondiente del módulo Materias y luego vuelve a mostrar el menú de materias.
+    '''
     mostrar_submenu("MATERIAS")
     opcion = validar_rango(1, 5)
     match opcion:
@@ -91,6 +123,11 @@ def menu_materias(materias, notas):
 
 #------------------ Menu Calificaciones ---------------------
 def menu_calificaciones(notas, estudiantes, materias):
+
+    '''
+    pre: Recibe una lista de notas, una lista de estudiantes y una lista de materias.
+    pos: Muestra un menú de calificaciones que contiene el CRUD de calificaciones y una opción para volver al menú principal. Dependiendo de la opción seleccionada, llama a la función correspondiente del módulo calificaciones y luego vuelve a mostrar el menú de calificaciones.
+    '''
     mostrar_submenu("CALIFICACIONES")
     opcion = validar_rango(1, 5)
     match opcion:
@@ -109,6 +146,11 @@ def menu_calificaciones(notas, estudiantes, materias):
 
 #------------------ Menu Estadisticas ---------------------
 def menu_estadisticas(notas, estudiantes, materias):
+
+    '''
+    pre: Recibe una lista de notas, una lista de estudiantes y una lista de materias.
+    pos: Muestra un menú de estadísticas que contiene opciones para ver estadísticas de materias, estudiantes y una opción para volver al menú principal. Dependiendo de la opción seleccionada, llama a la función correspondiente del módulo estadisticas y luego vuelve a mostrar el menú de estadísticas.
+    '''
     mostrar_submenu_estadistica()
     opcion = validar_rango(1, 3)
     match opcion:
@@ -121,6 +163,12 @@ def menu_estadisticas(notas, estudiantes, materias):
 
 
 def mostrar_menu_principal():
+
+    '''
+    pre: No recibe parámetros.
+    pos: Muestra el menú principal del programa.
+    '''
+
     print("""
     ==== MENÚ PRINCIPAL ====
 
@@ -133,6 +181,11 @@ def mostrar_menu_principal():
  
  
 def ejecutar_menu_principal(eleccion, estudiantes, materias, notas):
+
+    '''
+    pre: Recibe una opción elegida por el usuario, una lista de estudiantes, una lista de materias y una lista de notas.
+    pos: Dependiendo de la opción elegida, llama a la función correspondiente para mostrar el menú de estudiantes, materias, calificaciones o estadísticas. Si la opción elegida es salir del programa, muestra un mensaje de despedida.
+    '''
     match eleccion:
         case 1:
             menu_estudiantes(estudiantes, notas)
@@ -151,6 +204,11 @@ def ejecutar_menu_principal(eleccion, estudiantes, materias, notas):
  
  
 def menu_principal(estudiantes, materias, notas):
+
+    '''
+    pre: Recibe una lista de estudiantes, una lista de materias y una lista de notas.
+    pos: Muestra el menú principal del programa, llama a la función para validar la opción elegida por el usuario y luego entrega la opción correspondiente para la otra función.
+    '''
     mostrar_menu_principal()
     opcion = validar_rango(1, 5)
     ejecutar_menu_principal(opcion, estudiantes, materias, notas)
@@ -158,6 +216,10 @@ def menu_principal(estudiantes, materias, notas):
 
 def principal():
 
+    '''
+    pre: No recibe parámetros.
+    pos: Inicializa las matrices de estudiantes, materias y notas, llama a la función de login, valida los intentos de inicio de sesión y, si se loguea correctamente dentro de los intentos, llama a la función para mostrar el menú principal del programa.
+    '''
     # Matriz estudiantes: legajo, nombre, edad, año de cursada, nombre de usuario
     matriz_estudiantes = [
     [100, "Ares Alfini", 18, 2, "aalfini"],
