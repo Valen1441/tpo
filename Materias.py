@@ -260,6 +260,11 @@ def imprimir_materias(materias):
          El formato del código mostrado se modifica temporalmente para indicar el año y el cuatrimestre.
     '''
 
+    '''
+    pre: Recibe una lista de materias.
+    pos: Imprime en pantalla la lista de materias con sus respectivos datos, incluyendo un código único generado a partir del año y cuatrimestre de la materia.
+    '''
+
     print("="*82)
     print(f'{BOLD}{MAGENTA}{"MATERIAS":^82}{RESET}')
     print("="*82)

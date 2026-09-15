@@ -302,6 +302,10 @@ def principal():
          y, si las credenciales son válidas, inicia el menú principal.
     '''
 
+    '''
+    pre: No recibe parámetros.
+    pos: Inicializa las matrices de estudiantes, materias y notas, llama a la función de login, valida los intentos de inicio de sesión y, si se loguea correctamente dentro de los intentos, llama a la función para mostrar el menú principal del programa.
+    '''
     # Matriz estudiantes: legajo, nombre, edad, año de cursada, nombre de usuario
     matriz_estudiantes = [
     [100, "Ares Alfini", 18, 2, "aalfini"],

@@ -84,6 +84,11 @@ def estadisticas_materias(notas, materias):
          el promedio y la cantidad de alumnos aprobados, promocionados y desaprobados.
     '''
 
+    '''
+    pre: Recibe una lista de notas y una lista de materias.
+    pos: Imprime en pantalla las estadísticas de cada materia, incluyendo la cantidad de notas, el promedio de las notas, la cantidad de aprobados, promocionados y desaprobados.
+    '''
+
     aprueba = f"{VERDE}Aprobados{RESET}"
     promociona = f"{AZUL}Promocionados{RESET}"
     desaprueba = f"{ROJO}Desaprobados{RESET}"

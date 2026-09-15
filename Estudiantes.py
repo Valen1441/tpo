@@ -294,6 +294,11 @@ def imprimir_estudiantes(estudiantes):
     pos: muestra por pantalla los datos de todos los estudiantes en formato de tabla.
     '''
 
+    '''
+    pre: Recibe una lista de estudiantes.
+    pos: Imprime los datos de todos los estudiantes en una tabla modificada con el codigo ANSI.
+    '''
+
     print("="*82)
     print(f'{BOLD}{MAGENTA}{"ESTUDIANTES":^82}{RESET}')
     print("="*82)
