@@ -3,8 +3,8 @@ import Estudiantes
 import estadisticas
 import Materias
 
-usuario = "Admin"
-contrasenia = "123"
+usuarios = ("Admin", "Nardone")
+contrasenias = ("123", "321")
 
 # Códigos ANSI
 RESET = "\033[0m"
@@ -38,7 +38,7 @@ def validar_rango(desde, hasta):
     return numero
 
 
-def login(usuario_almacenado, contrasenia_almacenada):
+def login(usuarios_almacenados, contrasenias_almacenadas):
     '''
     pre: recibe el usuario y la contraseña almacenados.
     pos: devuelve True si el usuario y la contraseña ingresados coinciden
@@ -46,24 +46,49 @@ def login(usuario_almacenado, contrasenia_almacenada):
     '''
     usuario_login = input("Ingrese un usuario: ")
     contrasena_login = input("Ingrese una contraseña: ")
-    return usuario_login == usuario_almacenado and contrasena_login == contrasenia_almacenada
-
+    inicio = False
+    for i in range(len(usuarios_almacenados)):
+        if usuarios_almacenados[i] == usuario_login:
+            for j in range(len(contrasenias_almacenadas)):
+                if contrasenias_almacenadas[j] == contrasena_login and i == j:
+                    inicio = True
+    if inicio: 
+        return usuario_login
+    else:
+        return -1
 
 #------------------------ Submenu ---------------------
-def mostrar_submenu(titulo):
+def mostrar_submenu(titulo, usuario):
     '''
     pre: recibe el título del menú que se desea mostrar.
     pos: muestra por pantalla el submenú correspondiente con las opciones
          de alta, baja, modificación, listado y volver.
     '''
-    print(f"""
-    === MENÚ {titulo} ===
-    1. ALTA
-    2. BAJA
-    3. MODIFICACIÓN
-    4. LISTADO
-    5. VOLVER AL MENÚ PRINCIPAL
-    """)
+    if usuario == "Admin":
+        print(f"""
+        === MENÚ {titulo} ===
+        1. ALTA
+        2. BAJA
+        3. MODIFICACIÓN
+        4. LISTADO
+        5. VOLVER AL MENÚ PRINCIPAL
+        """)
+    else:
+        if titulo == "CALIFICACIONES":
+            print(f"""
+        === MENÚ CALIFICACIONES ===
+        1. ALTA
+        2. MODIFICACIÓN
+        3. LISTADO
+        4. VOLVER AL MENÚ PRINCIPAL
+        """)
+        else:
+            print(f"""
+        === MENÚ {titulo} ===
+        1. LISTADO
+        2. VOLVER AL MENÚ PRINCIPAL
+        """)
+        
 
 def mostrar_submenu_estadistica(titulo="ESTADÍSTICAS"):
     '''
@@ -86,119 +111,158 @@ def mostrar_submenu_estadistica(titulo="ESTADÍSTICAS"):
     """)
 
 #------------------ Menu Estudiantes ---------------------
-def menu_estudiantes(estudiantes, notas):
+def menu_estudiantes(estudiantes, notas, usuario):
     '''
     pre: recibe el diccionario de estudiantes y la matriz de calificaciones.
     pos: muestra y ejecuta las opciones del menú de estudiantes, permitiendo
          realizar altas, bajas, modificaciones y listados.
     '''
-    mostrar_submenu("ESTUDIANTES")
-    opcion = validar_rango(1, 5)
-    estudiantes_con_notas = set()
-    estudiantes_totales = set()
-    for nota in notas:
-        estudiantes_con_notas.add(nota[2])
-    for estudiante in estudiantes:
-        estudiantes_totales.add(estudiante["legajo"])
-        print(estudiantes_totales)
-    match opcion:
-        case 1:
-            Estudiantes.altas_estudiantes(estudiantes)
-            menu_estudiantes(estudiantes, notas)
-        case 2:
-            if len(estudiantes) > 0:
-                if len(estudiantes_totales ^ estudiantes_con_notas) != 0:
-                    Estudiantes.bajas_estudiantes(estudiantes, notas)
-                else: 
-                    print(f"{ROJO}ERROR: todos los estudiantes tienen una calificación registrada, no se pueden eliminar.{RESET}")
-            else:
-                print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}")
-            menu_estudiantes(estudiantes, notas)
-        case 3:
-            if len(estudiantes) > 0:
-                Estudiantes.modificar_estudiantes(estudiantes)
-            else:
-                print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}")
-            menu_estudiantes(estudiantes, notas)
-        case 4:
+    mostrar_submenu("ESTUDIANTES", usuario)
+    if usuario == "Admin" :  
+        opcion = validar_rango(1, 5)
+        estudiantes_con_notas = set()
+        estudiantes_totales = set()
+        for nota in notas:
+            estudiantes_con_notas.add(nota[2])
+        for estudiante in estudiantes:
+            estudiantes_totales.add(estudiante["legajo"])
+            print(estudiantes_totales)
+        match opcion:
+            case 1:
+                Estudiantes.altas_estudiantes(estudiantes)
+                menu_estudiantes(estudiantes, notas, usuario)
+            case 2:
+                if len(estudiantes) > 0:
+                    if len(estudiantes_totales ^ estudiantes_con_notas) != 0:
+                        Estudiantes.bajas_estudiantes(estudiantes, notas, usuario)
+                    else: 
+                        print(f"{ROJO}ERROR: todos los estudiantes tienen una calificación registrada, no se pueden eliminar.{RESET}")
+                else:
+                    print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}")
+                menu_estudiantes(estudiantes, notas, usuario)
+            case 3:
+                if len(estudiantes) > 0:
+                    Estudiantes.modificar_estudiantes(estudiantes)
+                else:
+                    print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}")
+                menu_estudiantes(estudiantes, notas, usuario)
+            case 4:
+                if len(estudiantes) > 0:
+                    Estudiantes.mostrar_estudiantes(estudiantes)
+                else:
+                    print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}")
+                menu_estudiantes(estudiantes, notas, usuario)
+    else:
+        opcion = validar_rango(1, 2)
+        if opcion == 1: 
             if len(estudiantes) > 0:
                 Estudiantes.mostrar_estudiantes(estudiantes)
             else:
                 print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}")
-            menu_estudiantes(estudiantes, notas)
+            menu_estudiantes(estudiantes, notas, usuario)
 
 #------------------ Menu Masterias ---------------------
-def menu_materias(materias, notas):
+def menu_materias(materias, notas, usuario):
     '''
     pre: recibe las matrices de materias y calificaciones.
     pos: muestra y ejecuta las opciones del menú de materias, permitiendo
          realizar altas, bajas, modificaciones y listados.
     '''
-    mostrar_submenu("MATERIAS")
-    opcion = validar_rango(1, 5)
-    materias_con_notas = set()
-    materias_totales = set()
-    for nota in notas:
-        materias_con_notas.add(nota[2])
-    for materia in materias:
-        materias_totales.add(materia[0])
-    match opcion:
-        case 1:
-            Materias.altas_materias(materias)
-            menu_materias(materias, notas)
-        case 2:
-            if len(materias) > 0:
-                if len(materias_totales ^ materias_con_notas) != 0:     
-                    Materias.bajas_materias(materias, notas)
+    mostrar_submenu("MATERIAS", usuario)
+    if usuario == "Admin": 
+        opcion = validar_rango(1, 5)
+        materias_con_notas = set()
+        materias_totales = set()
+        for nota in notas:
+            materias_con_notas.add(nota[2])
+        for materia in materias:
+            materias_totales.add(materia[0])
+        match opcion:
+            case 1:
+                Materias.altas_materias(materias)
+                menu_materias(materias, notas, usuario)
+            case 2:
+                if len(materias) > 0:
+                    if len(materias_totales ^ materias_con_notas) != 0:     
+                        Materias.bajas_materias(materias, notas, usuario)
+                    else:
+                        print(f"{ROJO}ERROR: todas las materias tienen una calificación registrada, no se pueden eliminar.{RESET}") 
                 else:
-                    print(f"{ROJO}ERROR: todas las materias tienen una calificación registrada, no se pueden eliminar.{RESET}") 
-            else:
-                print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
-            menu_materias(materias, notas)
-        case 3:
-            if len(materias) > 0:
-                Materias.modificar_materias(materias)
-            else:
-                print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
-            menu_materias(materias, notas)
-        case 4:
+                    print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
+                menu_materias(materias, notas, usuarios)
+            case 3:
+                if len(materias) > 0:
+                    Materias.modificar_materias(materias)
+                else:
+                    print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
+                menu_materias(materias, notas, usuario)
+            case 4:
+                if len(materias) > 0:
+                    Materias.mostrar_materias(materias)
+                else:
+                    print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
+                menu_materias(materias, notas, usuario)
+    else: 
+        opcion = validar_rango(1, 2)
+        if opcion == 1:
             if len(materias) > 0:
                 Materias.mostrar_materias(materias)
             else:
                 print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
-            menu_materias(materias, notas)
+            menu_materias(materias, notas, usuario)
+
 
 #------------------ Menu Calificaciones ---------------------
-def menu_calificaciones(notas, estudiantes, materias):
+def menu_calificaciones(notas, estudiantes, materias, usuario):
     '''
     pre: recibe las matrices de calificaciones, estudiantes y materias.
     pos: muestra y ejecuta las opciones del menú de calificaciones, permitiendo
          realizar altas, bajas, modificaciones y listados.
     '''
-    mostrar_submenu("CALIFICACIONES")
-    opcion = validar_rango(1, 5)
-    match opcion:
-        case 1:
-            calificaciones.altas_calificaciones(notas, estudiantes, materias)
-            menu_calificaciones(notas, estudiantes, materias)
-        case 2:
-            if len(notas) > 0:
-                calificaciones.bajas_calificaciones(notas)
-            else:
-                print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
-            menu_calificaciones(notas, estudiantes, materias)
-        case 3:
-            if len(notas) > 0:
-                calificaciones.modificar_calificaciones(notas, estudiantes, materias)
-            else:
-                print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
-            menu_calificaciones(notas, estudiantes, materias)
-        case 4:
-            if len(notas) > 0:
-                calificaciones.mostrar_calificaciones(notas, estudiantes, materias)
-            else:
-                print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
-            menu_calificaciones(notas, estudiantes, materias)
+    mostrar_submenu("CALIFICACIONES", usuario)
+    if usuario == "Admin": 
+        opcion = validar_rango(1, 5)
+        match opcion:
+            case 1:
+                calificaciones.altas_calificaciones(notas, estudiantes, materias)
+                menu_calificaciones(notas, estudiantes, materias, usuario)
+            case 2:
+                if len(notas) > 0:
+                    calificaciones.bajas_calificaciones(notas)
+                else:
+                    print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
+                menu_calificaciones(notas, estudiantes, materias, usuario)
+            case 3:
+                if len(notas) > 0:
+                    calificaciones.modificar_calificaciones(notas, estudiantes, materias)
+                else:
+                    print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
+                menu_calificaciones(notas, estudiantes, materias, usuario)
+            case 4:
+                if len(notas) > 0:
+                    calificaciones.mostrar_calificaciones(notas, estudiantes, materias)
+                else:
+                    print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
+                menu_calificaciones(notas, estudiantes, materias, usuario)
+    else:
+        opcion = validar_rango(1, 4)
+        match opcion: 
+            case 1:
+                calificaciones.altas_calificaciones(notas, estudiantes, materias)
+                menu_calificaciones(notas, estudiantes, materias, usuario)
+            case 2:
+                if len(notas) > 0:
+                    calificaciones.modificar_calificaciones(notas, estudiantes, materias)
+                else:
+                    print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
+                menu_calificaciones(notas, estudiantes, materias, usuario)
+            case 3:
+                if len(notas) > 0:
+                    calificaciones.mostrar_calificaciones(notas, estudiantes, materias)
+                else:
+                    print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
+                menu_calificaciones(notas, estudiantes, materias, usuario)
+
 
 #------------------ Menu Estadisticas ---------------------
 def menu_estadisticas(notas, estudiantes, materias):
@@ -269,7 +333,7 @@ def mostrar_menu_principal():
     """)
  
  
-def menu_principal(estudiantes, materias, notas):
+def menu_principal(estudiantes, materias, notas, usuario):
     '''
     pre: recibe el diccionario de estudiantes y las matrices de 
          materias y calificaciones.
@@ -280,17 +344,17 @@ def menu_principal(estudiantes, materias, notas):
     opcion = validar_rango(1, 5)
     match opcion:
             case 1:
-                menu_estudiantes(estudiantes, notas)
-                menu_principal(estudiantes, materias, notas)
+                menu_estudiantes(estudiantes, notas, usuario)
+                menu_principal(estudiantes, materias, notas, usuario)
             case 2:
-                menu_materias(materias, notas)
-                menu_principal(estudiantes, materias, notas)
+                menu_materias(materias, notas, usuario)
+                menu_principal(estudiantes, materias, notas, usuario)
             case 3:
-                menu_calificaciones(notas, estudiantes, materias)
-                menu_principal(estudiantes, materias, notas)
+                menu_calificaciones(notas, estudiantes, materias, usuario)
+                menu_principal(estudiantes, materias, notas, usuario)
             case 4:
                 menu_estadisticas(notas, estudiantes, materias)
-                menu_principal(estudiantes, materias, notas)
+                menu_principal(estudiantes, materias, notas, usuario)
             case 5:
                 print("Saliste del programa.")
 
@@ -339,15 +403,15 @@ def principal():
     ]
 
     cont = 4 #Cantidad de intentos de login
-    lgin = login(usuario, contrasenia)
+    lgin = login(usuarios, contrasenias)
 
-    while cont > 0 and lgin == False:
+    while cont > 0 and lgin == -1:
         print(f"{ROJO}Usuario o contraseña inválidos. Intentos restantes: {cont}{RESET}")
-        lgin = login(usuario, contrasenia)
+        lgin = login(usuarios, contrasenias)
         cont -= 1
 
-    if lgin == True:
-        menu_principal(estudiantes, materias, notas)
+    if lgin != -1:
+        menu_principal(estudiantes, materias, notas, lgin)
     else:
         print("Intentos superados, vuelva a intentar más tarde")
 
