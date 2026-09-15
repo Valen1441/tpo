@@ -1,5 +1,19 @@
+# Códigos ANSI
+RESET = "\033[0m"
+BOLD  = "\033[1m"
+ROJO  = "\033[31;1m"
+VERDE = "\033[32;1m"
+AZUL  = "\033[34;1m"
+MAGENTA  = "\033[35;1m"
+NARANJA = "\033[33;1m"
+
+
 #------------------------ CALIFICACIONES ---------------------
 def busqueda_secuencial(matriz, columna, dato):
+    '''
+    pre: recibe una matriz, el número de columna donde buscar y el dato a buscar.
+    pos: devuelve la posición de la fila donde se encuentra el dato o -1 si no lo encuentra.
+    '''
     i = 0
     while i < len(matriz) and matriz[i][columna] != dato:
         i += 1
@@ -9,12 +23,20 @@ def busqueda_secuencial(matriz, columna, dato):
         return -1
 
 def obtener_lista_legajos(estudiantes):
+    '''
+    pre: recibe la lista de diccionarios de estudiantes.
+    pos: devuelve una lista que contiene los legajos de todos los estudiantes.
+    '''
     lista_legajos = []
     for i in estudiantes:
         lista_legajos.append(i["legajo"])
     return lista_legajos
 
 def boletin(estudiantes, estudiante, notas, materias):
+    '''
+    pre: recibe las listas de estudiantes, notas y materias, y el legajo del estudiante.
+    pos: muestra por pantalla el boletín del estudiante con sus materias, notas y resultados.
+    '''
     # ==============================
     # REPORTE / BOLETÍN DEL ALUMNO
     # ==============================
@@ -56,12 +78,16 @@ def boletin(estudiantes, estudiante, notas, materias):
 
 #------------------ ALTAS CALIFICACIONES ---------------------
 def altas_calificaciones(notas, estudiantes, materias):
+    '''
+    pre: recibe la lista de diccionarios de estudiantes y las matrices notas y materias.
+    pos: solicita los datos necesarios, valida la información y agrega una nueva calificación.
+    '''
     print()
     print(" == ALTAS CALIFICACIONES ==")
 
     lista_legajos = obtener_lista_legajos(estudiantes)
 
-    #Pedir legajo del estudiante 
+    # Pedir legajo del estudiante 
     estudiante = input("Ingrese el legajo del estudiante a calificar (Formato: 100): ")
 
     while estudiante.isnumeric() == False:
@@ -81,7 +107,7 @@ def altas_calificaciones(notas, estudiantes, materias):
         estudiante = int(estudiante)
     
     
-    #Pedir id de la materia
+    # Pedir id de la materia
     materia = input("Ingrese el código de la materia (Formato: 100): ")
 
     while materia.isnumeric() == False:
@@ -104,7 +130,7 @@ def altas_calificaciones(notas, estudiantes, materias):
         registrado = busqueda_secuencial(materias, 0, materia)
         
     
-    #Pedir la nota
+    # Pedir la nota
     nota = input("Ingrese la nota: ")
 
     while nota.isnumeric() == False:
@@ -122,8 +148,14 @@ def altas_calificaciones(notas, estudiantes, materias):
             nota = input("Ingrese de nuevo la nota: ")
         nota = int(nota)
 
-        
-    codigo = notas[len(notas) - 1][0] + 1
+
+    # Genera el código de la nueva calificación tomando el último código y sumando 1.
+    if len(notas) > 0:
+        codigo = notas[len(notas) - 1][0] + 1
+    else: 
+        codigo = 100
+
+
     if nota >= 8:
         condicion = 2
     elif nota >= 4:
@@ -132,7 +164,7 @@ def altas_calificaciones(notas, estudiantes, materias):
         condicion = 3
 
 
-    #Agregar
+    # Agrega la nueva calificación a la matriz.
     notas.append([codigo, nota, estudiante, materia, condicion])
 
     print(f"{VERDE}Nota {codigo} agreagada.{RESET}")
@@ -142,9 +174,14 @@ def altas_calificaciones(notas, estudiantes, materias):
 
 #------------------ BAJAS CALIFICACIONES ---------------------
 def bajas_calificaciones(notas):
+    '''
+    pre: recibe la matriz de calificaciones.
+    pos: solicita el código de una calificación y elimina el registro correspondiente.
+    '''
     print()
     print(" == BAJAS CALIFICACIONES ==")
-    
+
+    # Pedir el codigo a eliminar
     codigo = input("Ingrese el código de la nota a eliminar (Formato: 100): ")
 
     while codigo.isnumeric() == False:
@@ -166,8 +203,9 @@ def bajas_calificaciones(notas):
         codigo = int(codigo)
     
         registrado = busqueda_secuencial(notas, 0, codigo)
+
                     
-    #Eliminar
+    # Elimina de la matriz la fila encontrada.
     notas.pop(registrado)
     
     print(f"{NARANJA}Nota {codigo} eliminada.{RESET}")
@@ -175,12 +213,16 @@ def bajas_calificaciones(notas):
 
 #------------------ MODIFICACION CALIFICACIONES ---------------------
 def modificar_calificaciones(notas, estudiantes, materias):
+    '''
+    pre: recibe la lista de diccionarios de estudiantes y las matrices notas y materias.
+    pos: solicita una calificación existente y modifica sus datos, validando la información ingresada.
+    '''
     print()
     print(" == MODIFICACIÓN CALIFICACIONES ==")
 
     lista_legajos = obtener_lista_legajos(estudiantes)
     
-    #Pedir el codigo a modificar
+    # Pedir el codigo a modificar
     codigo = input("Ingrese el código de la nota a modificar (Formato: 100): ")
 
     while codigo.isnumeric() == False:
@@ -203,7 +245,7 @@ def modificar_calificaciones(notas, estudiantes, materias):
         nota_modificar = busqueda_secuencial(notas, 0, codigo)
                 
                 
-    #Pedir el nuevo legajo
+    # Pedir el nuevo legajo
     legajo = input("Ingrese el nuevo legajo del estudiante de la nota (Formato: 100): ")
 
     while legajo.isnumeric() == False:
@@ -223,7 +265,7 @@ def modificar_calificaciones(notas, estudiantes, materias):
         legajo = int(legajo)
 
         
-    #Pedir el nuevo codigo de materia
+    # Pedir el nuevo codigo de materia
     materia = input("Ingrese el nuevo código de la materia de la nota (Formato: 100): ")
 
     while materia.isnumeric() == False:
@@ -245,7 +287,7 @@ def modificar_calificaciones(notas, estudiantes, materias):
         registrado = busqueda_secuencial(materias, 0, materia)
 
     
-    #Pedir la nueva nota
+    # Pedir la nueva nota
     nota = input("Ingrese la nota: ")
 
     while nota.isnumeric() == False:
@@ -271,7 +313,7 @@ def modificar_calificaciones(notas, estudiantes, materias):
     else:
         condicion = 3
 
-    #Modificar
+    # Reemplaza los datos de la calificación seleccionada.
     notas[nota_modificar][0] = codigo
     notas[nota_modificar][1] = nota
     notas[nota_modificar][2] = legajo
@@ -285,6 +327,10 @@ def modificar_calificaciones(notas, estudiantes, materias):
 
 #------------------ MOSTRAR CALIFICACIONES ---------------------
 def clasificar_nota(nota):
+    '''
+    pre: recibe una nota numérica.
+    pos: devuelve una cadena que indica si la nota es promocionada, aprobada o desaprobada.
+    '''
     if nota >= 8:
         cadena = f"{AZUL}Promocionada{RESET}"
     elif nota >= 4:
@@ -294,6 +340,10 @@ def clasificar_nota(nota):
     return cadena
     
 def imprimir_calificacion(notas, estudiantes, materias):
+    '''
+    pre: recibe la lista de diccionarios de estudiantes y las matrices notas y materias.
+    pos: muestra por pantalla todas las calificaciones en formato de tabla.
+    '''
     # Encabezado
     print("="*80)
     print(f'{BOLD}{MAGENTA}{"CALIFICACIONES":^80}{RESET}')
@@ -324,12 +374,20 @@ def imprimir_calificacion(notas, estudiantes, materias):
         print(f"{id_nota:^7}{nota:^16}{estudiante:<21}{materia:<15}{condicion:^36}")
 
 def ordenar_matriz(matriz, columna, reversa):
+    '''
+    pre: recibe una matriz, el número de columna por la cual ordenar y un indicador de orden.
+    pos: ordena la matriz por la columna indicada, de forma ascendente o descendente.
+    '''
     if reversa == 0: 
         matriz.sort(key=lambda fila: fila[columna])
     else:
         matriz.sort(key=lambda fila: fila[columna], reverse=True)
 
 def mostrar_calificaciones(notas, estudiantes, materias):
+    '''
+    pre: recibe la lista de diccionarios de estudiantes y las matrices notas y materias.
+    pos: solicita la columna y el tipo de orden, ordena las calificaciones y las muestra por pantalla.
+    '''
     columna = input("Ingrese el número de la columna para ordenar (1-5): ")
 
     while columna.isnumeric() == False:
@@ -366,13 +424,3 @@ def mostrar_calificaciones(notas, estudiantes, materias):
 
     ordenar_matriz(notas, columna, reversa)
     imprimir_calificacion(notas, estudiantes, materias)
-
-
-# Códigos ANSI
-RESET = "\033[0m"
-BOLD  = "\033[1m"
-ROJO  = "\033[31;1m"
-VERDE = "\033[32;1m"
-AZUL  = "\033[34;1m"
-MAGENTA  = "\033[35;1m"
-NARANJA = "\033[33;1m"
