@@ -75,7 +75,7 @@ def altas_estudiantes(estudiantes):
     cont = 1
     numero = 0
     for i in range(len(estudiantes)):
-        if re.search(nombre, estudiantes[i]["nombre"], re.IGNORECASE):
+        if re.search(f"^nombre$", estudiantes[i]["nombre"], re.IGNORECASE):
             # Si re repite el nombre entre los estudiantes se suma una letra del nombre al usuario
             if cont < len(usuario[0]):
                 cont += 1
@@ -242,7 +242,7 @@ def modificar_estudiantes(estudiantes):
     cont = 1
     numero = 0
     for i in range(len(estudiantes)):
-        if re.search(nombre, estudiantes[i]["nombre"], re.IGNORECASE):
+        if re.search(f"^nombre$", estudiantes[i]["nombre"], re.IGNORECASE):
             # Si re repite el nombre entre los estudiantes se suma una letra del nombre al usuario
             if cont < len(usuario[0]):
                 cont += 1
