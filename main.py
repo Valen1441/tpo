@@ -10,6 +10,11 @@ contrasenias = ("123", "321")
 RESET = "\033[0m"
 BOLD  = "\033[1m"
 ROJO  = "\033[31;1m"
+VERDE = "\033[32;1m"
+AZUL  = "\033[34;1m"
+MAGENTA  = "\033[35;1m"
+NARANJA = "\033[33;1m"
+CELESTE = "\033[36;1m"
 
 
 def validar_rango(desde, hasta):
@@ -40,18 +45,16 @@ def validar_rango(desde, hasta):
 
 def login(usuarios_almacenados, contrasenias_almacenadas):
     '''
-    pre: recibe el usuario y la contraseña almacenados.
-    pos: devuelve True si el usuario y la contraseña ingresados coinciden
-         con los almacenados, y False en caso contrario.
+    pre: recibe las tuplas de usuarios y contraseñas almacenados.
+    pos: solicita usuario y contraseña y devuelve el nombre de usuario ingresado 
+         si coincide con un par usuario-contraseña almacenado, o -1 si no coincide.
     '''
     usuario_login = input("Ingrese un usuario: ")
     contrasena_login = input("Ingrese una contraseña: ")
     inicio = False
     for i in range(len(usuarios_almacenados)):
-        if usuarios_almacenados[i] == usuario_login:
-            for j in range(len(contrasenias_almacenadas)):
-                if contrasenias_almacenadas[j] == contrasena_login and i == j:
-                    inicio = True
+        if usuarios_almacenados[i] == usuario_login and contrasenias_almacenadas[i] == contrasena_login:
+            inicio = True
     if inicio: 
         return usuario_login
     else:
@@ -60,62 +63,68 @@ def login(usuarios_almacenados, contrasenias_almacenadas):
 #------------------------ Submenu ---------------------
 def mostrar_submenu(titulo, usuario):
     '''
-    pre: recibe el título del menú que se desea mostrar.
-    pos: muestra por pantalla el submenú correspondiente con las opciones
-         de alta, baja, modificación, listado y volver.
+    pre: recibe el título del menú que se desea mostrar y el usuario que
+         está utilizando el sistema.
+    pos: muestra por pantalla el submenú correspondiente. Las opciones disponibles 
+         dependen del tipo de usuario y del menú seleccionado.
     '''
+    print()
+    print("=" * 40)
+    print(f'{BOLD}{MAGENTA}{"MENÚ " + titulo:^40}{RESET}')
+    print("=" * 40)
+
     if usuario == "Admin":
-        print(f"""
-        === MENÚ {titulo} ===
-        1. ALTA
-        2. BAJA
-        3. MODIFICACIÓN
-        4. LISTADO
-        5. VOLVER AL MENÚ PRINCIPAL
-        """)
+        print(f"  {VERDE}1. ALTA{RESET}")
+        print(f"  {NARANJA}2. BAJA{RESET}")
+        print(f"  {AZUL}3. MODIFICACIÓN{RESET}")
+        print(f"  {MAGENTA}4. LISTADO{RESET}")
+        print(f"  {BOLD}5. VOLVER AL MENÚ PRINCIPAL{RESET}")
     else:
         if titulo == "CALIFICACIONES":
-            print(f"""
-        === MENÚ CALIFICACIONES ===
-        1. ALTA
-        2. MODIFICACIÓN
-        3. LISTADO
-        4. VOLVER AL MENÚ PRINCIPAL
-        """)
+            print(f"  {VERDE}1. ALTA{RESET}")
+            print(f"  {AZUL}2. MODIFICACIÓN{RESET}")
+            print(f"  {MAGENTA}3. LISTADO{RESET}")
+            print(f"  {BOLD}4. VOLVER AL MENÚ PRINCIPAL{RESET}")
         else:
-            print(f"""
-        === MENÚ {titulo} ===
-        1. LISTADO
-        2. VOLVER AL MENÚ PRINCIPAL
-        """)
+            print(f"  {MAGENTA}1. LISTADO{RESET}")
+            print(f"  {BOLD}2. VOLVER AL MENÚ PRINCIPAL{RESET}")
+
+    print("=" * 40)
         
 
 def mostrar_submenu_estadistica(titulo="ESTADÍSTICAS"):
     '''
-    pre: no recibe parámetros.
-    pos: muestra por pantalla el submenú de estadísticas.
+    pre: recibe opcionalmente el título del submenú de estadísticas. 
+         Si no se recibe un título, utiliza "ESTADÍSTICAS" por defecto.
+    pos: muestra por pantalla el submenú de estadísticas generales o 
+         particulares según el título recibido.
     '''
+    print()
+    print("=" * 40)
+
     if titulo == "ESTADÍSTICAS":
-        print("""
-    === MENÚ ESTADÍSTICAS ===
-    1. MATERIAS
-    2. ESTUDIANTES
-    3. VOLVER AL MENÚ PRINCIPAL
-    """)
+        print(f'{BOLD}{MAGENTA}{"MENÚ ESTADÍSTICAS":^40}{RESET}')
+        print("=" * 40)
+        print(f"  {AZUL}1. MATERIAS{RESET}")
+        print(f"  {VERDE}2. ESTUDIANTES{RESET}")
+        print(f"  {BOLD}3. VOLVER AL MENÚ PRINCIPAL{RESET}")
     else:
-        print(f"""
-    === MENÚ ESTADÍSTICAS {titulo} ===
-    1. GENERALES
-    2. PARTICULARES
-    3. VOLVER AL MENÚ ESTADÍSTICAS
-    """)
+        print(f'{BOLD}{MAGENTA}{"ESTADÍSTICAS " + titulo:^40}{RESET}')
+        print("=" * 40)
+        print(f"  {VERDE}1. GENERALES{RESET}")
+        print(f"  {CELESTE}2. PARTICULARES{RESET}")
+        print(f"  {BOLD}3. VOLVER AL MENÚ ESTADÍSTICAS{RESET}")
+
+    print("=" * 40)
 
 #------------------ Menu Estudiantes ---------------------
 def menu_estudiantes(estudiantes, notas, usuario):
     '''
-    pre: recibe el diccionario de estudiantes y la matriz de calificaciones.
-    pos: muestra y ejecuta las opciones del menú de estudiantes, permitiendo
-         realizar altas, bajas, modificaciones y listados.
+    pre: recibe una lista de diccionarios de estudiantes, una matriz de
+         calificaciones y el usuario que utiliza el sistema.
+    pos: muestra y ejecuta las opciones del menú de estudiantes según el
+         tipo de usuario. Permite realizar altas, bajas, modificaciones
+         y listados cuando el usuario es Admin, y consultas si no lo es.
     '''
     mostrar_submenu("ESTUDIANTES", usuario)
     if usuario == "Admin" :  
@@ -126,7 +135,6 @@ def menu_estudiantes(estudiantes, notas, usuario):
             estudiantes_con_notas.add(nota[2])
         for estudiante in estudiantes:
             estudiantes_totales.add(estudiante["legajo"])
-            print(estudiantes_totales)
         match opcion:
             case 1:
                 Estudiantes.altas_estudiantes(estudiantes)
@@ -134,7 +142,7 @@ def menu_estudiantes(estudiantes, notas, usuario):
             case 2:
                 if len(estudiantes) > 0:
                     if len(estudiantes_totales ^ estudiantes_con_notas) != 0:
-                        Estudiantes.bajas_estudiantes(estudiantes, notas, usuario)
+                        Estudiantes.bajas_estudiantes(estudiantes, notas)
                     else: 
                         print(f"{ROJO}ERROR: todos los estudiantes tienen una calificación registrada, no se pueden eliminar.{RESET}")
                 else:
@@ -164,9 +172,11 @@ def menu_estudiantes(estudiantes, notas, usuario):
 #------------------ Menu Masterias ---------------------
 def menu_materias(materias, notas, usuario):
     '''
-    pre: recibe las matrices de materias y calificaciones.
-    pos: muestra y ejecuta las opciones del menú de materias, permitiendo
-         realizar altas, bajas, modificaciones y listados.
+    pre: recibe una matriz de materias, una matriz de calificaciones y el
+         usuario que utiliza el sistema.
+    pos: muestra y ejecuta las opciones del menú de materias según el tipo
+         de usuario. Permite realizar altas, bajas, modificaciones y
+         listados cuando el usuario es Admin, y consultas si no lo es.
     '''
     mostrar_submenu("MATERIAS", usuario)
     if usuario == "Admin": 
@@ -184,12 +194,12 @@ def menu_materias(materias, notas, usuario):
             case 2:
                 if len(materias) > 0:
                     if len(materias_totales ^ materias_con_notas) != 0:     
-                        Materias.bajas_materias(materias, notas, usuario)
+                        Materias.bajas_materias(materias, notas)
                     else:
                         print(f"{ROJO}ERROR: todas las materias tienen una calificación registrada, no se pueden eliminar.{RESET}") 
                 else:
                     print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
-                menu_materias(materias, notas, usuarios)
+                menu_materias(materias, notas, usuario)
             case 3:
                 if len(materias) > 0:
                     Materias.modificar_materias(materias)
@@ -215,17 +225,25 @@ def menu_materias(materias, notas, usuario):
 #------------------ Menu Calificaciones ---------------------
 def menu_calificaciones(notas, estudiantes, materias, usuario):
     '''
-    pre: recibe las matrices de calificaciones, estudiantes y materias.
-    pos: muestra y ejecuta las opciones del menú de calificaciones, permitiendo
-         realizar altas, bajas, modificaciones y listados.
+    pre: recibe una matriz de calificaciones, una lista de diccionarios de
+         estudiantes, una matriz de materias y el usuario que utiliza el sistema.
+    pos: muestra y ejecuta las opciones del menú de calificaciones según
+         el tipo de usuario. Permite realizar altas, bajas, modificaciones y
+         listados cuando el usuario es Admin, y altas, modificaciones y listados si no lo es.
     '''
     mostrar_submenu("CALIFICACIONES", usuario)
     if usuario == "Admin": 
         opcion = validar_rango(1, 5)
         match opcion:
             case 1:
-                calificaciones.altas_calificaciones(notas, estudiantes, materias)
-                menu_calificaciones(notas, estudiantes, materias, usuario)
+                if len(estudiantes) > 0 and len(materias) > 0:
+                    calificaciones.altas_calificaciones(notas, estudiantes, materias)
+                    menu_calificaciones(notas, estudiantes, materias, usuario)
+                else:
+                    if len(materias) == 0:
+                        print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
+                    else:
+                        print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}") 
             case 2:
                 if len(notas) > 0:
                     calificaciones.bajas_calificaciones(notas)
@@ -248,8 +266,14 @@ def menu_calificaciones(notas, estudiantes, materias, usuario):
         opcion = validar_rango(1, 4)
         match opcion: 
             case 1:
-                calificaciones.altas_calificaciones(notas, estudiantes, materias)
-                menu_calificaciones(notas, estudiantes, materias, usuario)
+                if len(estudiantes) > 0 and len(materias) > 0:
+                    calificaciones.altas_calificaciones(notas, estudiantes, materias)
+                    menu_calificaciones(notas, estudiantes, materias, usuario)
+                else:
+                    if len(materias) == 0:
+                        print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
+                    else:
+                        print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}") 
             case 2:
                 if len(notas) > 0:
                     calificaciones.modificar_calificaciones(notas, estudiantes, materias)
@@ -294,24 +318,30 @@ def menu_estadisticas(notas, estudiantes, materias):
 
 
 def estadisticas_estudiantes_materias(notas, estudiantes, materias, titulo):
+    '''
+    pre: recibe las matrices de calificaciones, estudiantes y materias, y el título que indica
+         si se trabaja sobre estudiantes o sobre materias.
+    pos: muestra y ejecuta las opciones del submenú de estadísticas generales o particulares
+         correspondiente al título recibido.
+    '''
     mostrar_submenu_estadistica(titulo)
     opcion = validar_rango(1, 3)
     match opcion:
         case 1:
             if titulo == "ESTUDIANTES":
-                estadisticas.estadisticas_estudiantes_generales(notas, estudiantes)
+                estadisticas.estadisticas_estudiantes(notas, estudiantes)
             else:
                 estadisticas.estadisticas_materias(notas, materias)
             estadisticas_estudiantes_materias(notas, estudiantes, materias, titulo)
         case 2:
             if titulo == "ESTUDIANTES":
                 if len(materias) > 0:
-                    estadisticas.estadisticas_estudiantes_particulares(notas, estudiantes, materias)
+                    estadisticas.estadisticas_particulares(notas, estudiantes, materias, titulo)
                 else:
                     print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
             else:
                 if len(estudiantes) > 0:
-                    ...
+                    estadisticas.estadisticas_particulares(notas, estudiantes, materias, titulo)
                 else:
                     print(f"{ROJO}ERROR: no hay estudiantes cargadas.{RESET}")
             estadisticas_estudiantes_materias(notas, estudiantes, materias, titulo)
@@ -322,21 +352,22 @@ def mostrar_menu_principal():
     pre: no recibe parámetros.
     pos: muestra por pantalla el menú principal del programa.
     '''
-    print("""
-    ==== MENÚ PRINCIPAL ====
-
-    1. ESTUDIANTES
-    2. MATERIAS
-    3. CALIFICACIONES
-    4. ESTADISTICAS
-    5. SALIR DEL PROGRAMA
-    """)
+    print()
+    print("=" * 40)
+    print(f'{BOLD}{MAGENTA}{"MENÚ PRINCIPAL":^40}{RESET}')
+    print("=" * 40)
+    print(f"  1. ESTUDIANTES")
+    print(f"  2. MATERIAS")
+    print(f"  3. CALIFICACIONES")
+    print(f"  4. ESTADÍSTICAS")
+    print(f"  {ROJO}5. SALIR DEL PROGRAMA{RESET}")
+    print("=" * 40)
  
  
 def menu_principal(estudiantes, materias, notas, usuario):
     '''
-    pre: recibe el diccionario de estudiantes y las matrices de 
-         materias y calificaciones.
+    pre: recibe el diccionario de estudiantes, las matrices de 
+         materias y calificaciones y el usuario.
     pos: muestra el menú principal, solicita una opción válida y ejecuta
          la función correspondiente a la opción seleccionada.
     '''

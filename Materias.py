@@ -1,3 +1,5 @@
+import utilidades
+
 # Códigos ANSI
 RESET = "\033[0m"
 BOLD  = "\033[1m"
@@ -9,18 +11,6 @@ NARANJA = "\033[33;1m"
 
 
 #------------------------ MATERIAS ---------------------
-def busqueda_secuencial(matriz, columna, dato):
-    '''
-    pre: recibe una matriz, el número de columna donde buscar y el dato a buscar.
-    pos: devuelve la posición de la fila donde se encuentra el dato o -1 si no lo encuentra.
-    '''
-    i = 0
-    while i < len(matriz) and matriz[i][columna] != dato:
-        i += 1
-    if i < len(matriz):
-        return i
-    else:
-        return -1
 
 #------------------ ALTAS MATERIAS ---------------------
 def altas_materias(materias):
@@ -30,7 +20,7 @@ def altas_materias(materias):
          nombre, cuatrimestre, año y carga horaria válidos.
     '''
     print()
-    print(f" == ALTAS MATERIAS ==")
+    print(f"       ==================== {VERDE}ALTAS MATERIAS{RESET} ====================")
 
     # Pedir nombre
     nombre = input("Ingrese el nombre de la nueva materia: ").title()
@@ -110,7 +100,7 @@ def bajas_materias(materias, notas):
          siempre que exista y no tenga una calificación registrada.
     '''
     print()
-    print(f" == BAJAS MATERIAS ==")
+    print(f"       ==================== {NARANJA}BAJAS MATERIAS{RESET} ====================")
 
     # Pedir el código a eliminar
     codigo = input("Ingrese el código de la materia a eliminar (Formato: 100): ")
@@ -120,9 +110,9 @@ def bajas_materias(materias, notas):
         codigo = input("Ingrese de nuevo el código de la materia a eliminar (Formato: 100): ")
 
     codigo = int(codigo)
-    esta_en_calificaciones = busqueda_secuencial(notas, 3, codigo)
+    esta_en_calificaciones = utilidades.busqueda_secuencial(notas, 3, codigo)
 
-    registrado = busqueda_secuencial(materias, 0, codigo)
+    registrado = utilidades.busqueda_secuencial(materias, 0, codigo)
 
     while registrado == -1 or esta_en_calificaciones != -1:
         if registrado == -1:
@@ -138,9 +128,9 @@ def bajas_materias(materias, notas):
             codigo = input("Ingrese de nuevo el código de la materia a eliminar (Formato: 100): ")
 
         codigo = int(codigo)
-        esta_en_calificaciones = busqueda_secuencial(notas, 3, codigo)
+        esta_en_calificaciones = utilidades.busqueda_secuencial(notas, 3, codigo)
 
-        registrado = busqueda_secuencial(materias, 0, codigo)
+        registrado = utilidades.busqueda_secuencial(materias, 0, codigo)
 
 
     # Elimina la materia de la matriz. 
@@ -156,7 +146,7 @@ def modificar_materias(materias):
     pos: solicita una materia existente y modifica sus datos, validando la información ingresada.
     '''
     print()
-    print(f" == MODIFICACIÓN MATERIAS ==")
+    print(f"       ==================== {AZUL}MODIFICACIÓN MATERIAS{RESET} ====================")
     
     # Pedir el codigo a modificar
     codigo = input("Ingrese el código de la materia a modificar (Formato: 100): ")
@@ -167,7 +157,7 @@ def modificar_materias(materias):
 
     codigo = int(codigo)
 
-    modificar = busqueda_secuencial(materias, 0, codigo)
+    modificar = utilidades.busqueda_secuencial(materias, 0, codigo)
 
     while modificar == -1:
         print(f"{ROJO}ERROR: Ese código no está registrado{RESET}")
@@ -180,7 +170,7 @@ def modificar_materias(materias):
 
         codigo = int(codigo)
 
-        modificar = busqueda_secuencial(materias, 0, codigo)
+        modificar = utilidades.busqueda_secuencial(materias, 0, codigo)
                 
                 
     # Pedir nombre de la materia
@@ -259,16 +249,10 @@ def imprimir_materias(materias):
     pos: muestra en pantalla todas las materias de la matriz, mostrando su código, nombre, cuatrimestre, año y carga horaria.
          El formato del código mostrado se modifica temporalmente para indicar el año y el cuatrimestre.
     '''
-
-    '''
-    pre: Recibe una lista de materias.
-    pos: Imprime en pantalla la lista de materias con sus respectivos datos, incluyendo un código único generado a partir del año y cuatrimestre de la materia.
-    '''
-
     print("="*82)
     print(f'{BOLD}{MAGENTA}{"MATERIAS":^82}{RESET}')
     print("="*82)
-    print(f"{BOLD}{'Id Materia':<16}{'Nombre':<21}{'Cuatrimestre':^12}{"Año":^17}{'Carga Horaria':^13}{RESET}")
+    print(f"{BOLD}{'Id Materia':<16}{'Nombre':<21}{'Cuatrimestre':^12}{'Año':^17}{'Carga Horaria':^13}{RESET}")
     print("-" * 82)
 
     # Se guardan los códigos originales para restaurarlos después.
@@ -305,9 +289,10 @@ def ordenar_materias(materias, columna, reversa):
     pos: ordena la matriz por la columna indicada, de forma ascendente o descendente.
     '''
     if reversa == 0: 
-        materias.sort(key=lambda fila: fila[columna])
+        materias_ordenadas = sorted(materias, key=lambda fila: fila[columna])
     else:
-        materias.sort(key=lambda fila: fila[columna], reverse=True)
+        materias_ordenadas = sorted(materias, key=lambda fila: fila[columna], reverse=True)
+    return materias_ordenadas
 
 
 def mostrar_materias(materias):
@@ -316,20 +301,24 @@ def mostrar_materias(materias):
     pos: solicita al usuario una columna y un tipo de ordenamiento,
          ordena la matriz según los datos ingresados y muestra las materias.
     '''
-    columna = input("Ingrese el número de la columna para ordenar (1-5): ")
+    columna = input("""Ingrese el número de la columna para ordenar 
+(1 = id, 2 = nombre, 3 = cuatrimestre, 4 = año, 5 = carga horaria): """)
 
     while columna.isnumeric() == False:
         print(f"{ROJO}Opción inválida, ingrese un número entre 1 y 5{RESET}")
-        columna = input("Ingrese el número de la columna para ordenar (1-5): ")
+        columna = input("""Ingrese de nuevo el número de la columna para ordenar 
+(1 = id, 2 = nombre, 3 = cuatrimestre, 4 = año, 5 = carga horaria): """)
     columna = int(columna) - 1
 
     while columna < 0 or columna > 4:
         print(f"{ROJO}Número inválido, la matriz posee 5 columnas{RESET}")
-        columna = input("Ingrese de nuevo el número de la columna para ordenar (1-5): ")
+        columna = input("""Ingrese de nuevo el número de la columna para ordenar 
+(1 = id, 2 = nombre, 3 = cuatrimestre, 4 = año, 5 = carga horaria): """)
 
         while columna.isnumeric() == False:
             print(f"{ROJO}Opción inválida, ingrese un número entre 1 y 5{RESET}")
-            columna = input("Ingrese el número de la columna para ordenar (1-5): ")
+            columna = input("""Ingrese de nuevo el número de la columna para ordenar 
+(1 = id, 2 = nombre, 3 = cuatrimestre, 4 = año, 5 = carga horaria): """)
         columna = int(columna) - 1
 
     
@@ -350,6 +339,6 @@ def mostrar_materias(materias):
         reversa = int(reversa)
 
 
-    ordenar_materias(materias, columna, reversa)
-    imprimir_materias(materias)
+    materias_ordenadas = ordenar_materias(materias, columna, reversa)
+    imprimir_materias(materias_ordenadas)
     
