@@ -1,4 +1,5 @@
 import re
+import utilidades
 
 # Códigos ANSI
 RESET = "\033[0m"
@@ -11,28 +12,6 @@ NARANJA = "\033[33;1m"
 
 
 #------------------------ ESTUDIANTES ---------------------
-def busqueda_secuencial(matriz, columna, dato):
-    '''
-    pre: recibe una matriz, el número de columna donde buscar y el dato a buscar.
-    pos: devuelve la posición de la fila donde se encuentra el dato o -1 si no lo encuentra.
-    '''
-    i = 0
-    while i < len(matriz) and matriz[i][columna] != dato:
-        i += 1
-    if i < len(matriz):
-        return i
-    else:
-        return -1
-
-def obtener_lista_legajos(estudiantes):
-    '''
-    pre: recibe la lista de diccionarios de estudiantes.
-    pos: devuelve una lista con los legajos de todos los estudiantes.
-    '''
-    lista_legajos = []
-    for i in estudiantes:
-        lista_legajos.append(i["legajo"])
-    return lista_legajos
 
 #------------------ ALTAS ESTUDIANTES ---------------------
 def altas_estudiantes(estudiantes):
@@ -42,12 +21,12 @@ def altas_estudiantes(estudiantes):
          y luego a la lista de estudiantes.
     '''
     print()
-    print(f" == ALTAS ESTUDIANTES ==")
+    print(f"       ==================== {VERDE}ALTAS ESTUDIANTES{RESET} ====================")
 
     # Pedir nombre del estudiante
     nombre = input("Ingrese el nombre y apellido del nuevo estudiante: ").title()
 
-    if len(nombre.split()) != 2:
+    while len(nombre.split()) != 2:
         print(f"{ROJO}ERROR: debe ingresar solo un nombre y apellido.{RESET}")
         nombre = input("Ingrese otra vez el nombre y apellido del nuevo estudiante: ").title()
 
@@ -137,9 +116,9 @@ def bajas_estudiantes(estudiantes, notas):
     pos: solicita un legajo y elimina el estudiante si existe y no tiene calificaciones registradas.
     '''
     print()
-    print(f" == BAJAS ESTUDIANTES ==")
+    print(f"       ==================== {NARANJA}BAJAS ESTUDIANTES{RESET} ====================")
 
-    lista_legajos = obtener_lista_legajos(estudiantes)
+    lista_legajos = utilidades.obtener_lista_legajos(estudiantes)
 
     # Pedir legajo a eliminar
     legajo = input("Ingrese el legajo del estudiante a eliminar (Formato: 100): ")
@@ -149,10 +128,10 @@ def bajas_estudiantes(estudiantes, notas):
         legajo = input("Ingrese de nuevo el legajo del estudiante a eliminar (Formato: 100): ")
 
     legajo = int(legajo)
-    esta_en_calificaciones = busqueda_secuencial(notas, 2, legajo)
+    esta_en_calificaciones = utilidades.busqueda_secuencial(notas, 2, legajo)
 
 
-    while legajo not in lista_legajos == -1 or esta_en_calificaciones != -1:
+    while legajo not in lista_legajos or esta_en_calificaciones != -1:
         if legajo not in lista_legajos:
             print(f"{ROJO}ERROR: Ese código no está registrado{RESET}")
         else:
@@ -166,7 +145,7 @@ def bajas_estudiantes(estudiantes, notas):
             legajo = input("Ingrese de nuevo el legajo del estudiante a eliminar (Formato: 100): ")
 
         legajo = int(legajo)
-        esta_en_calificaciones = busqueda_secuencial(notas, 2, legajo)
+        esta_en_calificaciones = utilidades.busqueda_secuencial(notas, 2, legajo)
 
 
     # Busca el indice del legajo en la lista de legajos y lo elimina de la misma y elimina el diccionario a la lista de estudiantes
@@ -184,9 +163,9 @@ def modificar_estudiantes(estudiantes):
     pos: solicita el legajo de un estudiante y modifica sus datos validando la información ingresada.
     '''
     print()
-    print(f" == MODIFICACIÓN ESTUDIANTES ==")
+    print(f"       ==================== {AZUL}MODIFICACIÓN ESTUDIANTES{RESET} ====================")
 
-    lista_legajos = obtener_lista_legajos(estudiantes)
+    lista_legajos = utilidades.obtener_lista_legajos(estudiantes)
     
     # Pedir el legajo a modificar
     legajo = input("Ingrese el legajo del estudiante a modificar (Formato: 100): ")
@@ -214,7 +193,7 @@ def modificar_estudiantes(estudiantes):
     # Pedir nombre del estudiante
     nombre = input("Ingrese el nombre y apellido del estudiante: ").title()
 
-    if len(nombre.split()) != 2:
+    while len(nombre.split()) != 2:
         print(f"{ROJO}ERROR: debe ingresar solo un nombre y apellido.{RESET}")
         nombre = input("Ingrese otra vez el nombre y apellido del estudiante: ").title()
 
@@ -293,16 +272,10 @@ def imprimir_estudiantes(estudiantes):
     pre: recibe la lista de diccionarios de estudiantes.
     pos: muestra por pantalla los datos de todos los estudiantes en formato de tabla.
     '''
-
-    '''
-    pre: Recibe una lista de estudiantes.
-    pos: Imprime los datos de todos los estudiantes en una tabla modificada con el codigo ANSI.
-    '''
-
     print("="*82)
     print(f'{BOLD}{MAGENTA}{"ESTUDIANTES":^82}{RESET}')
     print("="*82)
-    print(f"{BOLD}{'Legajo':<13}{'Nombre':<17}{'Edad':^18}{'Año Cursada':^13}{"Usuario":>19}{RESET}")
+    print(f"{BOLD}{'Legajo':<13}{'Nombre':<17}{'Edad':^18}{'Año Cursada':^13}{'Usuario':>19}{RESET}")
     print("-" * 82)
 
     # Recorre los estudiantes para mostrar sus datos.
@@ -335,10 +308,10 @@ def ordenar_estudiantes(estudiantes, columna, reversa):
     clave = dict_keys[columna]
 
     if reversa == 0: 
-        estudiantes.sort(key=lambda fila: fila[clave])
+        estudiantes_ordenados = sorted(estudiantes, key=lambda fila: fila[clave])
     else:
-        estudiantes.sort(key=lambda fila: fila[clave], reverse=True)
-
+        estudiantes_ordenados = sorted(estudiantes, key=lambda fila: fila[clave], reverse=True)
+    return estudiantes_ordenados
 
 
 def mostrar_estudiantes(estudiantes):
@@ -346,20 +319,24 @@ def mostrar_estudiantes(estudiantes):
     pre: recibe la lista de diccionarios de estudiantes.
     pos: solicita la columna y el tipo de orden, ordena los estudiantes y los muestra por pantalla.
     '''
-    columna = input("Ingrese el número de la columna para ordenar (1-5): ")
+    columna = input("""Ingrese el número de la columna para ordenar 
+(1 = legajo, 2 = nombre, 3 = edad, 4 = año de cursada, 5 = usuario): """)
 
     while columna.isnumeric() == False:
         print(f"{ROJO}Opción inválida, ingrese un número entre 1 y 5{RESET}")
-        columna = input("Ingrese el número de la columna para ordenar (1-5): ")
+        columna = input("""Ingrese de nuevo el número de la columna para ordenar 
+(1 = legajo, 2 = nombre, 3 = edad, 4 = año de cursada, 5 = usuario): """)
     columna = int(columna) - 1
 
     while columna < 0 or columna > 4:
         print(f"{ROJO}Número inválido, la matriz posee 5 columnas{RESET}")
-        columna = input("Ingrese de nuevo el número de la columna para ordenar (1-5): ")
+        columna = input("""Ingrese de nuevo el número de la columna para ordenar 
+(1 = legajo, 2 = nombre, 3 = edad, 4 = año de cursada, 5 = usuario): """)
 
         while columna.isnumeric() == False:
             print(f"{ROJO}Opción inválida, ingrese un número entre 1 y 5{RESET}")
-            columna = input("Ingrese el número de la columna para ordenar (1-5): ")
+            columna = input("""Ingrese de nuevo el número de la columna para ordenar 
+(1 = legajo, 2 = nombre, 3 = edad, 4 = año de cursada, 5 = usuario): """)
         columna = int(columna) - 1
 
     
@@ -380,5 +357,5 @@ def mostrar_estudiantes(estudiantes):
         reversa = int(reversa)
 
     
-    ordenar_estudiantes(estudiantes, columna, reversa)
-    imprimir_estudiantes(estudiantes)
+    estudiantes_ordenados = ordenar_estudiantes(estudiantes, columna, reversa)
+    imprimir_estudiantes(estudiantes_ordenados)
