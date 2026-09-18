@@ -72,20 +72,27 @@ def altas_estudiantes(estudiantes):
 
     # Genera el nombre de usuario tomando la primera letra del nombre y todo el apellido
     usuario = nombre.split()
+    nombre_usuario = usuario[0]
+    apellido_usuario = usuario[1]
     cont = 1
     numero = 0
+    primera_letra = nombre_usuario[0]
     for i in range(len(estudiantes)):
-        if re.search(nombre, estudiantes[i]["nombre"], re.IGNORECASE):
+        alumno = estudiantes[i]["nombre"].split()
+        if re.search(f"^{nombre}$", estudiantes[i]["nombre"], re.IGNORECASE):
             # Si re repite el nombre entre los estudiantes se suma una letra del nombre al usuario
             if cont < len(usuario[0]):
                 cont += 1
             # Si se completó el nombre se le suma un número al usuario 
             else: 
                 numero += 1
+        elif re.search(f"^{primera_letra}", alumno[0], re.IGNORECASE) and re.search(f"^{apellido_usuario}$", alumno[1], re.IGNORECASE):
+            # Si re repite el apellido y la primera letra entre los estudiantes se suma un número al usuario
+                numero += 1
     if numero == 0:
-        usuario = (usuario[0][:cont] + usuario[1]).lower()
+        usuario = (nombre_usuario[:cont] + apellido_usuario).lower()
     else:
-        usuario = (usuario[0][:cont] + usuario[1] + str(numero)).lower()
+        usuario = (nombre_usuario[:cont] + apellido_usuario + str(numero)).lower()
 
 
     # Genera el legajo del nuevo estudiante tomando el último legajo y sumando 1.
@@ -239,20 +246,27 @@ def modificar_estudiantes(estudiantes):
 
     # Genera el nombre de usuario tomando la primera letra del nombre y todo el apellido
     usuario = nombre.split()
+    nombre_usuario = usuario[0]
+    apellido_usuario = usuario[1]
     cont = 1
     numero = 0
+    primera_letra = nombre_usuario[0]
     for i in range(len(estudiantes)):
-        if re.search(nombre, estudiantes[i]["nombre"], re.IGNORECASE):
+        alumno = estudiantes[i]["nombre"].split()
+        if re.search(f"^{nombre}$", estudiantes[i]["nombre"], re.IGNORECASE):
             # Si re repite el nombre entre los estudiantes se suma una letra del nombre al usuario
             if cont < len(usuario[0]):
                 cont += 1
             # Si se completó el nombre se le suma un número al usuario 
             else: 
                 numero += 1
+        elif re.search(f"^{primera_letra}", alumno[0], re.IGNORECASE) and re.search(f"^{apellido_usuario}$", alumno[1], re.IGNORECASE):
+            # Si re repite el apellido y la primera letra entre los estudiantes se suma un número al usuario
+                numero += 1
     if numero == 0:
-        usuario = (usuario[0][:cont] + usuario[1]).lower()
+        usuario = (nombre_usuario[:cont] + apellido_usuario).lower()
     else:
-        usuario = (usuario[0][:cont] + usuario[1] + str(numero)).lower()
+        usuario = (nombre_usuario[:cont] + apellido_usuario + str(numero)).lower()
  
 
     # Modifica los datos del estudiante seleccionado.
