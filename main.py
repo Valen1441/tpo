@@ -184,7 +184,7 @@ def menu_materias(materias, notas, usuario):
         materias_con_notas = set()
         materias_totales = set()
         for nota in notas:
-            materias_con_notas.add(nota[2])
+            materias_con_notas.add(nota[3])
         for materia in materias:
             materias_totales.add(materia[0])
         match opcion:
