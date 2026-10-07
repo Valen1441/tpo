@@ -435,45 +435,28 @@ def estadisticas_particulares(notas, estudiantes, materias, titulo):
     if titulo == "ESTUDIANTES":
         lista_legajos = utilidades.obtener_lista_legajos(estudiantes)
 
-        estudiante = input("Ingrese el legajo del estudiante para su boletín (Formato: 100): ")
-
-        while estudiante.isnumeric() == False:
-            print(f"{ROJO}ERROR: No se admiten letras en el legajo.{RESET}")
-            estudiante = input("Ingrese de nuevo el legajo del estudiante para su boletín (Formato: 100): ")
-        estudiante = int(estudiante)
-
-        while estudiante not in lista_legajos:
-            print(f"{ROJO}ERROR: Ese legajo no está registrado.{RESET}")
-            
-            estudiante = input("Ingrese de nuevo el legajo del estudiante para su boletín (Formato: 100): ")
-
-            while estudiante.isnumeric() == False:
-                print(f"{ROJO}ERROR: No se admiten letras en el legajo.{RESET}")
-                estudiante = input("Ingrese de nuevo el legajo del estudiante para su boletín (Formato: 100): ")
-            estudiante = int(estudiante)
+        while True:
+            try:
+                estudiante = utilidades.leerentero("Ingrese el legajo del estudiante para su boletín (Formato: 100): ")
+                assert estudiante in lista_legajos
+                break
+            except AssertionError:
+                print(f"{ROJO}ERROR: Ese legajo no está registrado.{RESET}")
+                print("Intente nuevamente.")
 
 
         boletin_completo(estudiantes, estudiante, notas, materias)
 
     else:
-        materia = input("Ingrese el códgio de la materia para su reporte (Formato: 100): ")
-        
-        while materia.isnumeric() == False:
-            print(f"{ROJO}ERROR: No se admiten letras en el código.{RESET}")
-            materia = input("Ingrese de nuevo el código de la materia para su reporte (Formato: 100): ")
-        materia = int(materia)
-
-        registrado = utilidades.busqueda_secuencial(materias, 0, materia)
-
-        while registrado == -1:
-            print(f"{ROJO}ERROR: Ese código no está registrado.{RESET}")
-            
-            materia = input("Ingrese de nuevo el código de la materia para su reporte (Formato: 100): ")
-
-            while materia.isnumeric() == False:
-                print(f"{ROJO}ERROR: No se admiten letras en el código.{RESET}")
-                materia = input("Ingrese de nuevo el código de la materia para su reporte (Formato: 100): ")
-            materia = int(materia)
+        while True:
+            try:
+                materia = utilidades.leerentero("Ingrese el códgio de la materia para su reporte (Formato: 100): ")
+                registrado = utilidades.busqueda_secuencial(materias, 0, materia)
+                assert registrado != -1
+                break
+            except AssertionError:
+                print(f"{ROJO}ERROR: Ese código no está registrado.{RESET}")
+                print("Intente nuevamente.")
 
 
         reporte_materia(materias, materia, notas, estudiantes)

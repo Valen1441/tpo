@@ -2,6 +2,7 @@ import calificaciones
 import Estudiantes
 import estadisticas
 import Materias
+import utilidades
 
 usuarios = ("Admin", "Nardone")
 contrasenias = ("123", "321")
@@ -23,22 +24,15 @@ def validar_rango(desde, hasta):
     pos: devuelve la opción ingresada por el usuario, validando que sea numérica
          y que se encuentre dentro del rango indicado.
     '''
-    numero = input("Ingrese una opción: " )
 
-    # Verifica que la opción ingresada sea un número.
-    while numero.isnumeric() == False:
-        print(f"{ROJO}Opcion inválida. Ingrese un número dentro del rango{RESET}")
-        numero = input("Ingrese nuevamente una opción: " )
-    numero = int(numero)
-
-    # Verifica que el número se encuentre dentro del rango permitido.
-    while numero < desde or numero > hasta:
-        print(f"{ROJO}Opción inválida. Ingrese una opción que se encuentre en el rango{RESET}")
-        numero = input("Ingrese nuevamente una opción: ")
-        while numero.isnumeric() == False:
-                print(f"{ROJO}Opcion iválida. Ingrese un número dentro del rango{RESET}")
-                numero = input("Ingrese nuevamente una opción: " )
-        numero = int(numero)
+    while True:
+        try:
+            numero = utilidades.leerentero("Ingrese una opción: " )
+            assert numero >= desde and numero <= hasta
+            break
+        except AssertionError:
+            print(f"{ROJO}Opción inválida. Ingrese una opción que se encuentre en el rango{RESET}")
+            print("Intente nuevamente.")
 
     return numero
 
@@ -426,7 +420,7 @@ def principal():
 
     # Matriz notas: id nota, nota, legajo estudiante, id materia, condicion: 1(aprobado), 2(promocionada), 3(desaprobado)
     notas = [
-    [100, 8, 100, 101, 2],
+    [100, 8, 104, 101, 2],
     [101, 6, 101, 101, 1],
     [102, 7, 102, 104, 1],
     [103, 3, 103, 103, 3],

@@ -35,39 +35,25 @@ def altas_estudiantes(estudiantes):
     
     
     # Pedir edad
-    edad = input("Ingrese la edad del nuevo estudiante: ")
-
-    while edad.isnumeric() == False:
-        print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-        edad = input("Ingrese otra vez la edad del nuevo estudiante: ")
-    edad = int(edad)
-
-    while edad < 17 or edad > 100:
-        print(f"{ROJO}Edad invalida: rango perimitido de 17 a 100 años{RESET}")
-        edad = input("Ingrese otra vez la edad del nuevo estudiante: ")
-
-        while edad.isnumeric() == False:
-            print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-            edad = input("Ingrese otra vez la edad del nuevo estudiante: ")
-        edad = int(edad)
+    while True:
+        try:
+            edad = utilidades.leerentero("Ingrese la edad del nuevo estudiante: ")
+            assert edad >= 17 and edad <= 100
+            break
+        except AssertionError:
+            print(f"{ROJO}Edad invalida: rango perimitido de 17 a 100 años{RESET}")
+            print("Intente nuevamente.")
 
 
     # Pedir año de cursada
-    anio = input("Ingrese el año de cursada del nuevo estudiante (1-9): ")
-
-    while anio.isnumeric() == False:
-        print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-        anio = input("Ingrese otra vez el año de cursada del nuevo estudiante (1-9): ")
-    anio = int(anio)
-
-    while anio < 1 or anio > 9:
-        print(f"{ROJO}Año de cursada invalido: rango perimitido de 1 a 9{RESET}")
-        anio = input("Ingrese otra vez el año de cursada del nuevo estudiante (1-9): ")
-
-        while anio.isnumeric() == False:
-            print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-            anio = input("Ingrese otra vez el año de cursada del nuevo estudiante (1-9): ")
-        anio = int(anio)
+    while True:
+        try:
+            anio = utilidades.leerentero("Ingrese el año de cursada del nuevo estudiante (1-9): ")
+            assert anio > 0 and anio < 10
+            break
+        except AssertionError:
+            print(f"{ROJO}Año de cursada invalido: rango perimitido de 1 a 9{RESET}")
+            print("Intente nuevamente.")
 
 
     # Genera el nombre de usuario tomando la primera letra del nombre y todo el apellido
@@ -128,31 +114,19 @@ def bajas_estudiantes(estudiantes, notas):
     lista_legajos = utilidades.obtener_lista_legajos(estudiantes)
 
     # Pedir legajo a eliminar
-    legajo = input("Ingrese el legajo del estudiante a eliminar (Formato: 100): ")
-
-    while legajo.isnumeric() == False:
-        print(f"{ROJO}ERROR: No se admiten letras en el código.{RESET}")
-        legajo = input("Ingrese de nuevo el legajo del estudiante a eliminar (Formato: 100): ")
-
-    legajo = int(legajo)
-    esta_en_calificaciones = utilidades.busqueda_secuencial(notas, 2, legajo)
-
-
-    while legajo not in lista_legajos or esta_en_calificaciones != -1:
-        if legajo not in lista_legajos:
-            print(f"{ROJO}ERROR: Ese código no está registrado{RESET}")
-        else:
-            print(f"{ROJO}ERROR: Ese estudiante tiene una calificaión registrada, no se puede eliminar{RESET}")
-        
-
-        legajo = input("Ingrese el legajo del estudiante a eliminar (Formato: 100): ")
-
-        while legajo.isnumeric() == False:
-            print(f"{ROJO}ERROR: No se admiten letras en el código.{RESET}")
-            legajo = input("Ingrese de nuevo el legajo del estudiante a eliminar (Formato: 100): ")
-
-        legajo = int(legajo)
-        esta_en_calificaciones = utilidades.busqueda_secuencial(notas, 2, legajo)
+    while True:
+        try:
+            legajo = utilidades.leerentero("Ingrese el legajo del estudiante a eliminar (Formato: 100): ")
+            esta_en_calificaciones = utilidades.busqueda_secuencial(notas, 2, legajo)
+            assert legajo in lista_legajos
+            assert esta_en_calificaciones == -1
+            break
+        except AssertionError:
+            if legajo not in lista_legajos:
+                print(f"{ROJO}ERROR: Ese código no está registrado{RESET}")
+            else:
+                print(f"{ROJO}ERROR: Ese estudiante tiene una calificaión registrada, no se puede eliminar{RESET}")
+            print("Intente nuevamente.")
 
 
     # Busca el indice del legajo en la lista de legajos y lo elimina de la misma y elimina el diccionario a la lista de estudiantes
@@ -175,28 +149,16 @@ def modificar_estudiantes(estudiantes):
     lista_legajos = utilidades.obtener_lista_legajos(estudiantes)
     
     # Pedir el legajo a modificar
-    legajo = input("Ingrese el legajo del estudiante a modificar (Formato: 100): ")
+    while True:
+        try:
+            legajo = utilidades.leerentero("Ingrese el legajo del estudiante a modificar (Formato: 100): ")
+            assert legajo in lista_legajos
+            break
+        except AssertionError:
+            print(f"{ROJO}ERROR: Ese legajo no está registrado{RESET}")
+            print("Intente nuevamente.")
 
-    while legajo.isnumeric() == False:
-        print(f"{ROJO}ERROR: No se admiten letras en el código.{RESET}")
-        legajo = input("Ingrese de nuevo el legajo del estudiante a modificar (Formato: 100): ")
-
-    legajo = int(legajo)
-
-
-    while legajo not in lista_legajos:
-        print(f"{ROJO}ERROR: Ese legajo no está registrado{RESET}")
-
-        legajo = input("Ingrese de nuevo el legajo del estudiante a modificar (Formato: 100): ")
-
-        while legajo.isnumeric() == False:
-            print(f"{ROJO}ERROR: No se admiten letras en el legajo.{RESET}")
-            legajo = input("Ingrese de nuevo el legajo del estudiante a modificar (Formato: 100): ")
-
-        legajo = int(legajo)
-
-                
-                
+                             
     # Pedir nombre del estudiante
     nombre = input("Ingrese el nombre y apellido del estudiante: ").title()
 
@@ -209,39 +171,24 @@ def modificar_estudiantes(estudiantes):
     
     
     #Pedir edad
-    edad = input("Ingrese la edad del estudiante: ")
-
-    while edad.isnumeric() == False:
-        print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-        edad = input("Ingrese de nuevo la edad del estudiante: ")
-    edad = int(edad)
-    
-    while edad < 17 or edad > 100:
-        print(f"{ROJO}Edad invalida: rango perimitido de 17 a 100 años{RESET}")
-        edad = input("Ingrese de nuevo la edad del estudiante: ")
-
-        while edad.isnumeric() == False:
-            print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-            edad = input("Ingrese de nuevo la edad del estudiante: ")
-        edad = int(edad)
-
+    while True:
+        try:
+            edad = utilidades.leerentero("Ingrese la edad del nuevo estudiante: ")
+            assert edad > 17 and edad < 100
+            break
+        except AssertionError:
+            print(f"{ROJO}Edad invalida: rango perimitido de 17 a 100 años{RESET}")
+            print("Intente nuevamente.")
 
     # Pedir año de cursada
-    anio = input("Ingrese el año de cursada del estudiante (1-9): ")
-
-    while anio.isnumeric() == False:
-        print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-        anio = input("Ingrese de nuevo el año de cursada del estudiante (1-9): ")
-    anio = int(anio)
-
-    while anio < 1 or anio > 9:
-        print(f"{ROJO}Año de cursada invalido: rango perimitido de 1 a 9{RESET}")
-        anio = input("Ingrese de nuevo el año de cursada del estudiante (1-9): ")
-
-        while anio.isnumeric() == False:
-            print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-            anio = input("Ingrese de nuevo el año de cursada del estudiante (1-9): ")
-        anio = int(anio)
+    while True:
+        try:
+            anio = utilidades.leerentero("Ingrese el año de cursada del nuevo estudiante (1-9): ")
+            assert anio > 0 and anio < 10
+            break
+        except AssertionError:
+            print(f"{ROJO}Año de cursada invalido: rango perimitido de 1 a 9{RESET}")
+            print("Intente nuevamente.")
 
 
     # Genera el nombre de usuario tomando la primera letra del nombre y todo el apellido
@@ -333,42 +280,26 @@ def mostrar_estudiantes(estudiantes):
     pre: recibe la lista de diccionarios de estudiantes.
     pos: solicita la columna y el tipo de orden, ordena los estudiantes y los muestra por pantalla.
     '''
-    columna = input("""Ingrese el número de la columna para ordenar 
-(1 = legajo, 2 = nombre, 3 = edad, 4 = año de cursada, 5 = usuario): """)
 
-    while columna.isnumeric() == False:
-        print(f"{ROJO}Opción inválida, ingrese un número entre 1 y 5{RESET}")
-        columna = input("""Ingrese de nuevo el número de la columna para ordenar 
-(1 = legajo, 2 = nombre, 3 = edad, 4 = año de cursada, 5 = usuario): """)
-    columna = int(columna) - 1
+    while True:
+        try:
+            columna = utilidades.leerentero("""Ingrese el número de la columna para ordenar 
+(1 = legajo, 2 = nombre, 3 = edad, 4 = año de cursada, 5 = usuario): """) - 1
+            assert columna >= 0 and columna <= 4
+            break
+        except AssertionError:
+            print(f"{ROJO}Número inválido, la matriz posee 5 columnas{RESET}")
+            print("Intente nuevamente.")
 
-    while columna < 0 or columna > 4:
-        print(f"{ROJO}Número inválido, la matriz posee 5 columnas{RESET}")
-        columna = input("""Ingrese de nuevo el número de la columna para ordenar 
-(1 = legajo, 2 = nombre, 3 = edad, 4 = año de cursada, 5 = usuario): """)
 
-        while columna.isnumeric() == False:
-            print(f"{ROJO}Opción inválida, ingrese un número entre 1 y 5{RESET}")
-            columna = input("""Ingrese de nuevo el número de la columna para ordenar 
-(1 = legajo, 2 = nombre, 3 = edad, 4 = año de cursada, 5 = usuario): """)
-        columna = int(columna) - 1
-
-    
-    reversa = input("Ingrese 0 = ascendente, 1 = descendente: ")
-
-    while reversa.isnumeric() == False:
-        print(f"{ROJO}Opción inválida, ingrese un número entre 1 y 2{RESET}")
-        reversa = input("Ingrese 0 = ascendente, 1 = descendente: ")
-    reversa = int(reversa)
-    
-    while reversa < 0 or reversa > 1:
-        print(f"{ROJO}Número inválido, rango valido de 0 a 1{RESET}")
-        reversa = input("Ingrese 0 = ascendente, 1 = descendente: ")
-
-        while reversa.isnumeric() == False:
-            print(f"{ROJO}Opción inválida, ingrese un número entre 1 y 2{RESET}")
-            reversa = input("Ingrese 0 = ascendente, 1 = descendente: ")
-        reversa = int(reversa)
+    while True:
+        try:
+            reversa = utilidades.leerentero("Ingrese 0 = ascendente, 1 = descendente: ")
+            assert reversa >= 0 and reversa <= 1
+            break
+        except AssertionError:
+            print(f"{ROJO}Número inválido, rango valido de 0 a 1{RESET}")
+            print("Intente nuevamente.")
 
     
     estudiantes_ordenados = ordenar_estudiantes(estudiantes, columna, reversa)
