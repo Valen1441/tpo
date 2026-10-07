@@ -27,57 +27,36 @@ def altas_materias(materias):
 
     
     # Pedir cuatrimestre
-    cuatrimestre = input("Ingrese el cuatrimestre de la nueva materia (1-2): ")
-
-    while cuatrimestre.isnumeric() == False:
-        print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-        cuatrimestre = input("Ingrese otra vez el cuatrimestre de la nueva materia (1-2): ")
-    cuatrimestre = int(cuatrimestre)
-
-    while cuatrimestre < 1 or cuatrimestre > 2:
-        print(f"{ROJO}Cuatimestre invalido: rango perimitido de 1 a 2{RESET}")
-        cuatrimestre = input("Ingrese otra vez el cuatrimestre de la nueva materia (1-2): ")
-
-        while cuatrimestre.isnumeric() == False:
-            print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-            cuatrimestre = input("Ingrese otra vez el cuatrimestre de la nueva materia (1-2): ")
-        cuatrimestre = int(cuatrimestre)
+    while True:
+        try:
+            cuatrimestre = utilidades.leerentero("Ingrese el cuatrimestre de la nueva materia (1-2): ")
+            assert cuatrimestre >= 1 and cuatrimestre <= 2
+            break
+        except AssertionError:
+            print(f"{ROJO}Cuatimestre invalido: rango perimitido de 1 a 2{RESET}")
+            print("Intente nuevamente.")
 
 
     # Pedir año de la materia
-    anio = input("Ingrese el año de la nueva materia (1-5): ")
-
-    while anio.isnumeric() == False:
-        print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-        anio = input("Ingrese otra vez el año de la nueva materia (1-5): ")
-    anio = int(anio)
-
-    while anio < 1 or anio > 5:
-        print(f"{ROJO}Año inválido: rango perimitido de 1 a 5 años{RESET}")
-        anio = input("Ingrese otra vez el año de la nueva materia (1-5): ")
-
-        while anio.isnumeric() == False:
-            print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-            anio = input("Ingrese otra vez el año de la nueva materia (1-5): ")
-        anio = int(anio)
+    while True:
+        try:
+            anio = utilidades.leerentero("Ingrese el año de la nueva materia (1-5): ")
+            assert anio >= 1 and anio <= 5
+            break
+        except AssertionError:
+            print(f"{ROJO}Año inválido: rango perimitido de 1 a 5 años{RESET}")
+            print("Intente nuevamente.")
 
 
     # Pedir carga horaria 
-    horaria = input("Ingrese la carga horaria de la nueva materia (1-12): ")
-
-    while horaria.isnumeric() == False:
-        print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-        horaria = input("Ingrese otra vez la carga horaria de la nueva materia (1-12): ")
-    horaria = int(horaria)
-
-    while horaria < 1 or horaria > 12:
-        print(f"{ROJO}Carga horaria invalida: rango perimitido de 1 a 12 horas{RESET}")
-        horaria = input("Ingrese otra vez la carga horaria de la nueva materia (1-12): ")
-
-        while horaria.isnumeric() == False:
-            print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-            horaria = input("Ingrese otra vez la carga horaria de la nueva materia (1-12): ")
-        horaria = int(horaria)
+    while True:
+        try:
+            horaria = utilidades.leerentero("Ingrese la carga horaria de la nueva materia (1-12): ")
+            assert horaria >= 1 and horaria <= 12
+            break
+        except AssertionError:
+            print(f"{ROJO}Carga horaria invalida: rango perimitido de 1 a 12 horas{RESET}")
+            print("Intente nuevamente.")
 
 
     # Genera el código de la nueva materia tomando el último código y sumando 1.
@@ -103,34 +82,20 @@ def bajas_materias(materias, notas):
     print(f"       ==================== {NARANJA}BAJAS MATERIAS{RESET} ====================")
 
     # Pedir el código a eliminar
-    codigo = input("Ingrese el código de la materia a eliminar (Formato: 100): ")
-
-    while codigo.isnumeric() == False:
-        print(f"{ROJO}ERROR: No se admiten letras en el código.{RESET}")
-        codigo = input("Ingrese de nuevo el código de la materia a eliminar (Formato: 100): ")
-
-    codigo = int(codigo)
-    esta_en_calificaciones = utilidades.busqueda_secuencial(notas, 3, codigo)
-
-    registrado = utilidades.busqueda_secuencial(materias, 0, codigo)
-
-    while registrado == -1 or esta_en_calificaciones != -1:
-        if registrado == -1:
-            print(f"{ROJO}ERROR: Ese código no está registrado{RESET}")
-        else:
-            print(f"{ROJO}ERROR: Esa materia tiene una calificaión registrada, no se puede eliminar{RESET}")
-
-
-        codigo = input("Ingrese el código de la materia a eliminar (Formato: 100): ")
-
-        while codigo.isnumeric() == False:
-            print(f"{ROJO}ERROR: No se admiten letras en el código.{RESET}")
-            codigo = input("Ingrese de nuevo el código de la materia a eliminar (Formato: 100): ")
-
-        codigo = int(codigo)
-        esta_en_calificaciones = utilidades.busqueda_secuencial(notas, 3, codigo)
-
-        registrado = utilidades.busqueda_secuencial(materias, 0, codigo)
+    while True:
+        try:
+            codigo = utilidades.leerentero("Ingrese el código de la materia a eliminar (Formato: 100): ")
+            esta_en_calificaciones = utilidades.busqueda_secuencial(notas, 3, codigo)
+            registrado = utilidades.busqueda_secuencial(materias, 0, codigo)
+            assert esta_en_calificaciones == -1
+            assert registrado != -1
+            break
+        except AssertionError:
+            if registrado == -1:
+                print(f"{ROJO}ERROR: Ese código no está registrado{RESET}")
+            else:
+                print(f"{ROJO}ERROR: Esa materia tiene una calificaión registrada, no se puede eliminar{RESET}")
+            print("Intente nuevamente.")
 
 
     # Elimina la materia de la matriz. 
@@ -149,86 +114,52 @@ def modificar_materias(materias):
     print(f"       ==================== {AZUL}MODIFICACIÓN MATERIAS{RESET} ====================")
     
     # Pedir el codigo a modificar
-    codigo = input("Ingrese el código de la materia a modificar (Formato: 100): ")
+    while True:
+        try:
+            codigo = utilidades.leerentero("Ingrese el código de la materia a modificar (Formato: 100): ")
+            modificar = utilidades.busqueda_secuencial(materias, 0, codigo)
+            assert modificar != -1
+            break
+        except AssertionError:
+            print(f"{ROJO}ERROR: Ese código no está registrado{RESET}")
+            print("Intente nuevamente.")
 
-    while codigo.isnumeric() == False:
-        print(f"{ROJO}ERROR: No se admiten letras en el código.{RESET}")
-        codigo = input("Ingrese de nuevo el código de la materia a modificar (Formato: 100): ")
-
-    codigo = int(codigo)
-
-    modificar = utilidades.busqueda_secuencial(materias, 0, codigo)
-
-    while modificar == -1:
-        print(f"{ROJO}ERROR: Ese código no está registrado{RESET}")
-
-        codigo = input("Ingrese de nuevo el código de la materia a modificar (Formato: 100): ")
-
-        while codigo.isnumeric() == False:
-            print(f"{ROJO}ERROR: No se admiten letras en el código.{RESET}")
-            codigo = input("Ingrese de nuevo el código de la materia a modificar (Formato: 100): ")
-
-        codigo = int(codigo)
-
-        modificar = utilidades.busqueda_secuencial(materias, 0, codigo)
-                
                 
     # Pedir nombre de la materia
     nombre = input("Ingrese el nombre de la materia: ").title()
     
     
     # Pedir el cuatrimestre
-    cuatrimestre = input("Ingrese el cuatrimestre de la materia (1-2): ")
-
-    while cuatrimestre.isnumeric() == False:
-        print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-        cuatrimestre = input("Ingrese de nuevo el cuatrimestre de la materia (1-2): ")
-    cuatrimestre = int(cuatrimestre)
-
-    while cuatrimestre < 1 or cuatrimestre > 2:
-        print(f"{ROJO}Cuatimestre invalido: rango perimitido de 1 a 2{RESET}")
-        cuatrimestre = input("Ingrese de nuevo el cuatrimestre de la materia (1-2): ")
-
-        while cuatrimestre.isnumeric() == False:
-            print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-            cuatrimestre = input("Ingrese de nuevo el cuatrimestre de la materia (1-2): ")
-        cuatrimestre = int(cuatrimestre)
+    while True:
+        try:
+            cuatrimestre = utilidades.leerentero("Ingrese el cuatrimestre de la nueva materia (1-2): ")
+            assert cuatrimestre >= 1 and cuatrimestre <= 2
+            break
+        except AssertionError:
+            print(f"{ROJO}Cuatimestre invalido: rango perimitido de 1 a 2{RESET}")
+            print("Intente nuevamente.")
 
 
     # Pedir año de la materia
-    anio = input("Ingrese el año de la materia (1-5): ")
-
-    while anio.isnumeric() == False:
-        print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-        anio = input("Ingrese de nuevo el año de la materia (1-5): ")
-    anio = int(anio)
-
-    while anio < 1 or anio > 5:
-        print(f"{ROJO}Año invalido: rango perimitido de 1 a 5 años{RESET}")
-        anio = input("Ingrese de nuevo el año de la materia (1-5): ")
-
-        while anio.isnumeric() == False:
-            print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-            anio = input("Ingrese de nuevo el año de la materia (1-5): ")
-        anio = int(anio)
+    while True:
+        try:
+            anio = utilidades.leerentero("Ingrese el año de la nueva materia (1-5): ")
+            assert anio >= 1 and anio <= 5
+            break
+        except AssertionError:
+            print(f"{ROJO}Año inválido: rango perimitido de 1 a 5 años{RESET}")
+            print("Intente nuevamente.")
 
 
     # Pedir carga horaria 
-    horaria = input("Ingrese la carga horaria de la materia (1-12): ")
-
-    while horaria.isnumeric() == False:
-        print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-        horaria = input("Ingrese otra vez la carga horaria de la materia (1-12): ")
-    horaria = int(horaria)
-
-    while horaria < 1 or horaria > 12:
-        print(f"{ROJO}Carga horaria invalida: rango perimitido de 1 a 12 horas{RESET}")
-        horaria = input("Ingrese otra vez la carga horaria de la materia (1-12): ")
-
-        while horaria.isnumeric() == False:
-            print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-            horaria = input("Ingrese otra vez la carga horaria de la materia (1-12): ")
-        horaria = int(horaria)
+    while True:
+        try:
+            horaria = utilidades.leerentero("Ingrese la carga horaria de la nueva materia (1-12): ")
+            assert horaria >= 1 and horaria <= 12
+            break
+        except AssertionError:
+            print(f"{ROJO}Carga horaria invalida: rango perimitido de 1 a 12 horas{RESET}")
+            print("Intente nuevamente.")
 
     
     # Modificar los datos de la materia seleccionada.
@@ -301,42 +232,26 @@ def mostrar_materias(materias):
     pos: solicita al usuario una columna y un tipo de ordenamiento,
          ordena la matriz según los datos ingresados y muestra las materias.
     '''
-    columna = input("""Ingrese el número de la columna para ordenar 
-(1 = id, 2 = nombre, 3 = cuatrimestre, 4 = año, 5 = carga horaria): """)
 
-    while columna.isnumeric() == False:
-        print(f"{ROJO}Opción inválida, ingrese un número entre 1 y 5{RESET}")
-        columna = input("""Ingrese de nuevo el número de la columna para ordenar 
-(1 = id, 2 = nombre, 3 = cuatrimestre, 4 = año, 5 = carga horaria): """)
-    columna = int(columna) - 1
-
-    while columna < 0 or columna > 4:
-        print(f"{ROJO}Número inválido, la matriz posee 5 columnas{RESET}")
-        columna = input("""Ingrese de nuevo el número de la columna para ordenar 
-(1 = id, 2 = nombre, 3 = cuatrimestre, 4 = año, 5 = carga horaria): """)
-
-        while columna.isnumeric() == False:
-            print(f"{ROJO}Opción inválida, ingrese un número entre 1 y 5{RESET}")
-            columna = input("""Ingrese de nuevo el número de la columna para ordenar 
-(1 = id, 2 = nombre, 3 = cuatrimestre, 4 = año, 5 = carga horaria): """)
-        columna = int(columna) - 1
+    while True:
+        try:
+            columna = utilidades.leerentero("""Ingrese el número de la columna para ordenar 
+(1 = id, 2 = nombre, 3 = cuatrimestre, 4 = año, 5 = carga horaria): """) - 1
+            assert columna >= 0 and columna <= 4
+            break
+        except AssertionError:
+            print(f"{ROJO}Número inválido, la matriz posee 5 columnas{RESET}")
+            print("Intente nuevamente.")
 
     
-    reversa = input("Ingrese 0 = ascendente, 1 = descendente: ")
-
-    while reversa.isnumeric() == False:
-        print(f"{ROJO}Opción inválida, ingrese un número entre 1 y 2{RESET}")
-        reversa = input("Ingrese 0 = ascendente, 1 = descendente: ")
-    reversa = int(reversa)
-    
-    while reversa < 0 or reversa > 1:
-        print(f"{ROJO}Número inválido, rango valido de 0 a 1{RESET}")
-        reversa = input("Ingrese 0 = ascendente, 1 = descendente: ")
-
-        while reversa.isnumeric() == False:
-            print(f"{ROJO}Opción inválida, ingrese un número entre 1 y 2{RESET}")
-            reversa = input("Ingrese 0 = ascendente, 1 = descendente: ")
-        reversa = int(reversa)
+    while True:
+        try:
+            reversa = utilidades.leerentero("Ingrese 0 = ascendente, 1 = descendente: ")
+            assert reversa >= 0 and reversa <= 1
+            break
+        except AssertionError:
+            print(f"{ROJO}Número inválido, rango valido de 0 a 1{RESET}")
+            print("Intente nuevamente.")
 
 
     materias_ordenadas = ordenar_materias(materias, columna, reversa)

@@ -69,65 +69,37 @@ def altas_calificaciones(notas, estudiantes, materias):
     lista_legajos = utilidades.obtener_lista_legajos(estudiantes)
 
     # Pedir legajo del estudiante 
-    estudiante = input("Ingrese el legajo del estudiante a calificar (Formato: 100): ")
-
-    while estudiante.isnumeric() == False:
-        print(f"{ROJO}ERROR: No se admiten letras en el legajo.{RESET}")
-        estudiante = input("Ingrese de nuevo el legajo del estudiante a calificar (Formato: 100): ")
-    estudiante = int(estudiante)
-
-            
-    while estudiante not in lista_legajos:
-        print(f"{ROJO}ERROR: Ese legajo no está registrado.{RESET}")
-        
-        estudiante = input("Ingrese de nuevo el legajo del estudiante a calificar (Formato: 100): ")
-
-        while estudiante.isnumeric() == False:
-            print(f"{ROJO}ERROR: No se admiten letras en el legajo.{RESET}")
-            estudiante = input("Ingrese de nuevo el legajo del estudiante a calificar (Formato: 100): ")
-        estudiante = int(estudiante)
+    while True:
+        try:
+            estudiante = utilidades.leerentero("Ingrese el legajo del estudiante a calificar (Formato: 100): ")
+            assert estudiante in lista_legajos
+            break
+        except AssertionError:
+            print(f"{ROJO}ERROR: Ese legajo no está registrado.{RESET}")
+            print("Intente nuevamente.")
     
     
     # Pedir id de la materia
-    materia = input("Ingrese el código de la materia (Formato: 100): ")
-
-    while materia.isnumeric() == False:
-        print(f"{ROJO}ERROR: No se admiten letras en el código.{RESET}")
-        materia = input("Ingrese de nuevo el código de la materia (Formato: 100): ")
-    materia = int(materia)
-    
-    registrado = utilidades.busqueda_secuencial(materias, 0, materia)
-            
-    while registrado == -1:
-        print(f"{ROJO}ERROR: Ese código de materia no está registrado.{RESET}")
-        
-        materia = input("Ingrese de nuevo el código de la materia (Formato: 100): ")
-
-        while materia.isnumeric() == False:
-            print(f"{ROJO}ERROR: No se admiten letras en el código.{RESET}")
-            materia = input("Ingrese de nuevo el código de la materia (Formato: 100): ")
-        materia = int(materia)
-    
-        registrado = utilidades.busqueda_secuencial(materias, 0, materia)
+    while True:
+        try:
+            materia = utilidades.leerentero("Ingrese el código de la materia (Formato: 100): ")
+            registrado = utilidades.busqueda_secuencial(materias, 0, materia)
+            assert registrado != -1
+            break
+        except AssertionError:
+            print(f"{ROJO}ERROR: Ese código de materia no está registrado.{RESET}")
+            print("Intente nuevamente.")
         
     
     # Pedir la nota
-    nota = input("Ingrese la nota: ")
-
-    while nota.isnumeric() == False:
-        print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-        nota = input("Ingrese de nuevo la nota: ")
-    nota = int(nota)
-
-    while nota <= 0 or nota > 10:
-        print(f"{ROJO}ERROR: La nota debe ser mayor a 0 y menor o igual a 10.{RESET}")
-            
-        nota = input("Ingrese de nuevo la nota: ")
-
-        while nota.isnumeric() == False:
-            print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-            nota = input("Ingrese de nuevo la nota: ")
-        nota = int(nota)
+    while True:
+        try:
+            nota = utilidades.leerentero("Ingrese la nota: ")
+            assert nota > 0 and nota <= 10
+            break
+        except AssertionError:
+            print(f"{ROJO}ERROR: La nota debe ser mayor a 0 y menor o igual a 10.{RESET}")
+            print("Intente nuevamente.")
 
 
     # Genera el código de la nueva calificación tomando el último código y sumando 1.
@@ -163,27 +135,15 @@ def bajas_calificaciones(notas):
     print(f"       ==================== {NARANJA}BAJAS CALIFICACIONES{RESET} ====================")
 
     # Pedir el codigo a eliminar
-    codigo = input("Ingrese el código de la nota a eliminar (Formato: 100): ")
-
-    while codigo.isnumeric() == False:
-        print(f"{ROJO}ERROR: No se admiten letras en el código.{RESET}")
-        codigo = input("Ingrese de nuevo el código de la nota a eliminar (Formato: 100): ")
-    codigo = int(codigo)
-
-    registrado = utilidades.busqueda_secuencial(notas, 0, codigo)
-
-    
-    while registrado == -1:
-        print(f"{ROJO}ERROR: Ese código no está registrado{RESET}")
-        
-        codigo = input("Ingrese de nuevo el código de la nota a eliminar (Formato: 100): ")
-
-        while codigo.isnumeric() == False:
-            print(f"{ROJO}ERROR: No se admiten letras en el código.{RESET}")
-            codigo = input("Ingrese de nuevo el código de la nota a eliminar (Formato: 100): ")
-        codigo = int(codigo)
-    
-        registrado = utilidades.busqueda_secuencial(notas, 0, codigo)
+    while True:
+        try:
+            codigo = utilidades.leerentero("Ingrese el código de la nota a eliminar (Formato: 100): ")
+            registrado = utilidades.busqueda_secuencial(notas, 0, codigo)
+            assert registrado != -1
+            break
+        except AssertionError:
+            print(f"{ROJO}ERROR: Ese código no está registrado{RESET}")
+            print("Intente nuevamente.")
 
                     
     # Elimina de la matriz la fila encontrada.
@@ -204,87 +164,49 @@ def modificar_calificaciones(notas, estudiantes, materias):
     lista_legajos = utilidades.obtener_lista_legajos(estudiantes)
     
     # Pedir el codigo a modificar
-    codigo = input("Ingrese el código de la nota a modificar (Formato: 100): ")
-
-    while codigo.isnumeric() == False:
-        print(f"{ROJO}ERROR: No se admiten letras en el código.{RESET}")
-        codigo = input("Ingrese de nuevo el código de la nota a modificar (Formato: 100): ")
-    codigo = int(codigo)
-    
-    nota_modificar = utilidades.busqueda_secuencial(notas, 0, codigo)
-
-    while nota_modificar == -1:
-        print(f"{ROJO}ERROR: Ese código no está registrado{RESET}")
-        
-        codigo = input("Ingrese de nuevo el código de la nota a modificar (Formato: 100): ")
-
-        while codigo.isnumeric() == False:
-            print(f"{ROJO}ERROR: No se admiten letras en el código.{RESET}")
-            codigo = input("Ingrese de nuevo el código de la nota a modificar (Formato: 100): ")
-        codigo = int(codigo)
-    
-        nota_modificar = utilidades.busqueda_secuencial(notas, 0, codigo)
+    while True:
+        try:
+            codigo = utilidades.leerentero("Ingrese el código de la nota a modificar (Formato: 100): ")
+            nota_modificar = utilidades.busqueda_secuencial(notas, 0, codigo)
+            assert registrado != -1
+            break
+        except AssertionError:
+            print(f"{ROJO}ERROR: Ese código no está registrado{RESET}")
+            print("Intente nuevamente.")
                 
                 
     # Pedir el nuevo legajo
-    legajo = input("Ingrese el nuevo legajo del estudiante de la nota (Formato: 100): ")
-
-    while legajo.isnumeric() == False:
-        print(f"{ROJO}ERROR: No se admiten letras en el legajo.{RESET}")
-        legajo = input("Ingrese otra vez el nuevo legajo del estudiante de la nota (Formato: 100): ")
-    legajo = int(legajo)
-
-
-    while legajo not in lista_legajos:
-        print(f"{ROJO}ERROR: Ese código no está registrado{RESET}")
-        
-        legajo = input("Ingrese otra vez el nuevo legajo del estudiante de la nota (Formato: 100): ")
-
-        while legajo.isnumeric() == False:
-            print(f"{ROJO}ERROR: No se admiten letras en el legajo.{RESET}")
-            legajo = input("Ingrese otra vez el nuevo legajo del estudiante de la nota (Formato: 100): ")
-        legajo = int(legajo)
+    while True:
+        try:
+            legajo = utilidades.leerentero("Ingrese el legajo del estudiante a calificar (Formato: 100): ")
+            assert legajo in lista_legajos
+            break
+        except AssertionError:
+            print(f"{ROJO}ERROR: Ese legajo no está registrado.{RESET}")
+            print("Intente nuevamente.")
 
         
     # Pedir el nuevo codigo de materia
-    materia = input("Ingrese el nuevo código de la materia de la nota (Formato: 100): ")
-
-    while materia.isnumeric() == False:
-        print(f"{ROJO}ERROR: No se admiten letras en el código.{RESET}")
-        materia = input("Ingrese otra vez el nuevo código de la materia de la nota (Formato: 100): ")
-    materia = int(materia)
-
-    registrado = utilidades.busqueda_secuencial(materias, 0, materia)
-
-    while registrado == -1:
-        print(f"{ROJO}ERROR: Ese código no está registrado{RESET}")
-        
-        materia = input("Ingrese otra vez el nuevo código de la materia de la nota (Formato: 100): ")
-        while materia.isnumeric() == False:
-            print(f"{ROJO}ERROR: No se admiten letras en el código.{RESET}")
-            materia = input("Ingrese otra vez el nuevo código de la materia de la nota (Formato: 100): ")
-        materia = int(materia)
-
-        registrado = utilidades.busqueda_secuencial(materias, 0, materia)
+    while True:
+        try:
+            materia = utilidades.leerentero("Ingrese el código de la materia (Formato: 100): ")
+            registrado = utilidades.busqueda_secuencial(materias, 0, materia)
+            assert registrado != -1
+            break
+        except AssertionError:
+            print(f"{ROJO}ERROR: Ese código de materia no está registrado.{RESET}")
+            print("Intente nuevamente.")
 
     
     # Pedir la nueva nota
-    nota = input("Ingrese la nota: ")
-
-    while nota.isnumeric() == False:
-        print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-        nota = input("Ingrese de nuevo la nota: ")
-    nota = int(nota)
-
-    while nota <= 0 or nota > 10:
-        print(f"{ROJO}ERROR: La nota debe ser mayor a 0 y menor o igual a 10.{RESET}")
-            
-        nota = input("Ingrese de nuevo la nota: ")
-
-        while nota.isnumeric() == False:
-            print(f"{ROJO}ERROR: No se admiten letras.{RESET}")
-            nota = input("Ingrese de nuevo la nota: ")
-        nota = int(nota)
+    while True:
+        try:
+            nota = utilidades.leerentero("Ingrese la nota: ")
+            assert nota > 0 and nota <= 10
+            break
+        except AssertionError:
+            print(f"{ROJO}ERROR: La nota debe ser mayor a 0 y menor o igual a 10.{RESET}")
+            print("Intente nuevamente.")
         
 
     if nota >= 8:
@@ -370,43 +292,26 @@ def mostrar_calificaciones(notas, estudiantes, materias):
     pre: recibe la lista de diccionarios de estudiantes y las matrices notas y materias.
     pos: solicita la columna y el tipo de orden, ordena las calificaciones y las muestra por pantalla.
     '''
-    columna = input("""Ingrese el número de la columna para ordenar 
-(1 = id, 2 = nota, 3 = legajo estudiante, 4 = id materia, 5 = condicion): """)
 
-    while columna.isnumeric() == False:
-        print(f"{ROJO}Opción inválida, ingrese un número entre 1 y 5{RESET}")
-        columna = input("""Ingrese de nuevo el número de la columna para ordenar 
-(1 = id, 2 = nota, 3 = legajo estudiante, 4 = id materia, 5 = condicion): """)
-    columna = int(columna) - 1
-
-    while columna < 0 or columna > 3:
-        print(f"{ROJO}Número inválido, la matriz posee 5 columnas{RESET}")
-        columna = input("""Ingrese de nuevo el número de la columna para ordenar 
-(1 = id, 2 = nota, 3 = legajo estudiante, 4 = id materia, 5 = condicion): """)
-
-        while columna.isnumeric() == False:
-            print(f"{ROJO}Opción inválida, ingrese un número entre 1 y 5{RESET}")
-            columna = input("""Ingrese de nuevo el número de la columna para ordenar 
-(1 = id, 2 = nota, 3 = legajo estudiante, 4 = id materia, 5 = condicion): """)
-        columna = int(columna) - 1
+    while True:
+        try:
+            columna = utilidades.leerentero("""Ingrese el número de la columna para ordenar 
+(1 = id, 2 = nota, 3 = legajo estudiante, 4 = id materia, 5 = condicion): """) - 1
+            assert columna >= 0 and columna <= 4
+            break
+        except AssertionError:
+            print(f"{ROJO}Número inválido, la matriz posee 5 columnas{RESET}")
+            print("Intente nuevamente.")
 
     
-    reversa = input("Ingrese 0 = ascendente, 1 = descendente: ")
-
-    while reversa.isnumeric() == False:
-        print(f"{ROJO}Opción inválida, ingrese un número entre 1 y 2{RESET}")
-        reversa = input("Ingrese 0 = ascendente, 1 = descendente: ")
-    reversa = int(reversa)
-
-    while reversa < 0 or reversa > 1:
-        print(f"{ROJO}Número inválido, rango valido de 0 a 1{RESET}")
-        reversa = input("Ingrese 0 = ascendente, 1 = descendente: ")
-
-        while reversa.isnumeric() == False:
-            print(f"{ROJO}Opción inválida, ingrese un número entre 1 y 2{RESET}")
-            reversa = input("Ingrese 0 = ascendente, 1 = descendente: ")
-        reversa = int(reversa)
-
+    while True:
+        try:
+            reversa = utilidades.leerentero("Ingrese 0 = ascendente, 1 = descendente: ")
+            assert reversa >= 0 and reversa <= 1
+            break
+        except AssertionError:
+            print(f"{ROJO}Número inválido, rango valido de 0 a 1{RESET}")
+            print("Intente nuevamente.")
 
     notas_ordenadas = ordenar_notas(notas, columna, reversa)
     imprimir_calificacion(notas_ordenadas, estudiantes, materias)
