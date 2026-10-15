@@ -187,12 +187,7 @@ def imprimir_materias(materias):
     print("-" * 82)
 
     # Se guardan los códigos originales para restaurarlos después.
-    codigos = [fila[0] for fila in materias]
-
-    # Se genera temporalmente un código con el año y el cuatrimestre.
-    lista_codigo = list(map(lambda fila: str(fila[3]) + "Pri" + str(fila[0]) if fila[2] == 1 else str(fila[3]) + "Seg" + str(fila[0]), materias))
-    for fila in range(len(materias)):
-        materias[fila][0] = lista_codigo[fila]
+    codigos = utilidades.codigo_temporal(materias, materias)
 
     # Mostrar los datos de cada materia.
     for i in range(len(materias)):
@@ -210,8 +205,7 @@ def imprimir_materias(materias):
         print(f"{codigo:<16}{nombre:<21}{cuatrimestre:^12}{anio:^17}{horaria:^13}")
 
     # Se restauran los códigos originales para no modificar la matriz.
-    for fila in range(len(materias)):
-        materias[fila][0] = codigos[fila]
+    utilidades.restaurar_codigos(materias, codigos)
 
 
 def ordenar_materias(materias, columna, reversa):

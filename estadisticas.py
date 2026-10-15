@@ -84,12 +84,7 @@ def reporte_materia(materias, materia, notas, estudiantes):
     lista_legajos = utilidades.obtener_lista_legajos(estudiantes)
 
     # Se guardan los códigos originales para restaurarlos después.
-    codigos = [fila[0] for fila in materias]
-
-    # Se genera temporalmente un código con el año y el cuatrimestre.
-    lista_codigo = list(map(lambda fila: str(fila[3]) + "Pri" + str(fila[0]) if fila[2] == 1 else str(fila[3]) + "Seg" + str(fila[0]), materias))
-    for fila in range(len(materias)):
-        materias[fila][0] = lista_codigo[fila]
+    codigos = utilidades.codigo_temporal(materias, materias)
 
     print()
     print("=" * 40)
@@ -126,8 +121,7 @@ def reporte_materia(materias, materia, notas, estudiantes):
             print("-" * 40)
 
     # Se restauran los códigos originales para no modificar la matriz.
-    for fila in range(len(materias)):
-        materias[fila][0] = codigos[fila]
+    utilidades.restaurar_codigos(materias, codigos)
 
     if total > 0:
         promedio = (lambda a, b: a / b)(suma, total)
@@ -154,10 +148,7 @@ def estadisticas_materias(notas, materias):
     print(f"{BOLD}{'ID Materia':<15}{'Nombre':<15}{'Notas':^13}{'Promedio':^13}{aprueba:^24}{promociona:^28}{desaprueba:^27}{RESET}")
     print("-" * 102)
 
-    codigos = [fila[0] for fila in materias]
-    lista_codigo = list(map(lambda fila: str(fila[3]) + "Pri" + str(fila[0]) if fila[2] == 1 else str(fila[3]) + "Seg" + str(fila[0]), materias))
-    for fila in range(len(materias)):
-        materias[fila][0] = lista_codigo[fila]
+    codigos = utilidades.codigo_temporal(materias, materias)
 
     lista_cuat1 = []
     lista_cuat2 = []
@@ -195,8 +186,7 @@ def estadisticas_materias(notas, materias):
         print(f"{id_materia:<15}{nombre:<15}{cantidad:^13}{promedio:^13}{aprobados:^13}{promocionados:^17}{desaprobados:^17}")
 
 
-    for fila in range(len(materias)):
-        materias[fila][0] = codigos[fila]
+    utilidades.restaurar_codigos(materias, codigos)
 
 
     if len(lista_cuat1) != 0:
@@ -309,7 +299,7 @@ def estadisticas_materias(notas, materias):
 
             print(f"- Más estudiantes desaprobados: {cadena[:-2]} ({mas_desaprobados[3]})")
         else:
-            print(f"- Más estudiantes deaprobados: -")
+            print(f"- Más estudiantes desaprobados: -")
 
         porcentaje_aprobados = (aprobados / total) * 100
         porcentaje_desaprobados = (desaprobados / total) * 100

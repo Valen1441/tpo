@@ -120,40 +120,42 @@ def menu_estudiantes(estudiantes, notas, usuario):
          tipo de usuario. Permite realizar altas, bajas, modificaciones
          y listados cuando el usuario es Admin, y consultas si no lo es.
     '''
-    mostrar_submenu("ESTUDIANTES", usuario)
-    if usuario == "Admin" :  
-        opcion = validar_rango(1, 5)
-        estudiantes_con_notas = set()
-        estudiantes_totales = set()
-        for nota in notas:
-            estudiantes_con_notas.add(nota[2])
-        for estudiante in estudiantes:
-            estudiantes_totales.add(estudiante["legajo"])
-        match opcion:
-            case 1:
-                Estudiantes.altas_estudiantes(estudiantes)
-                menu_estudiantes(estudiantes, notas, usuario)
-            case 2:
-                if len(estudiantes) > 0:
-                    if len(estudiantes_totales ^ estudiantes_con_notas) != 0:
-                        Estudiantes.bajas_estudiantes(estudiantes, notas)
-                    else: 
-                        print(f"{ROJO}ERROR: todos los estudiantes tienen una calificación registrada, no se pueden eliminar.{RESET}")
-                else:
-                    print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}")
-                menu_estudiantes(estudiantes, notas, usuario)
-            case 3:
-                if len(estudiantes) > 0:
-                    Estudiantes.modificar_estudiantes(estudiantes)
-                else:
-                    print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}")
-                menu_estudiantes(estudiantes, notas, usuario)
-            case 4:
-                if len(estudiantes) > 0:
-                    Estudiantes.mostrar_estudiantes(estudiantes)
-                else:
-                    print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}")
-                menu_estudiantes(estudiantes, notas, usuario)
+    opcion = 0    
+    if usuario == "Admin" :
+        while opcion != 5:
+            mostrar_submenu("ESTUDIANTES", usuario)  
+            opcion = validar_rango(1, 5)
+            estudiantes_con_notas = set()
+            estudiantes_totales = set()
+            for nota in notas:
+                estudiantes_con_notas.add(nota[2])
+            for estudiante in estudiantes:
+                estudiantes_totales.add(estudiante["legajo"])
+            match opcion:
+                case 1:
+                    Estudiantes.altas_estudiantes(estudiantes)
+                        
+                case 2:
+                    if len(estudiantes) > 0:
+                        if len(estudiantes_totales ^ estudiantes_con_notas) != 0:
+                            Estudiantes.bajas_estudiantes(estudiantes, notas)
+                        else: 
+                            print(f"{ROJO}ERROR: todos los estudiantes tienen una calificación registrada, no se pueden eliminar.{RESET}")
+                    else:
+                        print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}")
+                        
+                case 3:
+                    if len(estudiantes) > 0:
+                        Estudiantes.modificar_estudiantes(estudiantes)
+                    else:
+                        print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}")
+                        
+                case 4:
+                    if len(estudiantes) > 0:
+                        Estudiantes.mostrar_estudiantes(estudiantes)
+                    else:
+                        print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}")
+               
     else:
         opcion = validar_rango(1, 2)
         if opcion == 1: 
@@ -365,21 +367,20 @@ def menu_principal(estudiantes, materias, notas, usuario):
     pos: muestra el menú principal, solicita una opción válida y ejecuta
          la función correspondiente a la opción seleccionada.
     '''
-    mostrar_menu_principal()
-    opcion = validar_rango(1, 5)
-    match opcion:
+    
+    opcion = 0
+    while opcion != 5:
+        mostrar_menu_principal()
+        opcion = validar_rango(1, 5)
+        match opcion:
             case 1:
                 menu_estudiantes(estudiantes, notas, usuario)
-                menu_principal(estudiantes, materias, notas, usuario)
             case 2:
                 menu_materias(materias, notas, usuario)
-                menu_principal(estudiantes, materias, notas, usuario)
             case 3:
                 menu_calificaciones(notas, estudiantes, materias, usuario)
-                menu_principal(estudiantes, materias, notas, usuario)
             case 4:
                 menu_estadisticas(notas, estudiantes, materias)
-                menu_principal(estudiantes, materias, notas, usuario)
             case 5:
                 print("Saliste del programa.")
 
