@@ -9,6 +9,18 @@ AZUL  = "\033[34;1m"
 MAGENTA  = "\033[35;1m"
 NARANJA = "\033[33;1m"
 
+def encontrar_dato(archivo,columna,dato):
+    arch= open(archivo,"rt",encoding="UTF-8")
+    encontrado=-1
+
+    for linea in arch:
+        with open(archivo,"rt",encoding="UTF-8") as arch:
+            datos=linea.strip().split(";")
+            if int(datos[columna])==dato:
+                encontrado=dato
+    return encontrado
+   
+
 def busqueda_secuencial(matriz, columna, dato):
     '''
     pre: recibe una matriz, el número de columna donde buscar y el dato a buscar.

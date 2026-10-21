@@ -3,6 +3,7 @@ import Estudiantes
 import estadisticas
 import Materias
 import utilidades
+import CRUD_calificaciones
 
 usuarios = ("Admin", "Nardone")
 contrasenias = ("123", "321")
@@ -233,7 +234,7 @@ def menu_calificaciones(notas, estudiantes, materias, usuario):
         match opcion:
             case 1:
                 if len(estudiantes) > 0 and len(materias) > 0:
-                    calificaciones.altas_calificaciones(notas, estudiantes, materias)
+                    CRUD_calificaciones.altas_calificaciones(notas, estudiantes, materias)
                     menu_calificaciones(notas, estudiantes, materias, usuario)
                 else:
                     if len(materias) == 0:
@@ -242,19 +243,19 @@ def menu_calificaciones(notas, estudiantes, materias, usuario):
                         print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}") 
             case 2:
                 if len(notas) > 0:
-                    calificaciones.bajas_calificaciones(notas)
+                    CRUD_calificaciones.bajas_calificaciones(notas)
                 else:
                     print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
                 menu_calificaciones(notas, estudiantes, materias, usuario)
             case 3:
                 if len(notas) > 0:
-                    calificaciones.modificar_calificaciones(notas, estudiantes, materias)
+                    CRUD_calificaciones.modificar_calificaciones(notas, estudiantes, materias)
                 else:
                     print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
                 menu_calificaciones(notas, estudiantes, materias, usuario)
             case 4:
                 if len(notas) > 0:
-                    calificaciones.mostrar_calificaciones(notas, estudiantes, materias)
+                    CRUD_calificaciones.mostrar_calificaciones()
                 else:
                     print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
                 menu_calificaciones(notas, estudiantes, materias, usuario)
@@ -263,7 +264,7 @@ def menu_calificaciones(notas, estudiantes, materias, usuario):
         match opcion: 
             case 1:
                 if len(estudiantes) > 0 and len(materias) > 0:
-                    calificaciones.altas_calificaciones(notas, estudiantes, materias)
+                    CRUD_calificaciones.altas_calificaciones(notas, estudiantes, materias)
                     menu_calificaciones(notas, estudiantes, materias, usuario)
                 else:
                     if len(materias) == 0:
@@ -272,13 +273,13 @@ def menu_calificaciones(notas, estudiantes, materias, usuario):
                         print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}") 
             case 2:
                 if len(notas) > 0:
-                    calificaciones.modificar_calificaciones(notas, estudiantes, materias)
+                    CRUD_calificaciones.modificar_calificaciones(notas, estudiantes, materias)
                 else:
                     print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
                 menu_calificaciones(notas, estudiantes, materias, usuario)
             case 3:
                 if len(notas) > 0:
-                    calificaciones.mostrar_calificaciones(notas, estudiantes, materias)
+                    CRUD_calificaciones.mostrar_calificaciones(notas, estudiantes, materias)
                 else:
                     print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
                 menu_calificaciones(notas, estudiantes, materias, usuario)
