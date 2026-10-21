@@ -64,7 +64,7 @@ def generar_usuarios(nombre, estudiantes):
     primera_letra = nombre_usuario[0]
     for i in range(len(estudiantes)):
         alumno = estudiantes[i]["nombre"].split()
-        if re.search(f"^{nombre}$", estudiantes[i]["nombre"], re.IGNORECASE):
+        if re.search(f"^{re.escape(nombre)}$", estudiantes[i]["nombre"], re.IGNORECASE):
             # Si re repite el nombre entre los estudiantes se suma una letra del nombre al usuario
             if cont < len(usuario[0]):
                 cont += 1

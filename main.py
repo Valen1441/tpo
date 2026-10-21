@@ -158,13 +158,14 @@ def menu_estudiantes(estudiantes, notas, usuario):
                         print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}")
                
     else:
-        opcion = validar_rango(1, 2)
-        if opcion == 1: 
-            if len(estudiantes) > 0:
-                Estudiantes.mostrar_estudiantes(estudiantes)
-            else:
-                print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}")
-            menu_estudiantes(estudiantes, notas, usuario)
+        while opcion != 2:
+            mostrar_submenu("ESTUDIANTES", usuario) 
+            opcion = validar_rango(1, 2)
+            if opcion == 1: 
+                if len(estudiantes) > 0:
+                    Estudiantes.mostrar_estudiantes(estudiantes)
+                else:
+                    print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}")
 
 #------------------ Menu Masterias ---------------------
 def menu_materias(materias, notas, usuario):
@@ -175,48 +176,47 @@ def menu_materias(materias, notas, usuario):
          de usuario. Permite realizar altas, bajas, modificaciones y
          listados cuando el usuario es Admin, y consultas si no lo es.
     '''
-    mostrar_submenu("MATERIAS", usuario)
+    opcion = 0
     if usuario == "Admin": 
-        opcion = validar_rango(1, 5)
-        materias_con_notas = set()
-        materias_totales = set()
-        for nota in notas:
-            materias_con_notas.add(nota[3])
-        for materia in materias:
-            materias_totales.add(materia[0])
-        match opcion:
-            case 1:
-                Materias.altas_materias(materias)
-                menu_materias(materias, notas, usuario)
-            case 2:
-                if len(materias) > 0:
-                    if len(materias_totales ^ materias_con_notas) != 0:     
-                        Materias.bajas_materias(materias, notas)
+        while opcion != 5:
+            mostrar_submenu("MATERIAS", usuario)
+            opcion = validar_rango(1, 5)
+            materias_con_notas = set()
+            materias_totales = set()
+            for nota in notas:
+                materias_con_notas.add(nota[3])
+            for materia in materias:
+                materias_totales.add(materia[0])
+            match opcion:
+                case 1:
+                    Materias.altas_materias(materias)
+                case 2:
+                    if len(materias) > 0:
+                        if len(materias_totales ^ materias_con_notas) != 0:     
+                            Materias.bajas_materias(materias, notas)
+                        else:
+                            print(f"{ROJO}ERROR: todas las materias tienen una calificación registrada, no se pueden eliminar.{RESET}") 
                     else:
-                        print(f"{ROJO}ERROR: todas las materias tienen una calificación registrada, no se pueden eliminar.{RESET}") 
-                else:
-                    print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
-                menu_materias(materias, notas, usuario)
-            case 3:
-                if len(materias) > 0:
-                    Materias.modificar_materias(materias)
-                else:
-                    print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
-                menu_materias(materias, notas, usuario)
-            case 4:
+                        print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
+                case 3:
+                    if len(materias) > 0:
+                        Materias.modificar_materias(materias)
+                    else:
+                        print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
+                case 4:
+                    if len(materias) > 0:
+                        Materias.mostrar_materias(materias)
+                    else:
+                        print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
+    else: 
+        while opcion != 2:
+            mostrar_submenu("MATERIAS", usuario)
+            opcion = validar_rango(1, 2)
+            if opcion == 1:
                 if len(materias) > 0:
                     Materias.mostrar_materias(materias)
                 else:
                     print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
-                menu_materias(materias, notas, usuario)
-    else: 
-        opcion = validar_rango(1, 2)
-        if opcion == 1:
-            if len(materias) > 0:
-                Materias.mostrar_materias(materias)
-            else:
-                print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
-            menu_materias(materias, notas, usuario)
 
 
 #------------------ Menu Calificaciones ---------------------
@@ -228,61 +228,58 @@ def menu_calificaciones(notas, estudiantes, materias, usuario):
          el tipo de usuario. Permite realizar altas, bajas, modificaciones y
          listados cuando el usuario es Admin, y altas, modificaciones y listados si no lo es.
     '''
-    mostrar_submenu("CALIFICACIONES", usuario)
+    opcion = 0
     if usuario == "Admin": 
-        opcion = validar_rango(1, 5)
-        match opcion:
-            case 1:
-                if len(estudiantes) > 0 and len(materias) > 0:
-                    CRUD_calificaciones.altas_calificaciones(notas, estudiantes, materias)
-                    menu_calificaciones(notas, estudiantes, materias, usuario)
-                else:
-                    if len(materias) == 0:
-                        print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
+        while opcion != 5: 
+            mostrar_submenu("CALIFICACIONES", usuario)
+            opcion = validar_rango(1, 5)
+            match opcion:
+                case 1:
+                    if len(estudiantes) > 0 and len(materias) > 0:
+                        CRUD_calificaciones.altas_calificaciones(notas, estudiantes, materias)
                     else:
-                        print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}") 
-            case 2:
-                if len(notas) > 0:
-                    CRUD_calificaciones.bajas_calificaciones(notas)
-                else:
-                    print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
-                menu_calificaciones(notas, estudiantes, materias, usuario)
-            case 3:
-                if len(notas) > 0:
-                    CRUD_calificaciones.modificar_calificaciones(notas, estudiantes, materias)
-                else:
-                    print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
-                menu_calificaciones(notas, estudiantes, materias, usuario)
-            case 4:
-                if len(notas) > 0:
-                    CRUD_calificaciones.mostrar_calificaciones()
-                else:
-                    print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
-                menu_calificaciones(notas, estudiantes, materias, usuario)
+                        if len(materias) == 0:
+                            print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
+                        else:
+                            print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}") 
+                case 2:
+                    if len(notas) > 0:
+                        CRUD_calificaciones.bajas_calificaciones(notas))
+                    else:
+                        print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
+                case 3:
+                    if len(notas) > 0:
+                        CRUD_calificaciones.modificar_calificaciones(notas, estudiantes, materias)
+                    else:
+                        print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
+                case 4:
+                    if len(notas) > 0:
+                        CRUD_calificaciones.mostrar_calificaciones()
+                    else:
+                        print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
     else:
-        opcion = validar_rango(1, 4)
-        match opcion: 
-            case 1:
-                if len(estudiantes) > 0 and len(materias) > 0:
-                    CRUD_calificaciones.altas_calificaciones(notas, estudiantes, materias)
-                    menu_calificaciones(notas, estudiantes, materias, usuario)
-                else:
-                    if len(materias) == 0:
-                        print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
+        while opcion != 4:
+            mostrar_submenu("CALIFICACIONES", usuario)
+            opcion = validar_rango(1, 4)
+            match opcion: 
+                case 1:
+                    if len(estudiantes) > 0 and len(materias) > 0:
+                        CRUD_calificaciones.altas_calificaciones(notas, estudiantes, materias)
                     else:
-                        print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}") 
-            case 2:
-                if len(notas) > 0:
-                    CRUD_calificaciones.modificar_calificaciones(notas, estudiantes, materias)
-                else:
-                    print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
-                menu_calificaciones(notas, estudiantes, materias, usuario)
-            case 3:
-                if len(notas) > 0:
-                    CRUD_calificaciones.mostrar_calificaciones(notas, estudiantes, materias)
-                else:
-                    print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
-                menu_calificaciones(notas, estudiantes, materias, usuario)
+                        if len(materias) == 0:
+                            print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
+                        else:
+                            print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}") 
+                case 2:
+                    if len(notas) > 0:
+                        CRUD_calificaciones.modificar_calificaciones(notas, estudiantes, materias)
+                    else:
+                        print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
+                case 3:
+                    if len(notas) > 0:
+                        CRUD_calificaciones.mostrar_calificaciones()
+                    else:
+                        print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
 
 
 #------------------ Menu Estadisticas ---------------------
@@ -291,27 +288,27 @@ def menu_estadisticas(notas, estudiantes, materias):
     pre: recibe las matrices de calificaciones, estudiantes y materias.
     pos: muestra y ejecuta las opciones disponibles del menú de estadísticas.
     '''
-    mostrar_submenu_estadistica()
-    opcion = validar_rango(1, 3)
-    match opcion:
-        case 1:
-            if len(notas) > 0 and len(materias) > 0:
-                estadisticas_estudiantes_materias(notas, estudiantes, materias, "MATERIAS")
-            else:
-                if len(notas) == 0:
-                    print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
+    opcion = 0
+    while opcion != 3:
+        mostrar_submenu_estadistica()
+        opcion = validar_rango(1, 3)
+        match opcion:
+            case 1:
+                if len(notas) > 0 and len(materias) > 0:
+                    estadisticas_estudiantes_materias(notas, estudiantes, materias, "MATERIAS")
                 else:
-                    print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
-            menu_estadisticas(notas, estudiantes, materias)
-        case 2:
-            if len(notas) > 0 and len(estudiantes) > 0:
-                estadisticas_estudiantes_materias(notas, estudiantes, materias, "ESTUDIANTES")
-            else:
-                if len(notas) == 0:
-                    print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
+                    if len(notas) == 0:
+                        print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
+                    else:
+                        print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
+            case 2:
+                if len(notas) > 0 and len(estudiantes) > 0:
+                    estadisticas_estudiantes_materias(notas, estudiantes, materias, "ESTUDIANTES")
                 else:
-                    print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}") 
-            menu_estadisticas(notas, estudiantes, materias)
+                    if len(notas) == 0:
+                        print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
+                    else:
+                        print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}") 
 
 
 def estadisticas_estudiantes_materias(notas, estudiantes, materias, titulo):
@@ -321,27 +318,27 @@ def estadisticas_estudiantes_materias(notas, estudiantes, materias, titulo):
     pos: muestra y ejecuta las opciones del submenú de estadísticas generales o particulares
          correspondiente al título recibido.
     '''
-    mostrar_submenu_estadistica(titulo)
-    opcion = validar_rango(1, 3)
-    match opcion:
-        case 1:
-            if titulo == "ESTUDIANTES":
-                estadisticas.estadisticas_estudiantes(notas, estudiantes)
-            else:
-                estadisticas.estadisticas_materias(notas, materias)
-            estadisticas_estudiantes_materias(notas, estudiantes, materias, titulo)
-        case 2:
-            if titulo == "ESTUDIANTES":
-                if len(materias) > 0:
-                    estadisticas.estadisticas_particulares(notas, estudiantes, materias, titulo)
+    opcion = 0
+    while opcion != 3:
+        mostrar_submenu_estadistica(titulo)
+        opcion = validar_rango(1, 3)
+        match opcion:
+            case 1:
+                if titulo == "ESTUDIANTES":
+                    estadisticas.estadisticas_estudiantes(notas, estudiantes)
                 else:
-                    print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
-            else:
-                if len(estudiantes) > 0:
-                    estadisticas.estadisticas_particulares(notas, estudiantes, materias, titulo)
+                    estadisticas.estadisticas_materias(notas, materias)
+            case 2:
+                if titulo == "ESTUDIANTES":
+                    if len(materias) > 0:
+                        estadisticas.estadisticas_particulares(notas, estudiantes, materias, titulo)
+                    else:
+                        print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
                 else:
-                    print(f"{ROJO}ERROR: no hay estudiantes cargadas.{RESET}")
-            estadisticas_estudiantes_materias(notas, estudiantes, materias, titulo)
+                    if len(estudiantes) > 0:
+                        estadisticas.estadisticas_particulares(notas, estudiantes, materias, titulo)
+                    else:
+                        print(f"{ROJO}ERROR: no hay estudiantes cargadas.{RESET}")
 
 
 def mostrar_menu_principal():
@@ -391,11 +388,6 @@ def principal():
     pre: no recibe parámetros.
     pos: inicializa los datos del sistema, realiza el inicio de sesión
          y, si las credenciales son válidas, inicia el menú principal.
-    '''
-
-    '''
-    pre: No recibe parámetros.
-    pos: Inicializa las matrices de estudiantes, materias y notas, llama a la función de login, valida los intentos de inicio de sesión y, si se loguea correctamente dentro de los intentos, llama a la función para mostrar el menú principal del programa.
     '''
     # Matriz estudiantes: legajo, nombre, edad, año de cursada, nombre de usuario
     matriz_estudiantes = [
