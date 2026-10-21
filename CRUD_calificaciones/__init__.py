@@ -1,0 +1,4 @@
+from .altascalificaciones import altas_calificaciones
+from .bajascalificaciones import bajas_calificaciones
+from .modificacionescalificaciones import modificar_calificaciones
+from .mostrarcalificaciones import mostrar_calificaciones
