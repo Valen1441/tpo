@@ -2,13 +2,7 @@ import utilidades
 import os
 
 # Códigos ANSI
-RESET = "\033[0m"
-BOLD  = "\033[1m"
-ROJO  = "\033[31;1m"
-VERDE = "\033[32;1m"
-AZUL  = "\033[34;1m"
-MAGENTA  = "\033[35;1m"
-NARANJA = "\033[33;1m"
+RESET, BOLD, ROJO, VERDE, AZUL, MAGENTA, NARANJA, CELESTE = utilidades.codigos_ansi()
 
 def bajas_calificaciones(notas):
     '''
@@ -18,13 +12,11 @@ def bajas_calificaciones(notas):
     print()
     print(f"       ==================== {NARANJA}BAJAS CALIFICACIONES{RESET} ====================")
 
-    archivo=r'tpo/CRUD_calificaciones/notas.txt'
-
     # Pedir el codigo a eliminar
     while True:
         try:
             codigo_baja = utilidades.leerentero("Ingrese el código de la nota a eliminar (Formato: 100): ")
-            registrado = utilidades.encontrar_dato(archivo, 0, codigo_baja)
+            registrado = utilidades.encontrar_dato(notas, 0, codigo_baja)
             assert registrado != -1
             break
         except AssertionError:
@@ -35,7 +27,7 @@ def bajas_calificaciones(notas):
     encontrado = False
 
     try:
-        arch = open(archivo, "rt", encoding="UTF-8")
+        arch = open(notas, "rt", encoding="UTF-8")
         aux = open(temp, "wt", encoding="UTF-8")
 
         for linea in arch:
@@ -59,8 +51,8 @@ def bajas_calificaciones(notas):
 
     if encontrado:
         try:
-            os.remove(archivo)       # elimina el original
-            os.rename(temp, archivo) # renombra el temporal
+            os.remove(notas)       # elimina el original
+            os.rename(temp, notas) # renombra el temporal
             print(f"Nota {codigo_baja} eliminada correctamente.")
         except OSError as error:
             print("Error al reemplazar el archivo:", error)

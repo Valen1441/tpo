@@ -1,24 +1,36 @@
 import re
 
 # Códigos ANSI
-RESET = "\033[0m"
-BOLD  = "\033[1m"
-ROJO  = "\033[31;1m"
-VERDE = "\033[32;1m"
-AZUL  = "\033[34;1m"
-MAGENTA  = "\033[35;1m"
-NARANJA = "\033[33;1m"
+def codigos_ansi():
+    RESET = "\033[0m"
+    BOLD  = "\033[1m"
+    ROJO  = "\033[31;1m"
+    VERDE = "\033[32;1m"
+    AZUL  = "\033[34;1m"
+    MAGENTA  = "\033[35;1m"
+    NARANJA = "\033[33;1m"
+    CELESTE = "\033[36;1m"
+    return RESET, BOLD, ROJO, VERDE, AZUL, MAGENTA, NARANJA, CELESTE
+
+RESET, BOLD, ROJO, VERDE, AZUL, MAGENTA, NARANJA, CELESTE = codigos_ansi()
 
 def encontrar_dato(archivo,columna,dato):
-    arch= open(archivo,"rt",encoding="UTF-8")
-    encontrado=-1
-
-    for linea in arch:
-        with open(archivo,"rt",encoding="UTF-8") as arch:
+    with open(archivo,"rt",encoding="UTF-8") as arch:
+        encontrado=-1
+        for linea in arch:
             datos=linea.strip().split(";")
             if int(datos[columna])==dato:
                 encontrado=dato
-    return encontrado
+        return encontrado
+
+def devolver_dato(archivo,columna_buscar,dato,columna_devolver):
+    with open(archivo,"rt",encoding="UTF-8") as arch:
+        encontrado=-1
+        for linea in arch:
+            datos=linea.strip().split(";")
+            if int(datos[columna_buscar]) == dato:
+                encontrado = datos[columna_devolver]
+        return encontrado
    
 
 def busqueda_secuencial(matriz, columna, dato):
@@ -89,3 +101,19 @@ def codigo_temporal(fila, materias):
 def restaurar_codigos(materias, codigos):
     for fila in range(len(materias)):
         materias[fila][0] = codigos[fila]
+
+
+def crear_conjuntos(notas, materias):
+    with open(notas,"rt",encoding="UTF-8") as notas:
+        materias_con_notas = set()
+        for linea in notas:
+            datos = linea.strip().split(";")
+            materias_con_notas.add(datos[3])
+
+    with open(materias,"rt",encoding="UTF-8") as materias:
+        materias_totales = set()
+        for linea in materias:
+            datos = linea.strip().split(";")
+            materias_totales.add(datos[0])
+
+    return materias_con_notas, materias_totales

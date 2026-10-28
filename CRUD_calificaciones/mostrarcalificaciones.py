@@ -1,13 +1,7 @@
 import utilidades
 
 # Códigos ANSI
-RESET = "\033[0m"
-BOLD  = "\033[1m"
-ROJO  = "\033[31;1m"
-VERDE = "\033[32;1m"
-AZUL  = "\033[34;1m"
-MAGENTA  = "\033[35;1m"
-NARANJA = "\033[33;1m"
+RESET, BOLD, ROJO, VERDE, AZUL, MAGENTA, NARANJA, CELESTE = utilidades.codigos_ansi()
 
 def clasificar_nota(nota):
     '''
@@ -22,24 +16,29 @@ def clasificar_nota(nota):
         cadena = f"{ROJO}Desaprobada{RESET}"
     return cadena
     
-def mostrar_calificaciones():
-
-    archivo=r'tpo/CRUD_calificaciones/notas.txt'
+def mostrar_calificaciones(notas, materias):
 
     try:
-        arch = open(archivo, "rt", encoding="UTF-8")
+        arch = open(notas, "rt", encoding="UTF-8")
     except OSError as error:
-        print(f'No se pudo leer el archivo {archivo}: {error}')
+        print(f'No se pudo leer el archivo {notas}: {error}')
     else:
-        print('Listado de productos:')
+        print("="*80)
+        print(f'{BOLD}{MAGENTA}{"CALIFICACIONES":^80}{RESET}')
+        print("="*80)
         print(f"{BOLD}{'ID Nota':<7}{'Nota':^16}{'Estudiante':<21}{'Materia':<15}{'Condición':^24}{RESET}")
+        print("-" * 80)
         linea = arch.readline()
         while linea != '':
             datos = linea.strip().split(";")
             codigo = int(datos[0])
             nota = int(datos[1])
             estudiante = int(datos[2])
-            materia = int(datos[3])
+            id_materia = int(datos[3])
+            materia = utilidades.devolver_dato(materias, 0, id_materia, 1)
+            if len(materia) > 15:
+                materia = materia[:12] + "..."
+
             condicion = clasificar_nota(nota)
             print(f"{codigo:^7}{nota:^16}{estudiante:<21}{materia:<15}{condicion:^36}")
             linea = arch.readline()
