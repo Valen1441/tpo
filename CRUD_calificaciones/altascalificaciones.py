@@ -1,14 +1,50 @@
-from calificaciones import boletin_nota_nueva
 import utilidades
 
 # Códigos ANSI
-RESET = "\033[0m"
-BOLD  = "\033[1m"
-ROJO  = "\033[31;1m"
-VERDE = "\033[32;1m"
-AZUL  = "\033[34;1m"
-MAGENTA  = "\033[35;1m"
-NARANJA = "\033[33;1m"
+RESET, BOLD, ROJO, VERDE, AZUL, MAGENTA, NARANJA, CELESTE = utilidades.codigos_ansi()
+
+def boletin_nota_nueva(estudiantes, estudiante, nota, notas, materias):
+    '''
+    pre: recibe la lista de diccionarios de estudiantes, el legajo del estudiante, el código
+         de la nota recién registrada o modificada, y las matrices de notas y materias.
+    pos: muestra por pantalla los datos del estudiante y el detalle de esa nota puntual
+         (materia, nota y resultado).
+    '''
+    # ==============================
+    # REPORTE / BOLETÍN DEL ALUMNO
+    # ==============================
+
+    # Buscar nombre del alumno
+    lista_legajos = utilidades.obtener_lista_legajos(estudiantes)
+    posicion_estudiante = lista_legajos.index(estudiante)
+    nombre_alumno = estudiantes[posicion_estudiante]["nombre"]
+
+    print()
+    print("=" * 40)
+    print(f'{BOLD}{MAGENTA}{"BOLETÍN":^40}{RESET}')
+    print("=" * 40)
+    print(f"Alumno: {nombre_alumno}")
+    print(f"Legajo: {estudiante}")
+    print("-" * 40)
+
+    nota_alumno = int(utilidades.devolver_dato(notas, 0, nota, 1))
+    codigo_materia = int(utilidades.devolver_dato(notas, 0, nota, 3))
+
+    # Buscar la materia
+    nombre_materia = utilidades.devolver_dato(materias, 0, codigo_materia, 1)
+
+    if nota_alumno >= 8:
+        resultado = f"{AZUL}PROMOCIONADA{RESET}"
+    elif nota_alumno >= 4:
+        resultado = f"{VERDE}APROBADA{RESET}"
+    else:
+        resultado = f"{ROJO}DESAPROBADA{RESET}"
+
+    print(f"Materia: {nombre_materia}")
+    print(f"Nota: {nota_alumno}")
+    print(f"Resultado: {resultado}")
+    print("-" * 40)
+
 
 def obtener_ultimo_codigo(archivo):
     ultimo_codigo = "000"
@@ -23,7 +59,7 @@ def obtener_ultimo_codigo(archivo):
 
 def siguiente_codigo(codigo_actual):
     numero = int(codigo_actual) + 1
-    return str(numero)
+    return numero
 
 
 def altas_calificaciones(notas, estudiantes, materias):
@@ -34,9 +70,7 @@ def altas_calificaciones(notas, estudiantes, materias):
     print()
     print(f"       ==================== {VERDE}ALTAS CALIFICACIONES{RESET} ====================")
 
-    archivo=r'tpo/CRUD_calificaciones/notas.txt'
-
-    ultimo = obtener_ultimo_codigo(archivo)
+    ultimo = obtener_ultimo_codigo(notas)
     nuevo_codigo = siguiente_codigo(ultimo)
     lista_legajos = utilidades.obtener_lista_legajos(estudiantes)
 
@@ -55,7 +89,7 @@ def altas_calificaciones(notas, estudiantes, materias):
     while True:
         try:
             materia = utilidades.leerentero("Ingrese el código de la materia (Formato: 100): ")
-            registrado = utilidades.encontrar_dato(archivo, materia)
+            registrado = utilidades.encontrar_dato(materias, 0, materia)
             assert registrado != -1
             break
         except AssertionError:
@@ -74,13 +108,6 @@ def altas_calificaciones(notas, estudiantes, materias):
             print("Intente nuevamente.")
 
 
-    # Genera el código de la nueva calificación tomando el último código y sumando 1.
-    if len(notas) > 0:
-        codigo = notas[len(notas) - 1][0] + 1
-    else: 
-        codigo = 100
-
-
     if nota >= 8:
         condicion = 2
     elif nota >= 4:
@@ -89,17 +116,17 @@ def altas_calificaciones(notas, estudiantes, materias):
         condicion = 3
 
     try:
-        arch = open(archivo, "a", encoding="UTF-8") #Importar archivo
+        arch = open(notas, "a", encoding="UTF-8") #Importar archivo
         nueva_calificacion = f'{nuevo_codigo};{nota};{estudiante};{materia};{condicion}\n'
         arch.write(nueva_calificacion)
 
         print(f"{VERDE}Nota {nuevo_codigo} agregada.{RESET}")
-        boletin_nota_nueva(estudiantes, estudiante, nuevo_codigo, notas, materias)
 
     except OSError as mensaje:
         print("No se puede grabar el archivo:", mensaje)
     finally:
         try:
             arch.close()
+            boletin_nota_nueva(estudiantes, estudiante, nuevo_codigo, notas, materias)
         except NameError:
             pass

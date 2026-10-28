@@ -4,19 +4,13 @@ import estadisticas
 import Materias
 import utilidades
 import CRUD_calificaciones
+import CRUD_materias
 
 usuarios = ("Admin", "Nardone")
 contrasenias = ("123", "321")
 
 # Códigos ANSI
-RESET = "\033[0m"
-BOLD  = "\033[1m"
-ROJO  = "\033[31;1m"
-VERDE = "\033[32;1m"
-AZUL  = "\033[34;1m"
-MAGENTA  = "\033[35;1m"
-NARANJA = "\033[33;1m"
-CELESTE = "\033[36;1m"
+RESET, BOLD, ROJO, VERDE, AZUL, MAGENTA, NARANJA, CELESTE = utilidades.codigos_ansi()
 
 
 def validar_rango(desde, hasta):
@@ -181,31 +175,26 @@ def menu_materias(materias, notas, usuario):
         while opcion != 5:
             mostrar_submenu("MATERIAS", usuario)
             opcion = validar_rango(1, 5)
-            materias_con_notas = set()
-            materias_totales = set()
-            for nota in notas:
-                materias_con_notas.add(nota[3])
-            for materia in materias:
-                materias_totales.add(materia[0])
+            materias_con_notas, materias_totales = utilidades.crear_conjuntos(notas, materias)
             match opcion:
                 case 1:
-                    Materias.altas_materias(materias)
+                    CRUD_materias.altas_materias(materias)
                 case 2:
                     if len(materias) > 0:
                         if len(materias_totales ^ materias_con_notas) != 0:     
-                            Materias.bajas_materias(materias, notas)
+                            CRUD_materias.bajas_materias(materias, notas)
                         else:
                             print(f"{ROJO}ERROR: todas las materias tienen una calificación registrada, no se pueden eliminar.{RESET}") 
                     else:
                         print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
                 case 3:
                     if len(materias) > 0:
-                        Materias.modificar_materias(materias)
+                        CRUD_materias.modificar_materias(materias)
                     else:
                         print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
                 case 4:
                     if len(materias) > 0:
-                        Materias.mostrar_materias(materias)
+                        CRUD_materias.mostrar_materias(materias)
                     else:
                         print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
     else: 
@@ -244,7 +233,7 @@ def menu_calificaciones(notas, estudiantes, materias, usuario):
                             print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}") 
                 case 2:
                     if len(notas) > 0:
-                        CRUD_calificaciones.bajas_calificaciones(notas))
+                        CRUD_calificaciones.bajas_calificaciones(notas)
                     else:
                         print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
                 case 3:
@@ -254,7 +243,7 @@ def menu_calificaciones(notas, estudiantes, materias, usuario):
                         print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
                 case 4:
                     if len(notas) > 0:
-                        CRUD_calificaciones.mostrar_calificaciones()
+                        CRUD_calificaciones.mostrar_calificaciones(notas, materias)
                     else:
                         print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
     else:
@@ -358,13 +347,15 @@ def mostrar_menu_principal():
     print("=" * 40)
  
  
-def menu_principal(estudiantes, materias, notas, usuario):
+def menu_principal(estudiantes, usuario):
     '''
     pre: recibe el diccionario de estudiantes, las matrices de 
          materias y calificaciones y el usuario.
     pos: muestra el menú principal, solicita una opción válida y ejecuta
          la función correspondiente a la opción seleccionada.
     '''
+    notas = r'CRUD_calificaciones/notas.txt'
+    materias = r'CRUD_materias/materias.txt'
     
     opcion = 0
     while opcion != 5:
@@ -403,23 +394,6 @@ def principal():
     # Convierte la matriz de estudiantes en una lista de diccionarios utilizando los encabezados como claves
     estudiantes = [dict(zip(encabezados, fila)) for fila in matriz_estudiantes]
 
-    # Matriz materias: id, nombre, cuatrimestre, año, carga horaria
-    materias = [
-    [100, "Programación", 2, 2, 6],
-    [101, "Álgebra", 2, 2, 4],
-    [102, "Sistemas de Información", 1, 1, 6],
-    [103, "Química", 2, 2, 4],
-    [104, "Inglés", 1, 3, 3]
-    ]     
-
-    # Matriz notas: id nota, nota, legajo estudiante, id materia, condicion: 1(aprobado), 2(promocionada), 3(desaprobado)
-    notas = [
-    [100, 8, 104, 101, 2],
-    [101, 6, 101, 101, 1],
-    [102, 7, 102, 104, 1],
-    [103, 3, 103, 103, 3],
-    [104, 9, 104, 102, 2]
-    ]
 
     cont = 4 #Cantidad de intentos de login
     lgin = login(usuarios, contrasenias)
@@ -430,7 +404,7 @@ def principal():
         cont -= 1
 
     if lgin != -1:
-        menu_principal(estudiantes, materias, notas, lgin)
+        menu_principal(estudiantes, lgin)
     else:
         print("Intentos superados, vuelva a intentar más tarde")
 

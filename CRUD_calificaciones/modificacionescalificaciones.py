@@ -2,13 +2,7 @@ import utilidades
 import os
 
 # Códigos ANSI
-RESET = "\033[0m"
-BOLD  = "\033[1m"
-ROJO  = "\033[31;1m"
-VERDE = "\033[32;1m"
-AZUL  = "\033[34;1m"
-MAGENTA  = "\033[35;1m"
-NARANJA = "\033[33;1m"
+RESET, BOLD, ROJO, VERDE, AZUL, MAGENTA, NARANJA, CELESTE = utilidades.codigos_ansi()
 
 def modificar_calificaciones(notas, estudiantes, materias):
     '''
@@ -19,14 +13,12 @@ def modificar_calificaciones(notas, estudiantes, materias):
     print(f"       ==================== {AZUL}MODIFICACIÓN CALIFICACIONES{RESET} ====================")
 
     lista_legajos = utilidades.obtener_lista_legajos(estudiantes)
-
-    archivo=r'tpo/CRUD_calificaciones/notas.txt'
     
     # Pedir el codigo a modificar
     while True:
         try:
             codigo_modif = utilidades.leerentero("Ingrese el código de la nota a modificar (Formato: 100): ")
-            nota_modificar = utilidades.busqueda_secuencial(notas, 0, codigo_modif)
+            nota_modificar = utilidades.encontrar_dato(notas, 0, codigo_modif)
             assert nota_modificar != -1
             break
         except AssertionError:
@@ -49,7 +41,7 @@ def modificar_calificaciones(notas, estudiantes, materias):
     while True:
         try:
             materia = utilidades.leerentero("Ingrese el código de la materia (Formato: 100): ")
-            registrado = utilidades.busqueda_secuencial(materias, 0, materia)
+            registrado = utilidades.encontrar_dato(materias, 0, materia)
             assert registrado != -1
             break
         except AssertionError:
@@ -79,7 +71,7 @@ def modificar_calificaciones(notas, estudiantes, materias):
     encontrado = False
 
     try:
-        arch = open(archivo, "rt", encoding="UTF-8")
+        arch = open(notas, "rt", encoding="UTF-8")
         aux = open(temp, "wt", encoding="UTF-8")
 
         for linea in arch:
@@ -107,8 +99,8 @@ def modificar_calificaciones(notas, estudiantes, materias):
 
     if encontrado:
         try:
-            os.remove(archivo)
-            os.rename(temp, archivo)
+            os.remove(notas)
+            os.rename(temp, notas)
         except OSError as error:
             print("Error al reemplazar el archivo:", error)
     else:
