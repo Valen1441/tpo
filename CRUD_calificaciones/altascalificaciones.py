@@ -17,7 +17,7 @@ def boletin_nota_nueva(estudiantes, estudiante, nota, notas, materias):
     # Buscar nombre del alumno
     lista_legajos = utilidades.obtener_lista_legajos(estudiantes)
     posicion_estudiante = lista_legajos.index(estudiante)
-    nombre_alumno = estudiantes[posicion_estudiante]["nombre"]
+    nombre_alumno = utilidades.devolver_dato(estudiantes, "legajo", estudiante, "nombre")
 
     print()
     print("=" * 40)

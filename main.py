@@ -1,10 +1,8 @@
-import calificaciones
-import Estudiantes
 import estadisticas
-import Materias
 import utilidades
 import CRUD_calificaciones
 import CRUD_materias
+import CRUD_estudiantes
 
 usuarios = ("Admin", "Nardone")
 contrasenias = ("123", "321")
@@ -120,20 +118,15 @@ def menu_estudiantes(estudiantes, notas, usuario):
         while opcion != 5:
             mostrar_submenu("ESTUDIANTES", usuario)  
             opcion = validar_rango(1, 5)
-            estudiantes_con_notas = set()
-            estudiantes_totales = set()
-            for nota in notas:
-                estudiantes_con_notas.add(nota[2])
-            for estudiante in estudiantes:
-                estudiantes_totales.add(estudiante["legajo"])
+            estudiantes_con_notas, estudiantes_totales = utilidades.crear_conjuntos(notas, 2, estudiantes, "legajo")
             match opcion:
                 case 1:
-                    Estudiantes.altas_estudiantes(estudiantes)
+                    CRUD_estudiantes.altas_estudiantes(estudiantes)
                         
                 case 2:
-                    if len(estudiantes) > 0:
+                    if len(estudiantes_totales) > 0:
                         if len(estudiantes_totales ^ estudiantes_con_notas) != 0:
-                            Estudiantes.bajas_estudiantes(estudiantes, notas)
+                            CRUD_estudiantes.bajas_estudiantes(estudiantes, notas)
                         else: 
                             print(f"{ROJO}ERROR: todos los estudiantes tienen una calificación registrada, no se pueden eliminar.{RESET}")
                     else:
@@ -141,13 +134,13 @@ def menu_estudiantes(estudiantes, notas, usuario):
                         
                 case 3:
                     if len(estudiantes) > 0:
-                        Estudiantes.modificar_estudiantes(estudiantes)
+                        CRUD_estudiantes.modificar_estudiantes(estudiantes)
                     else:
                         print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}")
                         
                 case 4:
                     if len(estudiantes) > 0:
-                        Estudiantes.mostrar_estudiantes(estudiantes)
+                        CRUD_estudiantes.mostrar_estudiantes(estudiantes)
                     else:
                         print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}")
                
@@ -157,7 +150,7 @@ def menu_estudiantes(estudiantes, notas, usuario):
             opcion = validar_rango(1, 2)
             if opcion == 1: 
                 if len(estudiantes) > 0:
-                    Estudiantes.mostrar_estudiantes(estudiantes)
+                    CRUD_estudiantes.mostrar_estudiantes(estudiantes)
                 else:
                     print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}")
 
@@ -175,12 +168,12 @@ def menu_materias(materias, notas, usuario):
         while opcion != 5:
             mostrar_submenu("MATERIAS", usuario)
             opcion = validar_rango(1, 5)
-            materias_con_notas, materias_totales = utilidades.crear_conjuntos(notas, materias)
+            materias_con_notas, materias_totales = utilidades.crear_conjuntos(notas, 3, materias, 0)
             match opcion:
                 case 1:
                     CRUD_materias.altas_materias(materias)
                 case 2:
-                    if len(materias) > 0:
+                    if len(materias_totales) > 0:
                         if len(materias_totales ^ materias_con_notas) != 0:     
                             CRUD_materias.bajas_materias(materias, notas)
                         else:
@@ -203,7 +196,7 @@ def menu_materias(materias, notas, usuario):
             opcion = validar_rango(1, 2)
             if opcion == 1:
                 if len(materias) > 0:
-                    Materias.mostrar_materias(materias)
+                    CRUD_materias.mostrar_materias(materias)
                 else:
                     print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
 
@@ -243,7 +236,7 @@ def menu_calificaciones(notas, estudiantes, materias, usuario):
                         print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
                 case 4:
                     if len(notas) > 0:
-                        CRUD_calificaciones.mostrar_calificaciones(notas, materias)
+                        CRUD_calificaciones.mostrar_calificaciones(notas, estudiantes, materias)
                     else:
                         print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
     else:
@@ -266,7 +259,7 @@ def menu_calificaciones(notas, estudiantes, materias, usuario):
                         print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
                 case 3:
                     if len(notas) > 0:
-                        CRUD_calificaciones.mostrar_calificaciones()
+                        CRUD_calificaciones.mostrar_calificaciones(notas, estudiantes, materias)
                     else:
                         print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
 
@@ -347,7 +340,7 @@ def mostrar_menu_principal():
     print("=" * 40)
  
  
-def menu_principal(estudiantes, usuario):
+def menu_principal(usuario):
     '''
     pre: recibe el diccionario de estudiantes, las matrices de 
          materias y calificaciones y el usuario.
@@ -356,6 +349,7 @@ def menu_principal(estudiantes, usuario):
     '''
     notas = r'CRUD_calificaciones/notas.txt'
     materias = r'CRUD_materias/materias.txt'
+    estudiantes = r'CRUD_estudiantes/estudiantes.json'
     
     opcion = 0
     while opcion != 5:
@@ -380,20 +374,6 @@ def principal():
     pos: inicializa los datos del sistema, realiza el inicio de sesión
          y, si las credenciales son válidas, inicia el menú principal.
     '''
-    # Matriz estudiantes: legajo, nombre, edad, año de cursada, nombre de usuario
-    matriz_estudiantes = [
-    [100, "Ares Alfini", 18, 2, "aalfini"],
-    [101, "Lucas Jaldin", 19, 3, "ljaldin"],
-    [102, "Marcos Ratt", 18, 1, "mratt"],
-    [103, "Diomid Petrenko", 22, 2, "dpetrenko"],
-    [104, "Valentino Lazzari", 18, 1, "vlazzari"]
-    ]
-
-    encabezados = ("legajo", "nombre", "edad", "año cursada", "usuario")
-
-    # Convierte la matriz de estudiantes en una lista de diccionarios utilizando los encabezados como claves
-    estudiantes = [dict(zip(encabezados, fila)) for fila in matriz_estudiantes]
-
 
     cont = 4 #Cantidad de intentos de login
     lgin = login(usuarios, contrasenias)
@@ -404,7 +384,7 @@ def principal():
         cont -= 1
 
     if lgin != -1:
-        menu_principal(estudiantes, lgin)
+        menu_principal(lgin)
     else:
         print("Intentos superados, vuelva a intentar más tarde")
 

@@ -4,7 +4,7 @@ import utilidades
 RESET, BOLD, ROJO, VERDE, AZUL, MAGENTA, NARANJA, CELESTE = utilidades.codigos_ansi()
 
 def obtener_ultimo_codigo(archivo):
-    ultimo_codigo = "000"
+    ultimo_codigo = "99"
     try:
         with open(archivo, "rt", encoding="UTF-8") as arch:
             for linea in arch:

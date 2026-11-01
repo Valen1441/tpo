@@ -1,4 +1,5 @@
 import re
+import json
 
 # Códigos ANSI
 def codigos_ansi():
@@ -15,22 +16,35 @@ def codigos_ansi():
 RESET, BOLD, ROJO, VERDE, AZUL, MAGENTA, NARANJA, CELESTE = codigos_ansi()
 
 def encontrar_dato(archivo,columna,dato):
-    with open(archivo,"rt",encoding="UTF-8") as arch:
-        encontrado=-1
-        for linea in arch:
-            datos=linea.strip().split(";")
-            if int(datos[columna])==dato:
-                encontrado=dato
-        return encontrado
+    try:
+        with open(archivo,"rt",encoding="UTF-8") as arch:
+            encontrado=-1
+            for linea in arch:
+                datos=linea.strip().split(";")
+                if int(datos[columna])==dato:
+                    encontrado=dato
+            return encontrado
+    except (FileNotFoundError, OSError) as error:
+        pass
 
 def devolver_dato(archivo,columna_buscar,dato,columna_devolver):
-    with open(archivo,"rt",encoding="UTF-8") as arch:
-        encontrado=-1
-        for linea in arch:
-            datos=linea.strip().split(";")
-            if int(datos[columna_buscar]) == dato:
-                encontrado = datos[columna_devolver]
-        return encontrado
+    try:
+        with open(archivo,"r",encoding="UTF-8") as arch:
+            encontrado=-1
+            if type(columna_devolver) is int:
+                for linea in arch:
+                    datos=linea.strip().split(";")
+                    if int(datos[columna_buscar]) == dato:
+                        encontrado = datos[columna_devolver]
+            else:
+                datos = json.load(arch)
+                for linea in datos:
+                    if linea[columna_buscar] == dato:
+                        encontrado = linea[columna_devolver]
+    except (FileNotFoundError, OSError, json.JSONDecodeError) as error:
+        pass
+
+    return encontrado
    
 
 def busqueda_secuencial(matriz, columna, dato):
@@ -46,14 +60,17 @@ def busqueda_secuencial(matriz, columna, dato):
     else:
         return -1
 
-def obtener_lista_legajos(estudiantes):
-    '''
-    pre: recibe la lista de diccionarios de estudiantes.
-    pos: devuelve una lista que contiene los legajos de todos los estudiantes.
-    '''
-    lista_legajos = []
-    for i in estudiantes:
-        lista_legajos.append(i["legajo"])
+
+def obtener_lista_legajos(arch_estudiantes):
+    try:
+        with open(arch_estudiantes, 'r', encoding="UTF-8") as datos:
+            estudiantes = json.load(datos)  # Cargar el contenido existente del archivo JSON
+
+        lista_legajos = [est["legajo"] for est in estudiantes]
+
+    except (FileNotFoundError, OSError, json.JSONDecodeError) as error:
+            pass
+
     return lista_legajos
 
 def leerentero(msj="Ingrese un número: "):
@@ -103,17 +120,27 @@ def restaurar_codigos(materias, codigos):
         materias[fila][0] = codigos[fila]
 
 
-def crear_conjuntos(notas, materias):
-    with open(notas,"rt",encoding="UTF-8") as notas:
-        materias_con_notas = set()
-        for linea in notas:
-            datos = linea.strip().split(";")
-            materias_con_notas.add(datos[3])
+def crear_conjuntos(archivo1, columna1, archivo2, columna2):
+    try: 
+        conjunto1 = set()
+        conjunto2 = set()
 
-    with open(materias,"rt",encoding="UTF-8") as materias:
-        materias_totales = set()
-        for linea in materias:
-            datos = linea.strip().split(";")
-            materias_totales.add(datos[0])
+        with open(archivo1,"rt",encoding="UTF-8") as arch1:
+            for linea in arch1:
+                datos = linea.strip().split(";")
+                conjunto1.add(int(datos[columna1]))
 
-    return materias_con_notas, materias_totales
+        with open(archivo2,"r",encoding="UTF-8") as arch2:
+            if type(columna2) is int: 
+                for linea in arch2:
+                    datos = linea.strip().split(";")
+                    conjunto2.add(int(datos[columna2]))
+            else:
+                datos = json.load(arch2)
+                for dic in datos:
+                    conjunto2.add(dic[columna2])
+
+    except (FileNotFoundError, OSError, json.JSONDecodeError) as error:
+            pass
+
+    return conjunto1, conjunto2
