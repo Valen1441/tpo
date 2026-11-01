@@ -83,7 +83,6 @@ def modificar_calificaciones(notas, estudiantes, materias):
 
                 nueva_linea = f'{codigo_modif};{nota};{legajo};{materia};{condicion}\n'
                 aux.write(nueva_linea)
-                print(f"Nota {codigo_modif} modificada.")
             else:
                 aux.write(linea)
     except FileNotFoundError:
@@ -95,14 +94,18 @@ def modificar_calificaciones(notas, estudiantes, materias):
             arch.close()
             aux.close()
         except:
-            print("Error en el cierre del archivo:")
+            print("Error en el cierre del archivo.")
 
     if encontrado:
         try:
             os.remove(notas)
             os.rename(temp, notas)
+            print(f"Nota {codigo_modif} modificada.")
         except OSError as error:
             print("Error al reemplazar el archivo:", error)
     else:
-        os.remove(temp)
-        print(f"No se encontró la nota {codigo_modif}.")
+        try:
+            os.remove(temp)
+            print(f"No se encontró la nota {codigo_modif}.")
+        except:
+            pass

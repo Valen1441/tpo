@@ -82,7 +82,7 @@ def modificar_materias(materias):
     except FileNotFoundError:
         print("El archivo no existe.")
     except OSError as error:
-        print("Error en el acceso al archivo:", error)
+        print("Error en el acceso al archivo.", error)
     finally:
         try:
             arch.close()
@@ -97,5 +97,8 @@ def modificar_materias(materias):
         except OSError as error:
             print("Error al reemplazar el archivo:", error)
     else:
-        os.remove(temp)
-        print(f"No se encontró la materia {codigo_modif}.")
+        try: 
+            os.remove(temp)
+            print(f"No se encontró la materia {codigo_modif}.")
+        except:
+            pass

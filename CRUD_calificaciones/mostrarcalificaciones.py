@@ -16,7 +16,7 @@ def clasificar_nota(nota):
         cadena = f"{ROJO}Desaprobada{RESET}"
     return cadena
     
-def mostrar_calificaciones(notas, materias):
+def mostrar_calificaciones(notas, estudiantes, materias):
 
     try:
         arch = open(notas, "rt", encoding="UTF-8")
@@ -33,7 +33,11 @@ def mostrar_calificaciones(notas, materias):
             datos = linea.strip().split(";")
             codigo = int(datos[0])
             nota = int(datos[1])
-            estudiante = int(datos[2])
+            legajo_est = int(datos[2])
+            estudiante = utilidades.devolver_dato(estudiantes, "legajo", legajo_est, "nombre")
+            if len(estudiante) > 15:
+                estudiante = estudiante[:12] + "..."
+
             id_materia = int(datos[3])
             materia = utilidades.devolver_dato(materias, 0, id_materia, 1)
             if len(materia) > 15:

@@ -3,18 +3,6 @@ import utilidades
 # Códigos ANSI
 RESET, BOLD, ROJO, VERDE, AZUL, MAGENTA, NARANJA, CELESTE = utilidades.codigos_ansi()
 
-def clasificar_nota(nota):
-    '''
-    pre: recibe una nota numérica.
-    pos: devuelve una cadena que indica si la nota es promocionada, aprobada o desaprobada.
-    '''
-    if nota >= 8:
-        cadena = f"{AZUL}Promocionada{RESET}"
-    elif nota >= 4:
-        cadena = f"{VERDE}Aprobada{RESET}"
-    else:
-        cadena = f"{ROJO}Desaprobada{RESET}"
-    return cadena
     
 def mostrar_materias(materias):
 

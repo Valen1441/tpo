@@ -47,7 +47,7 @@ def bajas_materias(materias, notas):
     except FileNotFoundError:
         print("El archivo no existe.")
     except OSError as error:
-        print("Error en el acceso al archivo:", error)
+        print("Error en el acceso al archivo.", error)
     finally:
         try:
             arch.close()
@@ -63,5 +63,8 @@ def bajas_materias(materias, notas):
         except OSError as error:
             print("Error al reemplazar el archivo:", error)
     else:
-        os.remove(temp)  # eliminamos el temporal si no se usó
-        print(f"No se encontró la materia {codigo_baja}.")
+        try:
+            os.remove(temp)  # eliminamos el temporal si no se usó
+            print(f"No se encontró la materia {codigo_baja}.")
+        except:
+            pass
