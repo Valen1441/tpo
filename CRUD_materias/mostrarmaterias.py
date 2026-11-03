@@ -16,10 +16,9 @@ def mostrar_materias(materias):
         print("="*82)
         print(f"{BOLD}{'Id Materia':<16}{'Nombre':<21}{'Cuatrimestre':^12}{'Año':^17}{'Carga Horaria':^13}{RESET}")
         print("-" * 82)
-        linea = arch.readline()
-        while linea != '':
+        for linea in arch:
             datos = linea.strip().split(";")
-            codigo = int(datos[0])
+            codigo = utilidades.codigo_temporal(datos[0], datos[2], datos[3])
             nombre = datos[1]
             if len(nombre) > 15:
                 nombre = nombre[:12] + "..."

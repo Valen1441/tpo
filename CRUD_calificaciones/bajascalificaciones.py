@@ -23,42 +23,5 @@ def bajas_calificaciones(notas):
             print(f"{ROJO}ERROR: Ese código no está registrado{RESET}")
             print("Intente nuevamente.")
 
-    temp = "temp.txt"
-    encontrado = False
-
-    try:
-        arch = open(notas, "rt", encoding="UTF-8")
-        aux = open(temp, "wt", encoding="UTF-8")
-
-        for linea in arch:
-            datos = linea.strip().split(";")
-            codigo = int(datos[0])
-            if codigo != codigo_baja:
-                aux.write(linea)
-            else:
-                encontrado = True
-
-    except FileNotFoundError:
-        print("El archivo no existe.")
-    except OSError as error:
-        print("Error en el acceso al archivo:", error)
-    finally:
-        try:
-            arch.close()
-            aux.close()
-        except:
-            print("Error en el cierre del archivo.")
-
-    if encontrado:
-        try:
-            os.remove(notas)       # elimina el original
-            os.rename(temp, notas) # renombra el temporal
-            print(f"Nota {codigo_baja} eliminada correctamente.")
-        except OSError as error:
-            print("Error al reemplazar el archivo:", error)
-    else:
-        try:
-            os.remove(temp)  # eliminamos el temporal si no se usó
-            print(f"No se encontró la nota {codigo_baja}.")
-        except:
-            pass
+    if utilidades.actualizar_archivo_plano(notas, 0, codigo_baja):
+        print(f"Nota {codigo_baja} eliminada.")
