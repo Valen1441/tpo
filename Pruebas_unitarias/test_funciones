@@ -1,0 +1,26 @@
+import utilidades
+import json
+
+# Códigos ANSI
+RESET, BOLD, ROJO, VERDE, AZUL, MAGENTA, NARANJA, CELESTE = utilidades.codigos_ansi()
+
+with open(r'CRUD_estudiantes/estudiantes.json', "r", encoding="UTF-8") as datos:
+    estudiantes = json.load(datos) 
+
+def test_usuario1():
+    assert utilidades.generar_usuarios("Roger Federer", estudiantes) == "rfederer"
+
+def test_usuario2():
+    assert utilidades.generar_usuarios("Diomid Petrenko", estudiantes) == "dpetrenko"
+
+def test_codigo1():
+    assert utilidades.siguiente_codigo(100) == "101"
+
+def test_codigo2():
+    assert utilidades.siguiente_codigo(100) == 101
+
+def test_nota1():
+    assert utilidades.clasificar_nota(2) == f"{ROJO}Desaprobada{RESET}"
+
+def test_nota2():
+    assert utilidades.clasificar_nota(10) == f"{VERDE}Aprobada{RESET}"

@@ -3,19 +3,7 @@ import utilidades
 # Códigos ANSI
 RESET, BOLD, ROJO, VERDE, AZUL, MAGENTA, NARANJA, CELESTE = utilidades.codigos_ansi()
 
-def clasificar_nota(nota):
-    '''
-    pre: recibe una nota numérica.
-    pos: devuelve una cadena que indica si la nota es promocionada, aprobada o desaprobada.
-    '''
-    if nota >= 8:
-        cadena = f"{AZUL}Promocionada{RESET}"
-    elif nota >= 4:
-        cadena = f"{VERDE}Aprobada{RESET}"
-    else:
-        cadena = f"{ROJO}Desaprobada{RESET}"
-    return cadena
-    
+
 def mostrar_calificaciones(notas, estudiantes, materias):
 
     try:
@@ -23,13 +11,14 @@ def mostrar_calificaciones(notas, estudiantes, materias):
     except OSError as error:
         print(f'No se pudo leer el archivo {notas}: {error}')
     else:
+        nombres_est = utilidades.crear_diccionario_json(estudiantes, "legajo", "nombre")
+        nombres_mat = utilidades.crear_diccionario_plano(materias, 0, 1)
         print("="*80)
         print(f'{BOLD}{MAGENTA}{"CALIFICACIONES":^80}{RESET}')
         print("="*80)
         print(f"{BOLD}{'ID Nota':<7}{'Nota':^16}{'Estudiante':<21}{'Materia':<15}{'Condición':^24}{RESET}")
         print("-" * 80)
-        linea = arch.readline()
-        while linea != '':
+        for linea in arch:
             datos = linea.strip().split(";")
             codigo = int(datos[0])
             nota = int(datos[1])
@@ -43,7 +32,7 @@ def mostrar_calificaciones(notas, estudiantes, materias):
             if len(materia) > 15:
                 materia = materia[:12] + "..."
 
-            condicion = clasificar_nota(nota)
+            condicion = utilidades.clasificar_nota(nota)
             print(f"{codigo:^7}{nota:^16}{estudiante:<21}{materia:<15}{condicion:^36}")
             linea = arch.readline()
     finally:

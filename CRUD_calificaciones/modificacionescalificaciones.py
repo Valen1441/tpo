@@ -1,5 +1,4 @@
 import utilidades
-import os
 
 # Códigos ANSI
 RESET, BOLD, ROJO, VERDE, AZUL, MAGENTA, NARANJA, CELESTE = utilidades.codigos_ansi()
@@ -12,7 +11,6 @@ def modificar_calificaciones(notas, estudiantes, materias):
     print()
     print(f"       ==================== {AZUL}MODIFICACIÓN CALIFICACIONES{RESET} ====================")
 
-    lista_legajos = utilidades.obtener_lista_legajos(estudiantes)
     
     # Pedir el codigo a modificar
     while True:
@@ -27,37 +25,7 @@ def modificar_calificaciones(notas, estudiantes, materias):
                 
                 
     # Pedir el nuevo legajo
-    while True:
-        try:
-            legajo = utilidades.leerentero("Ingrese el legajo del estudiante a calificar (Formato: 100): ")
-            assert legajo in lista_legajos
-            break
-        except AssertionError:
-            print(f"{ROJO}ERROR: Ese legajo no está registrado.{RESET}")
-            print("Intente nuevamente.")
-
-        
-    # Pedir el nuevo codigo de materia
-    while True:
-        try:
-            materia = utilidades.leerentero("Ingrese el código de la materia (Formato: 100): ")
-            registrado = utilidades.devolver_dato_plano(materias, 0, materia)
-            assert registrado != -1
-            break
-        except AssertionError:
-            print(f"{ROJO}ERROR: Ese código de materia no está registrado.{RESET}")
-            print("Intente nuevamente.")
-
-    
-    # Pedir la nueva nota
-    while True:
-        try:
-            nota = utilidades.leerentero("Ingrese la nota: ")
-            assert nota > 0 and nota <= 10
-            break
-        except AssertionError:
-            print(f"{ROJO}ERROR: La nota debe ser mayor a 0 y menor o igual a 10.{RESET}")
-            print("Intente nuevamente.")
+    legajo, materia, nota = utilidades.pedir_datos_calificacion(estudiantes, materias)
         
 
     if nota >= 8:
@@ -67,45 +35,7 @@ def modificar_calificaciones(notas, estudiantes, materias):
     else:
         condicion = 3
     
-    temp = "temp.txt"
-    encontrado = False
+    nueva_linea = f'{codigo_modif};{nota};{legajo};{materia};{condicion}\n'
 
-    try:
-        arch = open(notas, "rt", encoding="UTF-8")
-        aux = open(temp, "wt", encoding="UTF-8")
-
-        for linea in arch:
-            datos = linea.strip().split(";")
-            codigo = int(datos[0])
-
-            if codigo == codigo_modif:
-                encontrado = True
-
-                nueva_linea = f'{codigo_modif};{nota};{legajo};{materia};{condicion}\n'
-                aux.write(nueva_linea)
-            else:
-                aux.write(linea)
-    except FileNotFoundError:
-        print("El archivo no existe.")
-    except OSError as error:
-        print("Error en el acceso al archivo:", error)
-    finally:
-        try:
-            arch.close()
-            aux.close()
-        except:
-            print("Error en el cierre del archivo.")
-
-    if encontrado:
-        try:
-            os.remove(notas)
-            os.rename(temp, notas)
-            print(f"Nota {codigo_modif} modificada.")
-        except OSError as error:
-            print("Error al reemplazar el archivo:", error)
-    else:
-        try:
-            os.remove(temp)
-            print(f"No se encontró la nota {codigo_modif}.")
-        except:
-            pass
+    if utilidades.actualizar_archivo_plano(notas, 0, codigo_modif, nueva_linea):
+        print(f"Nota {codigo_modif} modificada.")

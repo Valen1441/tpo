@@ -1,124 +1,104 @@
 import utilidades
 from functools import reduce
 import json
-
+ 
 # Códigos ANSI
 RESET, BOLD, ROJO, VERDE, AZUL, MAGENTA, NARANJA, CELESTE = utilidades.codigos_ansi()
-
+ 
+ 
+def mostrar_mejores_y_peor(lista_promedios):
+    '''
+    pre: recibe una lista no vacía de filas [nombre, promedio], una por cada
+         estudiante que tiene notas.
+    pos: muestra los mejores promedios (los tres primeros puestos, incluyendo a
+         todos los empatados) y el peor promedio, siempre que el peor no esté ya
+         entre los mejores. Los empates se ordenan alfabéticamente por nombre.
+    '''
+    # De mayor a menor promedio; si empatan, por nombre de la A a la Z
+    lista_promedios.sort(key=lambda fila: (-fila[1], fila[0]))
+    mejor = lista_promedios[0][1]
+    peor = lista_promedios[-1][1]
+ 
+    if len(lista_promedios) > 3:
+        # El corte es el promedio del tercer puesto: entran todos los que lo igualan o superan
+        corte = lista_promedios[2][1]
+        mejores = list(filter(lambda fila: fila[1] >= corte, lista_promedios))
+    elif mejor == peor:
+        # Todos empatados: todos son "mejores" y no hay peor
+        mejores = lista_promedios
+    else:
+        # Con 3 o menos se separa al peor para que no figure también entre los mejores
+        mejores = list(filter(lambda fila: fila[1] > peor, lista_promedios))
+ 
+    print()
+    if len(mejores) > 1:
+        print(f"{BOLD}{VERDE}MEJORES PROMEDIOS{RESET}")
+        for i in range(len(mejores)):
+            print(f"{i + 1}. {mejores[i][0]} ({mejores[i][1]})")
+    else:
+        print(f"{BOLD}{VERDE}MEJOR PROMEDIO:{RESET} {mejores[0][0]} ({mejores[0][1]})")
+ 
+    # El peor solo se informa si su promedio es menor que el del último de los mejores
+    if peor < mejores[-1][1]:
+        print()
+        print(f"{BOLD}{ROJO}PEOR PROMEDIO:{RESET} {utilidades.nombres_con_valor(lista_promedios, 1, peor)} ({peor})")
+ 
+ 
 def estadisticas_estudiantes(arch_notas, arch_estudiantes):
     '''
-    pre: recibe la matriz de notas y la lista de diccionarios de estudiantes.
+    pre: recibe las rutas de los archivos de notas y de estudiantes.
     pos: muestra por pantalla la cantidad de notas, el promedio y la cantidad de aprobadas,
          promocionadas y desaprobadas de cada estudiante, e informa el/los estudiante/s con
-         mejor promedio (hasta 3, considerando empates) y el/los de peor promedio.
+         mejor promedio (hasta 3 puestos, considerando empates) y el/los de peor promedio.
     '''
     try:
-        with open(arch_estudiantes, 'r', encoding="UTF-8") as datos:
-                estudiantes = json.load(datos)
-    except OSError as error:
-        print(f'No se pudo leer el archivo: {error}')
-    else:    
-        
+        with open(arch_estudiantes, "r", encoding="UTF-8") as datos:
+            estudiantes = json.load(datos)
+    except (OSError, json.JSONDecodeError) as error:
+        print(f"{ROJO}ERROR: no se pudo leer {arch_estudiantes}: {error}{RESET}")
+    else:
         aprueba = f"{VERDE}Aprobadas{RESET}"
         promociona = f"{AZUL}Promocionadas{RESET}"
         desaprueba = f"{ROJO}Desaprobadas{RESET}"
-
-        print("="*102)
+ 
+        print("=" * 102)
         print(f'{BOLD}{MAGENTA}{"ESTADÍSTICAS POR ESTUDIANTE":^102}{RESET}')
-        print("="*102)
+        print("=" * 102)
         print(f"{BOLD}{'Legajo':<15}{'Nombre':<15}{'Notas':^13}{'Promedio':^13}{aprueba:^24}{promociona:^28}{desaprueba:^27}{RESET}")
         print("-" * 102)
-
+ 
         lista_promedios = []
-
-        for estudiante in range(len(estudiantes)):
-            legajo = estudiantes[estudiante]["legajo"]
-            nombre = estudiantes[estudiante]["nombre"]
+ 
+        for est in estudiantes:
+            legajo = est["legajo"]
+            nombre = est["nombre"]
+            nombre_corto = nombre
+            # Si el nombre tiene más de 15 caracteres se corta en el 12 y se agregan "..."
             if len(nombre) > 15:
-                nombre = nombre[:12] + "..."
-
-            suma = 0
+                nombre_corto = nombre[:12] + "..."
+ 
+            # Matriz solo con las notas de este estudiante (columna 2 = legajo)
+            matriz_notas = utilidades.filtrar_notas(arch_notas, 2, legajo)
+            lista_notas = list(map(lambda fila: int(fila[1]), matriz_notas))
+            cantidad = len(lista_notas)
+ 
             aprobados = 0
             promocionados = 0
             desaprobados = 0
             promedio = 0
-            matriz_notas = []
-
-            with open(arch_notas, "rt", encoding="UTF-8") as notas:
-                for linea2 in notas:
-                    datos2 = linea2.strip().split(";")
-                    if int(datos2[2]) == legajo:
-                        matriz_notas.append(datos2)
-
-            lista_notas = list(int(fila[1]) for fila in matriz_notas)
-            cantidad = len(lista_notas)
-
+ 
             if cantidad > 0:
-                suma = reduce(lambda cal1, cal2: int(cal1) + int(cal2), lista_notas)
-                aprobados = len(list(filter(lambda nota: int(nota[4]) == 1, matriz_notas)))
-                promocionados = len(list(filter(lambda nota: int(nota[4]) == 2, matriz_notas)))
-                desaprobados = len(list(filter(lambda nota: int(nota[4]) == 3, matriz_notas)))
-                promedio = (lambda a,b: a / b)(suma, cantidad)
-                promedio = f"{promedio:.1f}"
-                promedio = float(promedio)
-                lista_promedios.append([estudiantes[estudiante]["nombre"], promedio])
-
-            print(f"{legajo:<15}{nombre:<15}{cantidad:^13}{promedio:^13}{aprobados:^13}{promocionados:^17}{desaprobados:^17}")
-
-        lista_promedios.sort(key=lambda fila: (fila[1], fila[0]))
-        if len(lista_promedios) > 3:
-            ult_promedio = lista_promedios[-3]
-            segundo_promedio = lista_promedios[-2]
-            mejor_promedio = lista_promedios[-1]
-            peor_promedio = lista_promedios[0]
-            mejores_promedios = []
-
-            lista_empates = list(filter(lambda promedio: promedio[1] == mejor_promedio[1], lista_promedios))
-            for i in range(len(lista_empates)):
-                mejores_promedios.insert(0, lista_empates[i])
-
-            if segundo_promedio[1] != mejor_promedio[1]:
-                lista_empates = list(filter(lambda promedio: promedio[1] == segundo_promedio[1], lista_promedios))
-                for i in range(len(lista_empates)):
-                    mejores_promedios.insert(0, lista_empates[i])
-
-            if ult_promedio[1] != segundo_promedio[1]:
-                lista_empates = list(filter(lambda promedio: promedio[1] == ult_promedio[1], lista_promedios))
-                for i in range(len(lista_empates)):
-                    mejores_promedios.insert(0, lista_empates[i])
-
-            if peor_promedio[1] != ult_promedio[1]:
-                lista_empates = list(filter(lambda promedio: promedio[1] == peor_promedio[1], lista_promedios))
-                cadena = ""
-                for promedio in lista_empates:
-                    cadena = cadena + f"{promedio[0]}, "
-                cadena = cadena[:-2]
+                suma = reduce(lambda cal1, cal2: cal1 + cal2, lista_notas)
+                aprobados = len(list(filter(lambda fila: int(fila[4]) == 1, matriz_notas)))
+                promocionados = len(list(filter(lambda fila: int(fila[4]) == 2, matriz_notas)))
+                desaprobados = len(list(filter(lambda fila: int(fila[4]) == 3, matriz_notas)))
+                promedio = round(suma / cantidad, 1)
+                lista_promedios.append([nombre, promedio])
+ 
+            print(f"{legajo:<15}{nombre_corto:<15}{cantidad:^13}{promedio:^13}{aprobados:^13}{promocionados:^17}{desaprobados:^17}")
+ 
+        if lista_promedios:
+            mostrar_mejores_y_peor(lista_promedios)
         else:
-            peor_promedio = lista_promedios[0]
-            ult_promedio = lista_promedios[-1]
-            if peor_promedio[1] == ult_promedio[1]:
-                mejores_promedios = lista_promedios
-            else:
-                lista_empates = list(filter(lambda promedio: promedio[1] == peor_promedio[1], lista_promedios))
-                cadena = ""
-                for promedio in lista_empates:
-                    cadena = cadena + f"{promedio[0]}, "
-                cadena = cadena[:-2]
-                if len(lista_empates) == 1:
-                    mejores_promedios = lista_promedios[1:]
-                else:
-                    mejores_promedios = lista_promedios[2:]
-
-        print()
-        if len(mejores_promedios) > 1:
-            print(f'{BOLD}{VERDE}MEJORES PROMEDIOS{RESET}')
-            cont = 1
-            for i in range(len(mejores_promedios) -1, -1, -1):
-                print(f"{cont}. {mejores_promedios[i][0]} ({mejores_promedios[i][1]})")
-                cont += 1
-        else: 
-            print(f'{BOLD}{VERDE}MEJOR PROMEDIO:{RESET} {mejores_promedios[0][0]} ({mejores_promedios[0][1]})')
-
-        if peor_promedio[1] != ult_promedio[1]:
             print()
-            print(f"{BOLD}{ROJO}PEOR PROMEDIO:{RESET} {cadena} ({peor_promedio[1]})")
+            print("Ningún estudiante tiene notas registradas.")
