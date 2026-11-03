@@ -1,8 +1,8 @@
-import estadisticas
 import utilidades
 import CRUD_calificaciones
 import CRUD_materias
 import CRUD_estudiantes
+import Estadisticas
 
 usuarios = ("Admin", "Nardone")
 contrasenias = ("123", "321")
@@ -118,7 +118,8 @@ def menu_estudiantes(estudiantes, notas, usuario):
         while opcion != 5:
             mostrar_submenu("ESTUDIANTES", usuario)  
             opcion = validar_rango(1, 5)
-            estudiantes_con_notas, estudiantes_totales = utilidades.crear_conjuntos(notas, 2, estudiantes, "legajo")
+            estudiantes_con_notas = utilidades.crear_conjunto_planos(notas, 2)
+            estudiantes_totales = utilidades.crear_conjunto_json(estudiantes, "legajo")
             match opcion:
                 case 1:
                     CRUD_estudiantes.altas_estudiantes(estudiantes)
@@ -168,7 +169,8 @@ def menu_materias(materias, notas, usuario):
         while opcion != 5:
             mostrar_submenu("MATERIAS", usuario)
             opcion = validar_rango(1, 5)
-            materias_con_notas, materias_totales = utilidades.crear_conjuntos(notas, 3, materias, 0)
+            materias_con_notas = utilidades.crear_conjunto_planos(notas, 3)
+            materias_totales = utilidades.crear_conjunto_planos(materias, 0)
             match opcion:
                 case 1:
                     CRUD_materias.altas_materias(materias)
@@ -307,18 +309,18 @@ def estadisticas_estudiantes_materias(notas, estudiantes, materias, titulo):
         match opcion:
             case 1:
                 if titulo == "ESTUDIANTES":
-                    estadisticas.estadisticas_estudiantes(notas, estudiantes)
+                    Estadisticas.estadisticas_estudiantes(notas, estudiantes)
                 else:
-                    estadisticas.estadisticas_materias(notas, materias)
+                    Estadisticas.estadisticas_materias(notas, materias)
             case 2:
                 if titulo == "ESTUDIANTES":
                     if len(materias) > 0:
-                        estadisticas.estadisticas_particulares(notas, estudiantes, materias, titulo)
+                        Estadisticas.estadisticas_particulares(notas, estudiantes, materias, titulo)
                     else:
                         print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
                 else:
                     if len(estudiantes) > 0:
-                        estadisticas.estadisticas_particulares(notas, estudiantes, materias, titulo)
+                        Estadisticas.estadisticas_particulares(notas, estudiantes, materias, titulo)
                     else:
                         print(f"{ROJO}ERROR: no hay estudiantes cargadas.{RESET}")
 

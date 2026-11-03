@@ -17,7 +17,7 @@ def boletin_nota_nueva(estudiantes, estudiante, nota, notas, materias):
     # Buscar nombre del alumno
     lista_legajos = utilidades.obtener_lista_legajos(estudiantes)
     posicion_estudiante = lista_legajos.index(estudiante)
-    nombre_alumno = utilidades.devolver_dato(estudiantes, "legajo", estudiante, "nombre")
+    nombre_alumno = utilidades.devolver_dato_json(estudiantes, "legajo", estudiante, "nombre")
 
     print()
     print("=" * 40)
@@ -27,11 +27,11 @@ def boletin_nota_nueva(estudiantes, estudiante, nota, notas, materias):
     print(f"Legajo: {estudiante}")
     print("-" * 40)
 
-    nota_alumno = int(utilidades.devolver_dato(notas, 0, nota, 1))
-    codigo_materia = int(utilidades.devolver_dato(notas, 0, nota, 3))
+    nota_alumno = int(utilidades.devolver_dato_plano(notas, 0, nota, 1))
+    codigo_materia = int(utilidades.devolver_dato_plano(notas, 0, nota, 3))
 
     # Buscar la materia
-    nombre_materia = utilidades.devolver_dato(materias, 0, codigo_materia, 1)
+    nombre_materia = utilidades.devolver_dato_plano(materias, 0, codigo_materia, 1)
 
     if nota_alumno >= 8:
         resultado = f"{AZUL}PROMOCIONADA{RESET}"
@@ -89,7 +89,7 @@ def altas_calificaciones(notas, estudiantes, materias):
     while True:
         try:
             materia = utilidades.leerentero("Ingrese el código de la materia (Formato: 100): ")
-            registrado = utilidades.encontrar_dato(materias, 0, materia)
+            registrado = utilidades.devolver_dato(materias, 0, materia)
             assert registrado != -1
             break
         except AssertionError:

@@ -22,7 +22,7 @@ def bajas_estudiantes(arch_estudiantes, notas):
         while True:
             try:
                 legajo = utilidades.leerentero("Ingrese el legajo del estudiante a eliminar (Formato: 100): ")
-                esta_en_calificaciones = utilidades.encontrar_dato(notas, 2, legajo)
+                esta_en_calificaciones = utilidades.devolver_dato_plano(notas, 2, legajo)
                 assert legajo in legajos
                 assert esta_en_calificaciones == -1
                 break

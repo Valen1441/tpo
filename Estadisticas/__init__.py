@@ -1,0 +1,3 @@
+from .estadisticasmaterias import estadisticas_materias
+from .estadisticasestudiantes import estadisticas_estudiantes
+from .estadisticasparticulares import estadisticas_particulares
