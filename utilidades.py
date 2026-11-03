@@ -15,36 +15,42 @@ def codigos_ansi():
 
 RESET, BOLD, ROJO, VERDE, AZUL, MAGENTA, NARANJA, CELESTE = codigos_ansi()
 
-def encontrar_dato(archivo,columna,dato):
-    try:
-        with open(archivo,"rt",encoding="UTF-8") as arch:
-            encontrado=-1
-            for linea in arch:
-                datos=linea.strip().split(";")
-                if int(datos[columna])==dato:
-                    encontrado=dato
-            return encontrado
-    except (FileNotFoundError, OSError) as error:
-        pass
 
-def devolver_dato(archivo,columna_buscar,dato,columna_devolver):
+def devolver_dato_plano(archivo,columna_buscar,dato,columna_devolver=0):
     try:
         with open(archivo,"r",encoding="UTF-8") as arch:
             encontrado=-1
-            if type(columna_devolver) is int:
-                for linea in arch:
-                    datos=linea.strip().split(";")
-                    if int(datos[columna_buscar]) == dato:
-                        encontrado = datos[columna_devolver]
-            else:
-                datos = json.load(arch)
-                for linea in datos:
-                    if linea[columna_buscar] == dato:
-                        encontrado = linea[columna_devolver]
-    except (FileNotFoundError, OSError, json.JSONDecodeError) as error:
+            for linea in arch:
+                datos=linea.strip().split(";")
+                if int(datos[columna_buscar]) == dato:
+                    encontrado = datos[columna_devolver]
+            return encontrado
+    except (FileNotFoundError, OSError):
         pass
 
-    return encontrado
+def devolver_dato_json(archivo,columna_buscar,dato,columna_devolver):
+    try:
+        with open(archivo,"r",encoding="UTF-8") as arch:
+            encontrado=-1
+            datos = json.load(arch)
+            for linea in datos:
+                if linea[columna_buscar] == dato:
+                    encontrado = linea[columna_devolver]
+            return encontrado
+    except (FileNotFoundError, OSError, json.JSONDecodeError):
+        pass
+
+    
+def obtener_matriz(archivo):
+    try:
+        with open(archivo,"rt",encoding="UTF-8") as arch:
+            matriz = []
+            for linea in arch:
+                datos = linea.strip().split(";")
+                matriz.append(datos)
+            return matriz
+    except (FileNotFoundError, OSError) as error:
+            print(f'No se pudo leer el archivo {arch}: {error}')
    
 
 def busqueda_secuencial(matriz, columna, dato):
@@ -109,38 +115,38 @@ def generar_usuarios(nombre, estudiantes):
         usuario = (nombre_usuario[:cont] + apellido_usuario + str(numero)).lower()
     return usuario
 
-def codigo_temporal(fila, materias):
-    codigos = [fila[0] for fila in materias]
-    lista_codigo = list(map(lambda fila: str(fila[3]) + "Pri" + str(fila[0]) if fila[2] == 1 else str(fila[3]) + "Seg" + str(fila[0]), materias))
-    for fila in range(len(materias)):
-        materias[fila][0] = lista_codigo[fila]
-    return codigos
-def restaurar_codigos(materias, codigos):
-    for fila in range(len(materias)):
-        materias[fila][0] = codigos[fila]
+def codigo_temporal(arch_materias):
+    with open(arch_materias,"rt",encoding="UTF-8") as materias: 
+        matriz_mat = []
+        for linea in materias:
+            datos = linea.strip().split(";")
+            matriz_mat.append(datos)
+        lista_codigo = list(map(lambda fila: fila[3] + "Pri" + fila[0] if int(fila[2]) == 1 else fila[3] + "Seg" + fila[0], matriz_mat))
+    return lista_codigo
 
 
-def crear_conjuntos(archivo1, columna1, archivo2, columna2):
+def crear_conjunto_planos(archivo, columna):
     try: 
-        conjunto1 = set()
-        conjunto2 = set()
+        conjunto = set()
 
-        with open(archivo1,"rt",encoding="UTF-8") as arch1:
+        with open(archivo,"rt",encoding="UTF-8") as arch1:
             for linea in arch1:
                 datos = linea.strip().split(";")
-                conjunto1.add(int(datos[columna1]))
+                conjunto.add(int(datos[columna]))
 
-        with open(archivo2,"r",encoding="UTF-8") as arch2:
-            if type(columna2) is int: 
-                for linea in arch2:
-                    datos = linea.strip().split(";")
-                    conjunto2.add(int(datos[columna2]))
-            else:
-                datos = json.load(arch2)
-                for dic in datos:
-                    conjunto2.add(dic[columna2])
-
-    except (FileNotFoundError, OSError, json.JSONDecodeError) as error:
+        return conjunto
+    except (FileNotFoundError, OSError) as error:
             pass
 
-    return conjunto1, conjunto2
+
+def crear_conjunto_json(archivo, columna):
+    try: 
+        conjunto = set()
+
+        with open(archivo,"r",encoding="UTF-8") as arch2:
+            datos = json.load(arch2)
+            for dic in datos:
+                conjunto.add(dic[columna])
+        return conjunto
+    except (FileNotFoundError, OSError, json.JSONDecodeError) as error:
+            pass

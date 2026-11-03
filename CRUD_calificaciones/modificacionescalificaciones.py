@@ -18,7 +18,7 @@ def modificar_calificaciones(notas, estudiantes, materias):
     while True:
         try:
             codigo_modif = utilidades.leerentero("Ingrese el código de la nota a modificar (Formato: 100): ")
-            nota_modificar = utilidades.encontrar_dato(notas, 0, codigo_modif)
+            nota_modificar = utilidades.devolver_dato_plano(notas, 0, codigo_modif)
             assert nota_modificar != -1
             break
         except AssertionError:
@@ -41,7 +41,7 @@ def modificar_calificaciones(notas, estudiantes, materias):
     while True:
         try:
             materia = utilidades.leerentero("Ingrese el código de la materia (Formato: 100): ")
-            registrado = utilidades.encontrar_dato(materias, 0, materia)
+            registrado = utilidades.devolver_dato_plano(materias, 0, materia)
             assert registrado != -1
             break
         except AssertionError:

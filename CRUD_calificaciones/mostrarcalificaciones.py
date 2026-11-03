@@ -34,12 +34,12 @@ def mostrar_calificaciones(notas, estudiantes, materias):
             codigo = int(datos[0])
             nota = int(datos[1])
             legajo_est = int(datos[2])
-            estudiante = utilidades.devolver_dato(estudiantes, "legajo", legajo_est, "nombre")
+            estudiante = utilidades.devolver_dato_json(estudiantes, "legajo", legajo_est, "nombre")
             if len(estudiante) > 15:
                 estudiante = estudiante[:12] + "..."
 
             id_materia = int(datos[3])
-            materia = utilidades.devolver_dato(materias, 0, id_materia, 1)
+            materia = utilidades.devolver_dato_plano(materias, 0, id_materia, 1)
             if len(materia) > 15:
                 materia = materia[:12] + "..."
 
