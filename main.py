@@ -74,7 +74,8 @@ def mostrar_submenu_estadistica(titulo="ESTADÍSTICAS"):
         print("=" * 40)
         print(f"  {AZUL}1. MATERIAS{RESET}")
         print(f"  {VERDE}2. ESTUDIANTES{RESET}")
-        print(f"  {BOLD}3. VOLVER AL MENÚ PRINCIPAL{RESET}")
+        print(f"  {NARANJA}3. RESUMEN GENERAL{RESET}")
+        print(f"  {BOLD}4. VOLVER AL MENÚ PRINCIPAL{RESET}")
     else:
         print(f'{BOLD}{MAGENTA}{"ESTADÍSTICAS " + titulo:^40}{RESET}')
         print("=" * 40)
@@ -87,8 +88,8 @@ def mostrar_submenu_estadistica(titulo="ESTADÍSTICAS"):
 #------------------ Menu Estudiantes ---------------------
 def menu_estudiantes(estudiantes, notas, usuario):
     '''
-    pre: recibe una lista de diccionarios de estudiantes, una matriz de
-         calificaciones y el usuario que utiliza el sistema.
+    pre: recibe las rutas de los archivos de estudiantes, de notas
+         y de materias y el usuario que utiliza el sistema.
     pos: muestra y ejecuta las opciones del menú de estudiantes según el
          tipo de usuario. Permite realizar altas, bajas, modificaciones
          y listados cuando el usuario es Admin, y consultas si no lo es.
@@ -127,7 +128,7 @@ def menu_estudiantes(estudiantes, notas, usuario):
 #------------------ Menu Masterias ---------------------
 def menu_materias(materias, notas, usuario):
     '''
-    pre: recibe una matriz de materias, una matriz de calificaciones y el
+    pre: recibe las rutas de los archivos de materias y de notas y el
          usuario que utiliza el sistema.
     pos: muestra y ejecuta las opciones del menú de materias según el tipo
          de usuario. Permite realizar altas, bajas, modificaciones y
@@ -167,8 +168,8 @@ def menu_materias(materias, notas, usuario):
 #------------------ Menu Calificaciones ---------------------
 def menu_calificaciones(notas, estudiantes, materias, usuario):
     '''
-    pre: recibe una matriz de calificaciones, una lista de diccionarios de
-         estudiantes, una matriz de materias y el usuario que utiliza el sistema.
+    pre: recibe las rutas de los archivos de notas, de estudiantes y de materias
+         y el usuario que utiliza el sistema.
     pos: muestra y ejecuta las opciones del menú de calificaciones según
          el tipo de usuario. Permite realizar altas, bajas, modificaciones y
          listados cuando el usuario es Admin, y altas, modificaciones y listados si no lo es.
@@ -207,24 +208,29 @@ def menu_calificaciones(notas, estudiantes, materias, usuario):
 #------------------ Menu Estadisticas ---------------------
 def menu_estadisticas(notas, estudiantes, materias):
     '''
-    pre: recibe las matrices de calificaciones, estudiantes y materias.
+    pre: recibe las rutas de los archivos de notas, de estudiantes y de materias.
     pos: muestra y ejecuta las opciones disponibles del menú de estadísticas.
     '''
     opcion = 0
-    while opcion != 3:
+    while opcion != 4:
         mostrar_submenu_estadistica()
-        opcion = utilidades.validar_rango(1, 3)
+        opcion = utilidades.validar_rango(1, 4)
         match opcion:
             case 1:
                 estadisticas_estudiantes_materias(notas, estudiantes, materias, "MATERIAS")
             case 2:
                 estadisticas_estudiantes_materias(notas, estudiantes, materias, "ESTUDIANTES")
+            case 3:
+                if len(utilidades.crear_conjunto_planos(notas, 0)) == 0:
+                    print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
+                else:
+                    Estadisticas.resumen_general(notas)
 
 
 def estadisticas_estudiantes_materias(notas, estudiantes, materias, titulo):
     '''
-    pre: recibe las matrices de calificaciones, estudiantes y materias, y el título que indica
-         si se trabaja sobre estudiantes o sobre materias.
+    pre: recibe las rutas de los archivos de notas, de estudiantes y de materias, 
+         y el título que indica si se trabaja sobre estudiantes o sobre materias.
     pos: muestra y ejecuta las opciones del submenú de estadísticas generales o particulares
          correspondiente al título recibido.
     '''
@@ -232,24 +238,25 @@ def estadisticas_estudiantes_materias(notas, estudiantes, materias, titulo):
     while opcion != 3:
         mostrar_submenu_estadistica(titulo)
         opcion = utilidades.validar_rango(1, 3)
-        notas_totales = utilidades.crear_conjunto_planos(notas, 0)
-        estudiantes_totales = utilidades.crear_conjunto_json(estudiantes, "legajo")
-        materias_totales = utilidades.crear_conjunto_planos(materias, 0)
-        if len(notas_totales) == 0:
-            print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
-        elif (titulo == "ESTUDIANTES" or opcion == 2) and len(estudiantes_totales) == 0:
-            print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}")
-        elif (titulo == "MATERIAS" or opcion == 2) and len(materias_totales) == 0:
-            print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
-        else:
-            match opcion:
-                case 1:
-                    if titulo == "ESTUDIANTES":
-                        Estadisticas.estadisticas_estudiantes(notas, estudiantes)
-                    else:
-                        Estadisticas.estadisticas_materias(notas, materias)
-                case 2:
-                    Estadisticas.estadisticas_particulares(notas, estudiantes, materias, titulo)
+        if opcion != 3:
+            notas_totales = utilidades.crear_conjunto_planos(notas, 0)
+            estudiantes_totales = utilidades.crear_conjunto_json(estudiantes, "legajo")
+            materias_totales = utilidades.crear_conjunto_planos(materias, 0)
+            if len(notas_totales) == 0:
+                print(f"{ROJO}ERROR: no hay calificaciones cargadas.{RESET}")
+            elif (titulo == "ESTUDIANTES" or opcion == 2) and len(estudiantes_totales) == 0:
+                print(f"{ROJO}ERROR: no hay estudiantes cargados.{RESET}")
+            elif (titulo == "MATERIAS" or opcion == 2) and len(materias_totales) == 0:
+                print(f"{ROJO}ERROR: no hay materias cargadas.{RESET}")
+            else:
+                match opcion:
+                    case 1:
+                        if titulo == "ESTUDIANTES":
+                            Estadisticas.estadisticas_estudiantes(notas, estudiantes)
+                        else:
+                            Estadisticas.estadisticas_materias(notas, materias)
+                    case 2:
+                        Estadisticas.estadisticas_particulares(notas, estudiantes, materias, titulo)
 
 def mostrar_menu_principal():
     '''
@@ -270,14 +277,13 @@ def mostrar_menu_principal():
  
 def menu_principal(usuario):
     '''
-    pre: recibe el diccionario de estudiantes, las matrices de 
-         materias y calificaciones y el usuario.
-    pos: muestra el menú principal, solicita una opción válida y ejecuta
-         la función correspondiente a la opción seleccionada.
+    pre: recibe el usuario que esta utilizando el programa.
+    pos: muestra el menú principal, solicita una opción válida y ejecuta la función correspondiente 
+         a la opción seleccionada con sus respectivas rutas de los archivos.
     '''
-    notas = r'CRUD_calificaciones/notas.txt'
-    materias = r'CRUD_materias/materias.txt'
-    estudiantes = r'CRUD_estudiantes/estudiantes.json'
+    notas = r'notas.txt'
+    materias = r'materias.txt'
+    estudiantes = r'estudiantes.json'
     
     opcion = 0
     while opcion != 5:
@@ -299,8 +305,7 @@ def menu_principal(usuario):
 def principal():
     '''
     pre: no recibe parámetros.
-    pos: inicializa los datos del sistema, realiza el inicio de sesión
-         y, si las credenciales son válidas, inicia el menú principal.
+    pos: realiza el inicio de sesión y, si las credenciales son válidas, inicia el menú principal.
     '''
 
     cont = 4 #Cantidad de intentos de login
