@@ -18,6 +18,12 @@ RESET, BOLD, ROJO, VERDE, AZUL, MAGENTA, NARANJA, CELESTE = codigos_ansi()
 
 
 def devolver_dato_plano(archivo,columna_buscar,dato,columna_devolver=0):
+    '''
+    pre: recibe la ruta de un archivo de texto, la columna donde buscar, 
+         el valor buscado y la columna cuyo dato se quiere devolver (por defecto, la 0).
+    pos: devuelve, como cadena, el dato de columna_devolver del registro encontrado, o -1 si
+         no hay ninguno o si el archivo no se puede abrir.
+    '''
     encontrado=-1
     try:
         with open(archivo,"r",encoding="UTF-8") as arch:
@@ -30,6 +36,12 @@ def devolver_dato_plano(archivo,columna_buscar,dato,columna_devolver=0):
     return encontrado
 
 def devolver_dato_json(archivo,columna_buscar,dato,columna_devolver):
+    '''
+    pre: recibe la ruta de un archivo JSON con una lista de diccionarios, la clave por la que
+         buscar, el valor buscado y la clave cuyo dato se quiere devolver.
+    pos: devuelve el dato del registro encontrado, o -1 si no hay ninguno o si el archivo no
+         se puede leer.
+    '''
     encontrado=-1
     try:
         with open(archivo,"r",encoding="UTF-8") as arch:
@@ -43,7 +55,10 @@ def devolver_dato_json(archivo,columna_buscar,dato,columna_devolver):
 
 
 def leerentero(msj="Ingrese un número: "):
-    ''' Función para ingresar un número entero '''
+    '''
+    pre: recibe opcionalmente el mensaje que se muestra al pedir el número.
+    pos: pide un número por teclado hasta que se ingresa un entero válido y lo devuelve.
+    '''
     while True:
         try:
             n = int(input(msj))
@@ -53,30 +68,6 @@ def leerentero(msj="Ingrese un número: "):
             print("Intente nuevamente.")
     return n
 
-def generar_usuarios(nombre, estudiantes):
-    usuario = nombre.split()
-    nombre_usuario = usuario[0]
-    apellido_usuario = usuario[1]
-    cont = 1
-    numero = 0
-    primera_letra = nombre_usuario[0]
-    for est in estudiantes:
-        alumno = est["nombre"].split()
-        if re.search(f"^{re.escape(nombre)}$", est["nombre"], re.IGNORECASE):
-            # Si re repite el nombre entre los estudiantes se suma una letra del nombre al usuario
-            if cont < len(nombre_usuario):
-                cont += 1
-            # Si se completó el nombre se le suma un número al usuario 
-            else: 
-                numero += 1
-        elif re.search(f"^{re.escape(primera_letra)}", alumno[0], re.IGNORECASE) and re.search(f"^{re.escape(apellido_usuario)}$", alumno[1], re.IGNORECASE):
-            # Si se repite el apellido y la primera letra entre los estudiantes se suma un número al usuario
-                numero += 1
-    if numero == 0:
-        usuario = (nombre_usuario[:cont] + apellido_usuario).lower()
-    else:
-        usuario = (nombre_usuario[:cont] + apellido_usuario + str(numero)).lower()
-    return usuario
 
 def codigo_temporal(codigo, cuatrimestre, anio):
     '''
@@ -86,7 +77,13 @@ def codigo_temporal(codigo, cuatrimestre, anio):
     periodo = "Pri" if int(cuatrimestre) == 1 else "Seg"
     return anio + periodo + codigo
 
+
 def crear_conjunto_planos(archivo, columna):
+    '''
+    pre: recibe la ruta de un archivo de texto y la columna que se quiere leer.
+    pos: devuelve un conjunto con los valores enteros de esa columna. Si el archivo no se
+         puede leer, devuelve un conjunto vacío.
+    '''
     conjunto = set()
     try: 
         with open(archivo,"rt",encoding="UTF-8") as arch1:
@@ -97,8 +94,13 @@ def crear_conjunto_planos(archivo, columna):
         pass
     return conjunto
 
-
 def crear_conjunto_json(archivo, llave):
+    '''
+    pre: recibe la ruta de un archivo JSON con una lista de diccionarios y la clave que se
+         quiere leer.
+    pos: devuelve un conjunto con los valores de esa clave. Si el archivo no se puede leer,
+         devuelve un conjunto vacío.
+    '''
     conjunto = set()
     try: 
         with open(archivo,"r",encoding="UTF-8") as arch2:
@@ -112,7 +114,8 @@ def crear_conjunto_json(archivo, llave):
 
 def validar_rango(desde, hasta, msj="Ingrese una opción: ", error="Opción inválida: "):
     '''
-    pre: recibe el límite inferior y superior del rango de opciones.
+    pre: recibe el límite inferior y superior del rango de opciones, 
+         el mensaje que se muestra por pantalla y el mensaje de error.
     pos: devuelve la opción ingresada por el usuario, validando que sea numérica
          y que se encuentre dentro del rango indicado.
     '''
@@ -126,43 +129,6 @@ def validar_rango(desde, hasta, msj="Ingrese una opción: ", error="Opción inv�
             print(f"{ROJO}{error}rango permitido de {desde} a {hasta}.{RESET}")
             print("Intente nuevamente.")
     return numero
-
-
-def pedir_datos_estudiante():
-    '''
-    pre: no recibe parámetros.
-    pos: solicita y valida nombre y apellido, edad y año de cursada.
-         Devuelve la tupla (nombre, edad, anio).
-    '''
-    patron = r"^[A-Za-zÁÉÍÓÚÑáéíóúñ]+ +[A-Za-zÁÉÍÓÚÑáéíóúñ]+$"
-    nombre = input("Ingrese el nombre y apellido del estudiante: ").strip().title()
-    while not re.search(patron, nombre):
-        print(f"{ROJO}ERROR: ingrese solo un nombre y un apellido, con letras.{RESET}")
-        nombre = input("Ingrese otra vez el nombre y apellido: ").strip().title()
-    nombre = " ".join(nombre.split())
-    edad = validar_rango(17, 100, "Ingrese la edad (17-100): ", "Edad inválida: ")
-    anio = validar_rango(1, 9, "Ingrese el año de cursada (1-9): ", "Año de cursada inválido: ")
-    return nombre, edad, anio
-
-
-def pedir_datos_materia():
-    '''
-    pre: no recibe parámetros.
-    pos: solicita y valida nombre, cuatrimestre, año y carga horaria.
-         Devuelve la tupla (nombre, cuatrimestre, anio, horaria).
-    '''
-    nombre = input("Ingrese el nombre de la materia: ")
-    sin_espacios = "".join(nombre.split())
-    while not sin_espacios.isalnum() or sin_espacios.isdigit():
-        print(f"{ROJO}ERROR: use solo letras, números y espacios, con al menos una letra.{RESET}")
-        nombre = input("Ingrese el nombre de la materia: ")
-        sin_espacios = "".join(nombre.split())
-    nombre = " ".join(nombre.split()).title()
-    cuatrimestre = validar_rango(1, 2, "Ingrese el cuatrimestre (1-2): ", "Cuatrimestre inválido: ")
-    anio = validar_rango(1, 5, "Ingrese el año de la materia (1-5): ", "Año inválido: ")
-    horaria = validar_rango(1, 12, "Ingrese la carga horaria (1-12): ", "Carga horaria inválida: ")
-    return nombre, cuatrimestre, anio, horaria
-
 
 
 def pedir_valor_existente(conjunto, msj, error):
@@ -179,20 +145,6 @@ def pedir_valor_existente(conjunto, msj, error):
             print(f"{ROJO}{error}{RESET}")
             print("Intente nuevamente.")
     return valor
-
-
-def pedir_datos_calificacion(arch_estudiantes, arch_materias):
-    '''
-    pre: recibe las rutas de los archivos de estudiantes y de materias.
-    pos: solicita y valida legajo, código de materia y nota.
-        Devuelve la tupla (legajo, materia, nota).
-    '''
-    legajos = crear_conjunto_json(arch_estudiantes, "legajo")
-    codigos = crear_conjunto_planos(arch_materias, 0)
-    legajo = pedir_valor_existente(legajos, "Ingrese el legajo del estudiante (Formato: 100): ", "ERROR: Ese legajo no está registrado.")
-    materia = pedir_valor_existente(codigos, "Ingrese el código de la materia (Formato: 100): ", "ERROR: Ese código de materia no está registrado.")
-    nota = validar_rango(1, 10, "Ingrese la nota (1-10): ", "Nota inválida: ")
-    return legajo, materia, nota
 
 
 def clasificar_nota(nota):
@@ -224,6 +176,11 @@ def calcular_condicion(nota):
 
 
 def obtener_ultimo_codigo(archivo):
+    '''
+    pre: recibe la ruta de un archivo de texto.
+    pos: devuelve, como cadena, el código del último registro del archivo, o "99" si el
+         archivo no existe o está vacío (así el primer código generado es el 100).
+    '''
     ultimo_codigo = "99"
     try:
         with open(archivo, "rt", encoding="UTF-8") as arch:
@@ -235,18 +192,20 @@ def obtener_ultimo_codigo(archivo):
     return ultimo_codigo
 
 def siguiente_codigo(codigo_actual):
+    '''
+    pre: recibe un código numérico (como cadena o como entero).
+    pos: devuelve, como cadena, el código siguiente.
+    '''
     numero = int(codigo_actual) + 1
     return str(numero)
 
 
-
-
 def actualizar_archivo_plano(archivo, columna, valor, nueva_linea=0):
     '''
-    pre: recibe la ruta de un archivo de texto con campos separados por ";", la columna
-        donde buscar, el valor entero a buscar y, opcionalmente, la línea que reemplaza al registro.
+    pre: recibe la ruta de un archivo de texto, la columna donde buscar, el valor entero a buscar
+         y, opcionalmente, la línea que reemplaza al registro.
     pos: copia el archivo a uno temporal salteando el registro (o reemplazándolo si hay nueva_linea)
-        y luego reemplaza el original. Devuelve True si completó la operación y False si hubo error.
+         y luego reemplaza el original. Devuelve True si completó la operación y False si hubo error.
     '''
     temp = "temp.txt"
     actualizo = False
@@ -282,14 +241,12 @@ def nombres_con_valor(lista, posicion, valor):
     return ", ".join(sorted(nombres))
 
 
-
 def filtrar_notas(arch_notas, columna, valor):
     '''
-    pre: recibe la ruta de notas.txt, la columna (entera) por la que filtrar
+    pre: recibe la ruta del archivo de notas, la columna por la que filtrar
          (2 = legajo del estudiante, 3 = código de la materia) y el valor entero buscado.
-    pos: lee el archivo línea por línea y devuelve una matriz solo con las filas
-         que coinciden (cada fila es una lista de strings). Si el archivo no se
-         puede leer, informa el error y devuelve una lista vacía.
+    pos: lee el archivo línea por línea y devuelve una matriz solo con las filas que coinciden. 
+         Si el archivo no se puede leer, informa el error y devuelve una lista vacía.
     '''
     matriz = []
     try:
@@ -301,3 +258,71 @@ def filtrar_notas(arch_notas, columna, valor):
     except (OSError, ValueError) as error:
         print(f"{ROJO}ERROR: no se pudo leer {arch_notas}: {error}{RESET}")
     return matriz
+
+
+# ============================== RECURSIVIDAD ==============================
+def suma_recursiva(lista, i=0):
+    '''
+    pre: recibe una lista de números y el índice desde el cual sumar (por defecto, 0).
+    pos: devuelve la suma de los elementos de la lista desde el índice i hasta el final.
+    Caso base: i == len(lista), ya no quedan elementos, la suma es 0.
+    Caso recursivo: lista[i] + la suma de los elementos que quedan desde i + 1.
+    Reducción del dominio: el índice avanza de a uno hasta llegar a len(lista).
+    '''
+    if i == len(lista):
+        return 0
+    return lista[i] + suma_recursiva(lista, i + 1)
+
+
+def contar_en_columna(matriz, columna, valor, i=0):
+    '''
+    pre: recibe una matriz de registros (listas de cadenas con números enteros), la columna a
+         revisar, el valor entero buscado y la fila desde la cual contar (por defecto, 0).
+    pos: devuelve cuántas filas, desde la fila i hasta el final, tienen ese valor en la columna.
+    Caso base: i == len(matriz), ya no quedan filas, la cantidad es 0.
+    Caso recursivo: 1 si la fila i coincide (0 si no) más la cantidad en las filas desde i + 1.
+    Reducción del dominio: el índice de fila avanza de a uno hasta llegar a len(matriz).
+    '''
+    if i == len(matriz):
+        return 0
+    if int(matriz[i][columna]) == valor:
+        return 1 + contar_en_columna(matriz, columna, valor, i + 1)
+    return contar_en_columna(matriz, columna, valor, i + 1)
+
+
+def minimo_recursivo(lista, i=0):
+    '''
+    pre: recibe una lista de números no vacía y el índice desde el cual buscar (por defecto, 0).
+    pos: devuelve el menor elemento de la lista desde el índice i hasta el final.
+         Si la lista está vacía lanza ValueError.
+    Caso base: i es el último índice, el único elemento que queda es el mínimo.
+    Caso recursivo: el menor entre lista[i] y el mínimo de los elementos desde i + 1.
+    Reducción del dominio: el índice avanza de a uno hasta llegar al último elemento.
+    '''
+    if len(lista) == 0:
+        raise ValueError("La lista no debe estar vacía")
+    if i == len(lista) - 1:
+        return lista[i]
+    minimo_resto = minimo_recursivo(lista, i + 1)
+    if lista[i] < minimo_resto:
+        return lista[i]
+    return minimo_resto
+
+
+def maximo_recursivo(lista, i=0):
+    '''
+    pre: recibe una lista de números no vacía y el índice desde el cual buscar (por defecto, 0).
+    pos: devuelve el mayor elemento de la lista desde el índice i hasta el final.
+         Si la lista está vacía lanza ValueError.
+    Caso base: i es el último índice, el único elemento que queda es el máximo.
+    Caso recursivo: el mayor entre lista[i] y el máximo de los elementos desde i + 1.
+    Reducción del dominio: el índice avanza de a uno hasta llegar al último elemento.
+    '''
+    if len(lista) == 0:
+        raise ValueError("La lista no debe estar vacía")
+    if i == len(lista) - 1:
+        return lista[i]
+    maximo_resto = maximo_recursivo(lista, i + 1)
+    if lista[i] > maximo_resto:
+        return lista[i]
+    return maximo_resto

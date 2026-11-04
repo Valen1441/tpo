@@ -1,5 +1,4 @@
 import utilidades
-from functools import reduce
 import json
  
 # Códigos ANSI
@@ -88,10 +87,10 @@ def estadisticas_estudiantes(arch_notas, arch_estudiantes):
             promedio = 0
  
             if cantidad > 0:
-                suma = reduce(lambda cal1, cal2: cal1 + cal2, lista_notas)
-                aprobados = len(list(filter(lambda fila: int(fila[4]) == 1, matriz_notas)))
-                promocionados = len(list(filter(lambda fila: int(fila[4]) == 2, matriz_notas)))
-                desaprobados = len(list(filter(lambda fila: int(fila[4]) == 3, matriz_notas)))
+                suma = utilidades.suma_recursiva(lista_notas)
+                aprobados = utilidades.contar_en_columna(matriz_notas, 4, 1)
+                promocionados = utilidades.contar_en_columna(matriz_notas, 4, 2)
+                desaprobados = utilidades.contar_en_columna(matriz_notas, 4, 3)
                 promedio = round(suma / cantidad, 1)
                 lista_promedios.append([nombre, promedio])
  

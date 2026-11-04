@@ -36,6 +36,9 @@ def boletin_completo(estudiantes, legajo, notas, materias):
         print("-" * 40)
  
     if len(matriz_notas) > 0:
+        lista_notas = list(map(lambda fila: int(fila[1]), matriz_notas))
+        print(f"{'Nota más alta: ':>36}{utilidades.maximo_recursivo(lista_notas)}")
+        print(f"{'Nota más baja: ':>36}{utilidades.minimo_recursivo(lista_notas)}")
         print(f"{'Promedio: ':>36}{suma / len(matriz_notas):.1f}")
     else:
         print("El estudiante no tiene notas registradas.")
@@ -77,6 +80,9 @@ def reporte_materia(materias, materia, notas, estudiantes):
         print("-" * 40)
  
     if len(matriz_notas) > 0:
+        lista_notas = list(map(lambda fila: int(fila[1]), matriz_notas))
+        print(f"{'Nota más alta: ':>36}{utilidades.maximo_recursivo(lista_notas)}")
+        print(f"{'Nota más baja: ':>36}{utilidades.minimo_recursivo(lista_notas)}")
         print(f"{'Promedio: ':>36}{suma / len(matriz_notas):.1f}")
     else:
         print("La materia no tiene notas registradas.")
