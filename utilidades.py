@@ -188,7 +188,7 @@ def obtener_ultimo_codigo(archivo):
                 datos = linea.strip().split(";")
                 ultimo_codigo = datos[0]
     except FileNotFoundError:
-        pass  # Si no existe el archivo, empezamos desde cero
+        pass  # Si no existe el archivo, empezamos desde 99 + 1
     return ultimo_codigo
 
 def siguiente_codigo(codigo_actual):

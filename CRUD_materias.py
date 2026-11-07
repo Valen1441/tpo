@@ -36,7 +36,7 @@ def altas_materias(materias):
     ultimo = utilidades.obtener_ultimo_codigo(materias)
     nuevo_codigo = utilidades.siguiente_codigo(ultimo)
 
-    # Pedir nombre
+    # Pedir datos
     nombre, cuatrimestre, anio, horaria = pedir_datos_materia()
 
     try:
@@ -110,10 +110,9 @@ def modificar_materias(materias):
             print(f"{ROJO}ERROR: Ese código no está registrado{RESET}")
             print("Intente nuevamente.")
 
-                
-    # Pedir nombre de la materia
+              
+    # Pedir datos
     nombre, cuatrimestre, anio, horaria = pedir_datos_materia()
-
 
     nueva_linea = f'{codigo_modif};{nombre};{cuatrimestre};{anio};{horaria}\n'
 

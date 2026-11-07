@@ -1,26 +1,76 @@
 import utilidades
-import json
+import CRUD_estudiantes
 
-# Códigos ANSI
 RESET, BOLD, ROJO, VERDE, AZUL, MAGENTA, NARANJA, CELESTE = utilidades.codigos_ansi()
 
-with open(r'CRUD_estudiantes/estudiantes.json', "r", encoding="UTF-8") as datos:
-    estudiantes = json.load(datos) 
+# Datos de prueba fijos: no dependen de los archivos reales del sistema
+matriz_notas = [["100", "10", "100", "100", "2"],
+                ["101", "6", "101", "101", "1"],
+                ["102", "7", "102", "104", "1"]]
 
-def test_usuario1():
-    assert utilidades.generar_usuarios("Roger Federer", estudiantes) == "rfederer"
 
-def test_usuario2():
-    assert utilidades.generar_usuarios("Diomid Petrenko", estudiantes) == "dpetrenko"
+# ---------------- Recursividad ----------------
+def test_suma_recursiva():
+    assert utilidades.suma_recursiva([6, 3, 8]) == 17
 
-def test_codigo1():
+def test_suma_recursiva_lista_vacia():
+    assert utilidades.suma_recursiva([]) == 0
+
+def test_contar_en_columna():
+    assert utilidades.contar_en_columna(matriz_notas, 4, 1) == 2
+    assert utilidades.contar_en_columna(matriz_notas, 4, 2) == 1
+    assert utilidades.contar_en_columna(matriz_notas, 4, 3) == 0
+
+def test_minimo_y_maximo_recursivos():
+    notas = [7, 3, 9, 5]
+    assert utilidades.minimo_recursivo(notas) == 3
+    assert utilidades.maximo_recursivo(notas) == 9
+
+
+# ---------------- Notas y materias ----------------
+def test_condicion_limites():
+    assert [utilidades.calcular_condicion(n) for n in (3, 4, 7, 8, 10)] == [3, 1, 1, 2, 2]
+
+def test_clasificar_nota():
+    assert utilidades.clasificar_nota(2) == f"{ROJO}Desaprobada{RESET}"
+    assert utilidades.clasificar_nota(6) == f"{VERDE}Aprobada{RESET}"
+    assert utilidades.clasificar_nota(10) == f"{AZUL}Promocionada{RESET}"
+
+def test_codigo_temporal():
+    assert utilidades.codigo_temporal("100", "1", "2") == "2Pri100"
+    assert utilidades.codigo_temporal("101", "2", "3") == "3Seg101"
+
+def test_nombres_con_empate():
+    lista = [["Beto", 5], ["Ares", 5], ["Carla", 3]]
+    assert utilidades.nombres_con_valor(lista, 1, 5) == "Ares, Beto"
+
+def test_siguiente_codigo():
+    assert utilidades.siguiente_codigo("99") == "100"
     assert utilidades.siguiente_codigo(100) == "101"
 
-def test_codigo2():
+
+# ---------------- Usuarios ----------------
+estudiantes = [{"legajo": 100, "nombre": "Diomid Petrenko", "usuario": "dpetrenko"}]
+
+def test_usuario_nuevo():
+    assert CRUD_estudiantes.generar_usuarios("Roger Federer", estudiantes) == "rfederer"
+
+def test_usuario_nombre_repetido():
+    assert CRUD_estudiantes.generar_usuarios("Diomid Petrenko", estudiantes) == "dipetrenko"
+
+def test_usuario_misma_inicial_y_apellido():
+    assert CRUD_estudiantes.generar_usuarios("Dario Petrenko", estudiantes) == "dpetrenko1"
+
+
+# ---------------- DEMOSTRACIÓN DE FALLOS ----------------
+def test_fallo_usuario_repetido():
+    # Para un nombre que ya existe la función agrega una letra: devuelve "dipetrenko".
+    assert CRUD_estudiantes.generar_usuarios("Diomid Petrenko", estudiantes) == "dpetrenko"
+ 
+def test_fallo_condicion():
+    # El 10 es promocionada (>= 8), la condición es 2 y no 1.
+    assert utilidades.calcular_condicion(10) == 1
+ 
+def test_fallo_siguiente_codigo():
+    # La función devuelve la cadena "101", no el entero 101.
     assert utilidades.siguiente_codigo(100) == 101
-
-def test_nota1():
-    assert utilidades.clasificar_nota(2) == f"{ROJO}Desaprobada{RESET}"
-
-def test_nota2():
-    assert utilidades.clasificar_nota(10) == f"{VERDE}Aprobada{RESET}"

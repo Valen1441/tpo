@@ -1,0 +1,37 @@
+[
+    {
+        "legajo": 100,
+        "nombre": "Ares Alfini",
+        "edad": 18,
+        "año cursada": 2,
+        "usuario": "aalfini"
+    },
+    {
+        "legajo": 101,
+        "nombre": "Lucas Jaldin",
+        "edad": 19,
+        "año cursada": 3,
+        "usuario": "ljaldin"
+    },
+    {
+        "legajo": 102,
+        "nombre": "Marcos Ratt",
+        "edad": 18,
+        "año cursada": 1,
+        "usuario": "mratt"
+    },
+    {
+        "legajo": 103,
+        "nombre": "Diomid Petrenko",
+        "edad": 22,
+        "año cursada": 2,
+        "usuario": "dpetrenko"
+    },
+    {
+        "legajo": 104,
+        "nombre": "Valentino Lazzari",
+        "edad": 18,
+        "año cursada": 1,
+        "usuario": "valazzari"
+    }
+]
