@@ -62,7 +62,7 @@ def altas_calificaciones(notas, estudiantes, materias):
     ultimo = utilidades.obtener_ultimo_codigo(notas)
     nuevo_codigo = utilidades.siguiente_codigo(ultimo)
 
-    # Pedir legajo del estudiante 
+    # Pedir datos
     legajo, materia, nota = pedir_datos_calificacion(estudiantes, materias)
 
     condicion = utilidades.calcular_condicion(nota)
@@ -129,7 +129,7 @@ def modificar_calificaciones(notas, estudiantes, materias):
             print("Intente nuevamente.")
                 
                 
-    # Pedir el nuevo legajo
+    # Pedir datos
     legajo, materia, nota = pedir_datos_calificacion(estudiantes, materias)
         
 
